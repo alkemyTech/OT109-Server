@@ -41,6 +41,8 @@ public class Member {
 
     @NotNull
     @Column(nullable = false)
+    private String name;
+    @Nullable
     private String facebookUrl;
     @Nullable
     private String instagramUrl;

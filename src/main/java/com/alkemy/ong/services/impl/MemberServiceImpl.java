@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member create(Member member) throws DataAlreadyExistException{
 
-        if ((memberRepository.findByFacebookUrl(member.getFacebookUrl()).isPresent())) {
+        if ((memberRepository.findByName(member.getName()).isPresent())) {
             throw new DataAlreadyExistException("Member already exists");
         }
        return memberRepository.save(member);
@@ -32,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member update(Member member, Long id) throws NotFoundException {
         Member newMember = memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
+        newMember.setName(member.getName());
         newMember.setFacebookUrl(member.getFacebookUrl());
         newMember.setInstagramUrl(member.getInstagramUrl());
         newMember.setLinkedinUrl(member.getLinkedinUrl());
