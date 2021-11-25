@@ -46,7 +46,7 @@ public class UserService {
     }
 
     @Transactional
-    public User create(String firstName, String lastName, String email, String password, String photo, Long roleId) {
+    public User create(String firstName, String lastName, String email, String password, String photo, @NonNull Long roleId) {
         Role role = roleRepo.getById(roleId);
         return create(firstName, lastName, email, password, photo, role);
     }
@@ -116,7 +116,9 @@ public class UserService {
 
     @Transactional
     public void delete(@NonNull Long id) {
-        userRepo.deleteById(id);
+        if(userRepo.findById(id).isPresent()){
+            userRepo.deleteById(id);
+        }
     }
 
 }

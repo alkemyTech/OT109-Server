@@ -84,7 +84,9 @@ public class RoleService {
     
     @Transactional
     public void delete(@NonNull Long id) {
-        roleRepo.deleteById(id);
+        if(roleRepo.findById(id).isPresent()){
+            roleRepo.deleteById(id);
+        }
     }
     
 }

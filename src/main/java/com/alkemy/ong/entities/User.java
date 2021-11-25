@@ -59,6 +59,7 @@ public class User implements Serializable{
     private String photo;
     
     @ManyToOne
+    @NonNull
     private Role role;
     
     @Temporal(value = TemporalType.TIMESTAMP)
