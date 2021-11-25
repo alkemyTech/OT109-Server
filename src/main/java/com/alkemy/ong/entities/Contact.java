@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLUpdate;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ import java.util.Date;
 @Table(name = "contacts")
 @SQLDelete(sql = "UPDATE posts SET deleted_at = now() WHERE id=?")
 @Where(clause = "deleted_at = null")
+@SQLUpdate(sql = "UPDATE posts SET update_at = now() WHERE id=?")
 public class Contact implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
@@ -36,12 +38,15 @@ public class Contact implements Serializable {
     @Column(name = "message", nullable = false)
     private String message;
 
-    @Column(name = "deleted_at")
-    private Date deletedAt;
-
     @Column(name="created_at")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @Column(name = "deleted_at")
+    private Date deletedAt;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
 }
