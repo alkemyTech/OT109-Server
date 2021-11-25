@@ -25,23 +25,23 @@ public class Contact implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     private String phone;
 
-    @NonNull
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @NonNull
+    @Column(name = "message", nullable = false)
     private String message;
 
     @Column(name = "deleted_at")
     private Date deletedAt;
 
-    @Column(name="fecha_creacion")
+    @Column(name="created_at")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaCreacion;
+    private Date createdAt;
 
 }
