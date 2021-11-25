@@ -115,9 +115,11 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(@NonNull Long id) {
+    public void delete(@NonNull Long id) throws UserServiceException{
         if(userRepo.findById(id).isPresent()){
             userRepo.deleteById(id);
+        } else {
+            throw new UserServiceException("User not found");
         }
     }
 

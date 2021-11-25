@@ -83,9 +83,11 @@ public class RoleService {
     }
     
     @Transactional
-    public void delete(@NonNull Long id) {
+    public void delete(@NonNull Long id) throws RoleServiceException {
         if(roleRepo.findById(id).isPresent()){
             roleRepo.deleteById(id);
+        } else {
+            throw new RoleServiceException("User not found");
         }
     }
     
