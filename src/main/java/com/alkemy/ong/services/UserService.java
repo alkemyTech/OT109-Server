@@ -28,13 +28,13 @@ public class UserService {
     private RoleRepository roleRepo;
 
     @Transactional
-    public User create(@NonNull User user) throws UserServiceException {
+    public User create(@NonNull User user) {
         user.setCreatedAt(new Date());
         return userRepo.save(user);
     }
 
     @Transactional
-    public User create(String firstName, String lastName, String email, String password, String photo, Role role) throws UserServiceException {
+    public User create(String firstName, String lastName, String email, String password, String photo, Role role) {
         return create(User.builder()
                 .firstName(firstName)
                 .lastName(lastName)
@@ -46,7 +46,7 @@ public class UserService {
     }
 
     @Transactional
-    public User create(String firstName, String lastName, String email, String password, String photo, Long roleId) throws UserServiceException {
+    public User create(String firstName, String lastName, String email, String password, String photo, Long roleId) {
         Role role = roleRepo.getById(roleId);
         return create(firstName, lastName, email, password, photo, role);
     }
@@ -55,18 +55,18 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public List<User> findByRole(String role){
+    public List<User> findByRole(String role) {
         return userRepo.findByRole_Name(role);
     }
 
-    public List<User> findByRole(Role role){
+    public List<User> findByRole(Role role) {
         return findByRole(role.getName());
     }
 
-    public List<User> findByRole(Long id){
+    public List<User> findByRole(Long id) {
         return userRepo.findByRole_Id(id);
     }
-    
+
     public User findById(@NonNull Long id) throws UserServiceException {
         Optional<User> opt = userRepo.findById(id);
         if (opt.isPresent()) {
@@ -75,7 +75,7 @@ public class UserService {
         throw new UserServiceException("User not found");
     }
 
-    public User findByEmail(@NonNull @Email String email) throws UserServiceException{
+    public User findByEmail(@NonNull @Email String email) throws UserServiceException {
         Optional<User> opt = userRepo.findByEmailIgnoreCase(email);
         if (opt.isPresent()) {
             return opt.get();
@@ -84,7 +84,7 @@ public class UserService {
     }
 
     @Transactional
-    public void update(@NonNull Long id, @NonNull User newUser) throws UserServiceException{
+    public void update(@NonNull Long id, @NonNull User newUser) throws UserServiceException {
         Optional<User> opt = userRepo.findById(id);
         if (opt.isPresent()) {
             ModelMapper modelMapper = new ModelMapper();
