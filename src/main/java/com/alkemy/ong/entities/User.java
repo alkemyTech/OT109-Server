@@ -7,20 +7,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Table(name = "users")
 @Entity
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@SQLDelete(sql = "UPDATE table_product SET deletedAt = now() WHERE id=?")
+@Where(clause = "deleted=null")
 public class User implements Serializable{
     
     @Setter(AccessLevel.NONE)
@@ -47,7 +58,8 @@ public class User implements Serializable{
     
     private String photo;
     
-    //private Role role;
+    @ManyToOne
+    private Role role;
     
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date createdAt;
