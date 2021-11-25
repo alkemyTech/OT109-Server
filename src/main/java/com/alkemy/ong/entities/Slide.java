@@ -9,9 +9,10 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "contacts")
+@Table(name = "slides")
+/*
 @SQLDelete(sql = "UPDATE posts SET deleted_at = now() WHERE id=?")
-@Where(clause = "deleted_at = null")
+@Where(clause = "deleted_at = null")*/
 public class Slide {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,7 +22,7 @@ public class Slide {
     @Column(nullable = false)
     private String text;
     @Column(nullable = false)
-    private String order;
+    private String orderNum;
     @ManyToOne
     @JoinColumn(name = "organization_ID")
     private OrganizationEntity organization;
