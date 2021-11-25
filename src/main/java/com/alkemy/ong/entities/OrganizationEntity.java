@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -33,27 +31,23 @@ public class OrganizationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
     private String image;
 
-    @Nullable
     private String address;
 
-    @Nullable
     private Integer phone;
 
-    @NotNull
+    @Column(nullable = false)
     @Email
     private String email;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT", name = "welcome_text")
+    @Column(columnDefinition = "TEXT", name = "welcome_text", nullable = false)
     private String welcomeText;
 
-    @Nullable
     @Column(columnDefinition = "TEXT", name = "about_us_text")
     private String aboutUsText;
 
