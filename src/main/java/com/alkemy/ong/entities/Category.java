@@ -17,18 +17,16 @@ import java.util.Date;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
+    @Column(nullable = false)
     private String name;
-    @Nullable
+    @Column(nullable = true)
     private String description;
-    @Nullable
+    @Column(nullable = true)
     private String image;
-    @Nullable
     private Date createdAt;
-    @Nullable
     private Date updatedAt;
-    @Nullable
     private Date deletedAt;
 
 }
