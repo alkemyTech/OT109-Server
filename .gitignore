@@ -77,4 +77,18 @@ Thumbs.db
 *.mov
 *.wmv
 
-# src/main/resources/application.properties
+
+src/main/resources/application.properties
+
+#Personal folders
+/src/test/**
+/src/main/resources/**
+
+#Git ignore
+.gitignore
+
+#PDFs
+*.pdf
+
+#Persistence files
+/.jpb/**
