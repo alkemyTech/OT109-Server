@@ -47,7 +47,7 @@ public class SlideServiceImpl implements SlideService {
     }
 
     /**
-     * Cuando eliminamos un Slide decremetamos los orderNum mayores al id del slide eliminado
+     * Cuando eliminamos un Slide decremetamos los orderNum mayores al orderNum del slide eliminado
      *
      * @param id pertenece a un id de un Slide
      * @throws NotFoundException el id dado no existe para ningun Slide
