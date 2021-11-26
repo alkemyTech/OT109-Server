@@ -29,9 +29,9 @@ public class News {
     @Column(nullable = false)
     private String image;
 
-    //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //@JoinColumn(name = "category_id")
-    //private Category category;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "categories_id", nullable = false)
+    private Category category;
 
     private Date createdAt;
     private Date updatedAt;
