@@ -2,17 +2,11 @@ package com.alkemy.ong.entities;
 
 import lombok.*;
 import javax.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
-@Entity
-@Getter
-@Setter
 @NoArgsConstructor
+@Data
+@Entity
 @Table(name = "slides")
-/*
-@SQLDelete(sql = "UPDATE posts SET deleted_at = now() WHERE id=?")
-@Where(clause = "deleted_at = null")*/
 public class Slide {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,10 +15,16 @@ public class Slide {
     private String imageUrl;
     @Column(nullable = false)
     private String text;
-    @Column(nullable = false)
-    private String orderNum;
+    @Column(nullable = false, unique = true)
+    private int orderNum;
     @ManyToOne
     @JoinColumn(name = "organization_ID")
     private OrganizationEntity organization;
 
+    public Slide(String imageUrl, String text, int orderNum, OrganizationEntity organization) {
+        this.imageUrl = imageUrl;
+        this.text = text;
+        this.orderNum = orderNum;
+        this.organization = organization;
+    }
 }
