@@ -77,12 +77,6 @@ Thumbs.db
 *.mov
 *.wmv
 
-
-
-
-#Personal folders
-/src/test/**
-/src/main/resources/**
 src/main/resources/application.properties
 
 #Git ignore
