@@ -1,5 +1,7 @@
 package com.alkemy.ong.services;
 
+import com.alkemy.ong.entities.Category;
+import com.alkemy.ong.exceptions.CategoryServiceException;
 import com.alkemy.ong.exceptions.NewsNotFoundException;
 import com.alkemy.ong.entities.News;
 import com.alkemy.ong.repositories.NewsRepository;
@@ -15,15 +17,52 @@ public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
 
-    public void save(String name, String content, String image){
+    @Autowired
+    private CategoryService categoryService;
+
+    public News save(String name, String content, String image, Category categoryId){
         News news = new News();
 
         news.setName(name);
         news.setContent(content);
         news.setImage(image);
+        news.setCategory(categoryId);
         news.setCreatedAt(new Date());
 
         newsRepository.save(news);
+
+        return news;
+    }
+
+    public News save(String name, String content, String image, String categoryName){
+        News news = new News();
+        Category category = null;
+
+        try{
+            category = categoryService.findByName(categoryName);
+        }
+        catch (CategoryServiceException ex){
+            throw new CategoryServiceException(String.format("Category %s not found",categoryName));
+        }
+        category = keepId(category);
+
+        news.setName(name);
+        news.setContent(content);
+        news.setImage(image);
+        news.setCategory(category);
+        news.setCreatedAt(new Date());
+
+        newsRepository.save(news);
+
+        return news;
+    }
+
+    public News save(News news){
+
+        news.setCreatedAt(new Date());
+        news = newsRepository.save(news);
+
+        return news;
     }
 
     public List<News> getAll(){
@@ -61,4 +100,19 @@ public class NewsService {
 
     }
 
+    private boolean categoryNameIsNullOrEmpty(String catName){
+        return catName == null || catName.equals("");
+    }
+
+    private Category keepId(Category c){
+        if(!categoryNameIsNullOrEmpty(c.getName())){
+            c.setName(null);
+            c.setImage(null);
+            c.setCreatedAt(null);
+            c.setDeletedAt(null);
+            c.setUpdatedAt(null);
+            c.setDescription(null);
+        }
+        return c;
+    }
 }
