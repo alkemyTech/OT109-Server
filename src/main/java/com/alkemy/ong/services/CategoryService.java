@@ -15,18 +15,16 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Transactional
     public Category create(Category category) {
         category.setCreatedAt(new Date());
         return categoryRepository.save(category);
     }
 
-    @Transactional
     public Category update(Category category) {
+        category.setUpdatedAt(new Date());
         return categoryRepository.save(category);
     }
 
-    @Transactional
     public Category delete(Long id) {
         Category categoryToSoftDelete = this.findById(id);
         categoryToSoftDelete.setDeletedAt(new Date());
