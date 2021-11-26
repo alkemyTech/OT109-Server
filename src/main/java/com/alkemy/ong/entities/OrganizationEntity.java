@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,6 +30,7 @@ public class OrganizationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "organization_id")
     private Long id;
 
     @Column(nullable = false)
@@ -50,6 +52,9 @@ public class OrganizationEntity {
 
     @Column(columnDefinition = "TEXT", name = "about_us_text")
     private String aboutUsText;
+
+    @OneToOne(mappedBy = "organizarion")
+    private Member member;
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @CreationTimestamp
