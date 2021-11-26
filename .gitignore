@@ -78,11 +78,12 @@ Thumbs.db
 *.wmv
 
 
-src/main/resources/application.properties
+
 
 #Personal folders
 /src/test/**
 /src/main/resources/**
+src/main/resources/application.properties
 
 #Git ignore
 .gitignore
