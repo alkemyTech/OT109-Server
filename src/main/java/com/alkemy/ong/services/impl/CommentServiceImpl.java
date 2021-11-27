@@ -1,8 +1,6 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.entities.Comment;
-import com.alkemy.ong.entities.User;
-import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.CommentRepository;
 import com.alkemy.ong.repositories.NewsRepository;
