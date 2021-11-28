@@ -4,15 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 
 
 @Getter
@@ -30,10 +23,11 @@ public class Comment {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private User user_id;
 
-    @Column(name = "news_id")
+    @JoinColumn(name = "news_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private News new_id;
 
