@@ -4,13 +4,20 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
+
+import java.util.Date;
+import java.util.List;
+
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -19,6 +26,7 @@ import org.hibernate.annotations.Where;
 
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Entity
 @Table(name = "organizations")
@@ -31,6 +39,7 @@ public class OrganizationEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "organization_id")
 	private Long id;
 
 	@Column(nullable = false)
@@ -52,6 +61,10 @@ public class OrganizationEntity {
 
 	@Column(columnDefinition = "TEXT", name = "about_us_text")
 	private String aboutUsText;
+
+
+    @OneToMany(mappedBy = "organization" , fetch = FetchType.EAGER)
+    private List<Member> members;
 
 	@Temporal(value = TemporalType.TIMESTAMP)
 	@CreationTimestamp
