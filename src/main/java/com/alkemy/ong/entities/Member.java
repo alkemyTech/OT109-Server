@@ -59,7 +59,7 @@ public class Member {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "organization_id", referencedColumnName = "organization_id")
+    @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private OrganizationEntity organization;
 
     
