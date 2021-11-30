@@ -30,7 +30,7 @@ public class UserController {
     
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<ListUserDTO> findAll(Principal principal){
+    public List<ListUserDTO> findAll(){
         //FALTA LA VALIDACIÓN DE ADMINISTRADOR
         List<ListUserDTO> response = new ArrayList();
         List<User> users = userService.findAll();
