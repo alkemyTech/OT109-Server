@@ -13,7 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +28,8 @@ public class UserController {
     @Autowired
     private UserService userService;
     
-    @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping
     public List<ListUserDTO> findAll(Principal principal){
         //FALTA LA VALIDACIÓN DE ADMINISTRADOR
         List<ListUserDTO> response = new ArrayList();
@@ -37,9 +39,15 @@ public class UserController {
         });
         return response;
     }
-    
-    @DeleteMapping("/{id}")
+
     @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody User user){
+        userService.update(id, user);
+    }
+    
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
         userService.delete(id);
     }

@@ -1,5 +1,6 @@
 package com.alkemy.ong.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -34,7 +35,7 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted=null")
 public class User implements Serializable{
     
-    @Setter(AccessLevel.NONE)
+    @Setter(onMethod = @__( @JsonIgnore ))
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,12 +64,15 @@ public class User implements Serializable{
     private Role role;
     
     @Temporal(value = TemporalType.TIMESTAMP)
+    @Setter(onMethod = @__( @JsonIgnore ))
     private Date createdAt;
     
     @Temporal(value = TemporalType.TIMESTAMP)
+    @Setter(onMethod = @__( @JsonIgnore ))
     private Date updatedAt;
     
     @Temporal(value = TemporalType.TIMESTAMP)
+    @Setter(onMethod = @__( @JsonIgnore ))
     private Date deletedAt;
     
 }
