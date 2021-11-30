@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.alkemy.ong.dtos.ListMemberDTO;
+import com.alkemy.ong.dtos.MemberDescriptionDTO;
+import com.alkemy.ong.dtos.MemberRequestDTO;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
@@ -29,12 +32,15 @@ public class MemberServiceImpl implements MemberService {
     private ModelMapper memberMapper;
 
     @Override
-    public Member create(Member member) throws DataAlreadyExistException{
-
-        if ((memberRepository.findByName(member.getName()).isPresent())) {
+    public MemberDescriptionDTO create(MemberRequestDTO request) throws DataAlreadyExistException{
+        Optional<Member> optionalMember = memberRepository.findByName(request.getName());
+        if (optionalMember.isPresent()) {
             throw new DataAlreadyExistException("Member already exists");
         }
-       return memberRepository.save(member);
+
+        Member newMember = memberMapper.map(request, Member.class);
+
+       return memberMapper.map(memberRepository.save(newMember), MemberDescriptionDTO.class);
 
     }
 

@@ -1,11 +1,14 @@
 package com.alkemy.ong.controllers;
 
+import com.alkemy.ong.dtos.MemberDescriptionDTO;
+import com.alkemy.ong.dtos.MemberRequestDTO;
+import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/members")
@@ -14,8 +17,20 @@ public class MemberController {
     private MemberService memberService;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllMembers(){
-
+    public ResponseEntity<?> getAll(){
         return ResponseEntity.ok(memberService.findAll());
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> save(@Valid @RequestBody MemberRequestDTO request){
+
+        try{
+            MemberDescriptionDTO response = memberService.create(request);
+            return ResponseEntity.ok(response);
+
+        }catch (DataAlreadyExistException ex){
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 }
