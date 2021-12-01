@@ -5,6 +5,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Setter
@@ -18,6 +20,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @NotEmpty(message = "Name may not be empty")
+    @Size(min = 3)
     @Column(nullable = false)
     private String name;
     @Column(nullable = true)
