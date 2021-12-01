@@ -100,6 +100,7 @@ public class UserService {
 
     @Transactional
     public void put(@NonNull Long id, @NonNull User newUser) {
+        newUser.setId(id);
         Optional<User> opt = userRepo.findById(id);
         if (opt.isPresent()) {
             User user = opt.get();

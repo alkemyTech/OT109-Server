@@ -28,8 +28,8 @@ import org.hibernate.annotations.Where;
 @RequiredArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@SQLDelete(sql = "UPDATE table_product SET deletedAt = now() WHERE id=?")
-@Where(clause = "deleted=null")
+@SQLDelete(sql = "UPDATE roles SET deleted_at = now() WHERE id=?")
+@Where(clause = "deleted_at is null")
 public class Role implements Serializable{
     
     @Id
