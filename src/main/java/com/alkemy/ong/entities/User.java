@@ -1,5 +1,6 @@
 package com.alkemy.ong.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -30,11 +31,10 @@ import org.hibernate.annotations.Where;
 @RequiredArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@SQLDelete(sql = "UPDATE table_product SET deletedAt = now() WHERE id=?")
-@Where(clause = "deleted=null")
+@SQLDelete(sql = "UPDATE users SET deleted_at = now() WHERE id=?")
+@Where(clause = "deleted_at is null")
 public class User implements Serializable{
     
-    @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
