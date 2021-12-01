@@ -35,7 +35,6 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted_at is null")
 public class User implements Serializable{
     
-    @Setter(onMethod = @__( @JsonIgnore ))
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -64,15 +63,12 @@ public class User implements Serializable{
     private Role role;
     
     @Temporal(value = TemporalType.TIMESTAMP)
-    @Setter(onMethod = @__( @JsonIgnore ))
     private Date createdAt;
     
     @Temporal(value = TemporalType.TIMESTAMP)
-    @Setter(onMethod = @__( @JsonIgnore ))
     private Date updatedAt;
     
     @Temporal(value = TemporalType.TIMESTAMP)
-    @Setter(onMethod = @__( @JsonIgnore ))
     private Date deletedAt;
     
 }
