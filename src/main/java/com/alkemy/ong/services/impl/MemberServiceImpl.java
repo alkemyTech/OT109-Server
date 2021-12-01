@@ -63,6 +63,8 @@ public class MemberServiceImpl implements MemberService {
     public void delete(Long id) throws NotFoundException {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Member with id %id was not found", id)));
+        memberRepository.deleteById(id);
+
         member.setDeletedAt((Date.valueOf(LocalDate.now())));
         memberRepository.save(member);
     }

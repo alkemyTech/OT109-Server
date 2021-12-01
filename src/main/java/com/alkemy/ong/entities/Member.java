@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
@@ -35,7 +36,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "members")
 @SQLDelete(sql = "UPDATE members SET deleted_at = now() WHERE member_id=?")
-@Where(clause = "deleted_at=null")
+@Where(clause = "deleted_at IS NULL")
 public class Member {
 
     @Id
@@ -44,7 +45,7 @@ public class Member {
     @Column(name = "member_id" ,nullable = false, unique = true)
     private Long Id;
 
-    @NotNull
+    @NotBlank
     @Column(nullable = false)
     private String name;
     @Nullable

@@ -4,7 +4,6 @@ import com.alkemy.ong.dtos.ListMemberDTO;
 import com.alkemy.ong.dtos.MemberDescriptionDTO;
 import com.alkemy.ong.dtos.MemberRequestDTO;
 import com.alkemy.ong.entities.Member;
-import com.alkemy.ong.repositories.MemberRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +48,6 @@ public class ModelMapperConfig {
                 map().setLinkedinUrl(source.getLinkedinUrl());
             }
         });
-
-
 
         return modelMapper;
     }
