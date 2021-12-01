@@ -12,7 +12,7 @@ import com.alkemy.ong.exceptions.NotFoundException;
 public interface MemberService {
 
     MemberDescriptionDTO create(MemberRequestDTO member) throws DataAlreadyExistException;
-    Member update(Member member, Long id) throws NotFoundException;
+    MemberDescriptionDTO update(MemberRequestDTO member, Long id) throws NotFoundException;
     void delete(Long id) throws NotFoundException;
     Member findById(Long id) throws NotFoundException;
     List<ListMemberDTO> findAll();

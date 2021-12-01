@@ -45,8 +45,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member update(Member member, Long id) throws NotFoundException {
+    public MemberDescriptionDTO update(MemberRequestDTO member, Long id) throws NotFoundException {
         Member newMember = memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
+
         newMember.setName(member.getName());
         newMember.setFacebookUrl(member.getFacebookUrl());
         newMember.setInstagramUrl(member.getInstagramUrl());
@@ -54,8 +55,9 @@ public class MemberServiceImpl implements MemberService {
         newMember.setImage(member.getImage());
         newMember.setDescription(member.getDescription());
         newMember.setUpdatedAt(Date.valueOf(LocalDate.now()));
-        
-        return memberRepository.save(newMember);
+        newMember = memberRepository.save(newMember);
+
+        return memberMapper.map(newMember,MemberDescriptionDTO.class);
 
     }
 
