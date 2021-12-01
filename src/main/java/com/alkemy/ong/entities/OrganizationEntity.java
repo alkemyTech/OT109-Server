@@ -32,7 +32,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE organizations SET deleted_at = current_timestamp() WHERE id = ?")
-@Where(clause = "deleted_at = null")
+@Where(clause = "deleted_at is null")
 public class OrganizationEntity implements Serializable {
 
     @Id
