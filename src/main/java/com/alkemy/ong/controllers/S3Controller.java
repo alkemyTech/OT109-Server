@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+/** Amazon Web Services S3 Bucket integration for uploading and downloading images.*/
 @RestController
 @RequestMapping("/api/v1/files")
 @CrossOrigin(origins = "*", maxAge = 3600)

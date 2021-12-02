@@ -20,6 +20,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 
+
+
+/** Amazon Web Services S3 Bucket integration for uploading and downloading images.*/
 @Service
 public class S3Service {
 
