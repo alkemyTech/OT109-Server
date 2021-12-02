@@ -37,6 +37,6 @@ public class S3Controller {
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam("file") MultipartFile multipartFile) {
         s3Service.save(multipartFile);
-        return new ResponseEntity<>(MESSAGE_1, HttpStatus.OK);
+        return new ResponseEntity<>(MESSAGE_1,HttpStatus.OK);
     }
 }
