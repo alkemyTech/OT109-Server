@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 @Service
 public class S3Service {
 
-
     private static final Logger LOG = LoggerFactory.getLogger(S3Service.class);
 
     @Autowired
