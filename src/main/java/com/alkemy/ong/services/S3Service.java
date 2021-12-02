@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 
@@ -49,7 +50,8 @@ public class S3Service {
 
     //Must return a string with the absolute file path in the s3 bucket
     @Async
-    public void save(final MultipartFile multipartFile) {
+    public String save(final MultipartFile multipartFile) {
+        String filePath = null;
         try {
             final File file = convertMultiPartFileToFile(multipartFile);
             final String fileName = file.getName();
@@ -57,10 +59,13 @@ public class S3Service {
             final PutObjectRequest putObjectRequest = new PutObjectRequest(s3BucketName, fileName, file);
             amazonS3.putObject(putObjectRequest);
             Files.delete(file.toPath()); // Remove the file locally created in the project folder
+            filePath = amazonS3.getUrl(s3BucketName,fileName).toString();
         } catch (AmazonServiceException e) {
             LOG.error("Error {} occurred while uploading file", e.getLocalizedMessage());
         } catch (IOException ex) {
             LOG.error("Error {} occurred while deleting temporary file", ex.getLocalizedMessage());
         }
+        return filePath;
+
     }
 }

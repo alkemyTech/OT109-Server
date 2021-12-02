@@ -16,9 +16,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class S3Controller {
 
-    private static final String MESSAGE_1 = "Uploaded the file successfully";
     private static final String FILE_NAME = "fileName";
-
 
     @Autowired
     S3Service s3Service;
@@ -36,8 +34,8 @@ public class S3Controller {
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestParam("file") MultipartFile multipartFile) {
-        s3Service.save(multipartFile);
-        return new ResponseEntity<>(MESSAGE_1,HttpStatus.OK);
+        String filePath = s3Service.save(multipartFile);
+        return new ResponseEntity<>(filePath,HttpStatus.OK);
     }
 
 }
