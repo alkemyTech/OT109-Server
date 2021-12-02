@@ -1,11 +1,11 @@
-package com.alkemy.ong.dtos;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryRequest {
+public class CategoryListRequestDTO {
 
     private Long id;
     private String name;

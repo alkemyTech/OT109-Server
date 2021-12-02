@@ -1,9 +1,11 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.CategoryDTO;
-import com.alkemy.ong.dtos.CategoryRequest;
+import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
+import com.alkemy.ong.dtos.requests.CategoryPostRequestDTO;
+import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.CategoryServiceException;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.services.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -21,7 +24,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public CategoryDTO create(CategoryDTO categoryDTO) {
+    public CategoryDTO create(CategoryPostRequestDTO categoryDTO) {
+        if (categoryDTO.getName() == null) {
+            throw new ParamNotFound("Name may not be empty");
+        }
         Category entity = modelMapper.map(categoryDTO, Category.class);
         Category entityCreated = categoryRepository.save(entity);
         CategoryDTO result = modelMapper.map(entityCreated, CategoryDTO.class);
@@ -33,26 +39,32 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Category delete(Long id) {
+    /*public Category delete(Long id) {
         Category categoryToSoftDelete = this.findById(id);
         categoryToSoftDelete.setDeletedAt(new Date());
         return categoryRepository.save(categoryToSoftDelete);
-    }
+    }*/
 
-    public Category findById(Long id) throws CategoryServiceException {
-        return categoryRepository.findById(id).orElseThrow(() -> (new CategoryServiceException("Category with id: " + id + " not found.")));
+    public CategoryDTO findById(Long id) {
+        Optional<Category> entity = categoryRepository.findById(id);
+        if (!entity.isPresent()) {
+            throw new ParamNotFound("Error: Invalid category id");
+        }
+        //PostDTO result = postMapper.postEntity2DTO(entity.get());
+        CategoryDTO result = modelMapper.map(entity.get(), CategoryDTO.class);
+        return result;
     }
 
     public Category findByName(String name) throws CategoryServiceException {
         return categoryRepository.findByName(name).orElseThrow(() -> (new CategoryServiceException("Category with name: " + name + " not found.")));
     }
 
-    public List<CategoryRequest> findAll() throws CategoryServiceException {
+    public List<CategoryListRequestDTO> findAll() throws CategoryServiceException {
         List<Category> categories = categoryRepository.findAll();
-        List<CategoryRequest> result = new ArrayList<CategoryRequest>();
+        List<CategoryListRequestDTO> result = new ArrayList<CategoryListRequestDTO>();
         for (Category category : categories) {
-            CategoryRequest categoryRequest = modelMapper.map(category, CategoryRequest.class);
-            result.add(categoryRequest);
+            CategoryListRequestDTO categoryListRequestDTO = modelMapper.map(category, CategoryListRequestDTO.class);
+            result.add(categoryListRequestDTO);
         }
         return result;
     }
