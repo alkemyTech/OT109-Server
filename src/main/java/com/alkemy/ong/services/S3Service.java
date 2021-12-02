@@ -47,6 +47,7 @@ public class S3Service {
         return amazonS3.getObject(s3BucketName, fileName).getObjectContent();
     }
 
+    //Must return a string with the absolute file path in the s3 bucket
     @Async
     public void save(final MultipartFile multipartFile) {
         try {
