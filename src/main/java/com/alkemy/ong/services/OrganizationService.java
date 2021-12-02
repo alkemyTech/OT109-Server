@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
+import org.modelmapper.convention.MatchingStrategies;
 
 @Service
 public class OrganizationService {
@@ -24,14 +27,11 @@ public class OrganizationService {
         if (!entity.isPresent()) {
             throw new ParamNotFound("Error: invalid organization id");
         }
-        entity.get().setName(organizationEntity.getName());
-        entity.get().setImage(organizationEntity.getImage());
-        entity.get().setAddress(organizationEntity.getAddress());
-        entity.get().setPhone(organizationEntity.getPhone());
-        entity.get().setEmail(organizationEntity.getEmail());
-        entity.get().setWelcomeText(organizationEntity.getWelcomeText());
-        entity.get().setAboutUsText(organizationEntity.getAboutUsText());
-        organizationRepository.save(entity.get());
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+        OrganizationEntity organization = entity.get();
+        modelMapper.map(organizationEntity, organization);
+        organizationRepository.save(organization);
     }
 
     public void delete(Long id) {
