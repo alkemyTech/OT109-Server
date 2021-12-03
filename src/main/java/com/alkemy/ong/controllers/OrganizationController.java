@@ -37,7 +37,9 @@ public class OrganizationController {
     public OrganizationEntity save(@Valid @RequestBody CreateOrganizationDTO input) {
         OrganizationEntity response = new OrganizationEntity();
         BeanUtils.copyProperties(input, response);
-        return orgService.create(response);
+        response = orgService.create(response);
+        response.setUpdatedAt(null);
+        return response;
     }
 
     @GetMapping("/public")
