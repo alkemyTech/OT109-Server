@@ -1,7 +1,7 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
-import com.alkemy.ong.dtos.requests.CategoryPostRequestDTO;
+import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public CategoryDTO create(CategoryPostRequestDTO categoryDTO) {
+    public CategoryDTO create(CategoryPostPutRequestDTO categoryDTO) {
         if (categoryDTO.getName() == null) {
             throw new BadRequestException("Name may not be empty");
         }
@@ -35,9 +34,17 @@ public class CategoryServiceImpl implements CategoryService {
         return result;
     }
 
-    public Category update(Category category) {
-        category.setUpdatedAt(new Date());
-        return categoryRepository.save(category);
+    public CategoryDTO update(Long id, CategoryPostPutRequestDTO category) {
+        Optional<Category> entity = categoryRepository.findById(id);
+        if (!entity.isPresent()) {
+            throw new ParamNotFound("Error: Invalid category id");
+        }
+        entity.get().setName(category.getName());
+        entity.get().setDescription(category.getDescription());
+        entity.get().setImage(category.getImage());
+        Category entitySaved = categoryRepository.save(entity.get());
+        CategoryDTO result = modelMapper.map(entitySaved, CategoryDTO.class);
+        return result;
     }
 
     public void delete(Long id) {
