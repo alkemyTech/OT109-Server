@@ -88,6 +88,3 @@ src/main/resources/application.properties
 
 #Persistence files
 /.jpb/**
-
-#POM	
-/pom.xml
