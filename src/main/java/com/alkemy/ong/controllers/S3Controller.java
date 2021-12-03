@@ -23,17 +23,6 @@ public class S3Controller {
     @Autowired
     S3Service s3Service;
 
-//    @GetMapping
-//    public ResponseEntity<Object> findByName(@RequestBody(required = false) Map<String, String> params) {
-//        return ResponseEntity
-//                .ok()
-//                .cacheControl(CacheControl.noCache())
-//                .header("Content-type", "application/octet-stream")
-//                .header("Content-disposition", "attachment; filename=\"" + params.get(FILE_NAME) + "\"")
-//                .body(new InputStreamResource(s3Service.findByName(params.get(FILE_NAME))));
-//    }
-
-    //testing endpoint
     @GetMapping(params = "fileName")
     public ResponseEntity<Object> findByName2(@RequestParam("fileName") String fileName) {
         return ResponseEntity
