@@ -28,6 +28,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(value = {BadRequestException.class})
+    protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
+        ApiError errorDTO = new ApiError(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage(),
+                Arrays.asList("Error: a required field is missing")
+        );
+        return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     /**
      * Handler for @Valid annotation
      */
