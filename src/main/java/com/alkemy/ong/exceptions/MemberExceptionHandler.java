@@ -13,29 +13,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 @ControllerAdvice
-public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
+public class MemberExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException exception, WebRequest request){
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getContextPath());
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false).substring(4));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = DataAlreadyExistException.class)
     public ResponseEntity<?> handleAlreadyExistsException(DataAlreadyExistException exception, WebRequest request){
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getContextPath());
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false).substring(4));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = InvalidParameterException.class)
     public ResponseEntity<?> handleInvalidParameterException(InvalidParameterException exception, WebRequest request){
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getContextPath());
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false).substring(4));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), "Wrong type passed as parameter", ((ServletWebRequest)request).getRequest().getRequestURI());
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-    }
 }

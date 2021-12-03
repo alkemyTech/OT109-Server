@@ -39,7 +39,6 @@ public class OrganizationEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@Column(name = "organization_id")
 	private Long id;
 
 	@Column(nullable = false)

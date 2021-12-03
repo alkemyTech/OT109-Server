@@ -14,8 +14,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,7 +47,8 @@ public class Member {
     @Column(name = "member_id" ,nullable = false, unique = true)
     private Long Id;
 
-    @NotBlank
+    @NotBlank(message = "Member name can't be null,empty or whitespace.")
+    @Pattern(regexp="^[A-Za-z]*$",message = "Member name must have only letters")
     @Column(nullable = false)
     private String name;
     @Nullable
@@ -59,6 +62,7 @@ public class Member {
     @NotNull
     private String description;
 
+    @Valid
     @ManyToOne
     @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private OrganizationEntity organization;

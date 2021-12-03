@@ -6,16 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberDescriptionDTO {
+public class MemberRequest {
 
-    @NotNull
-    private Long id;
-    @NotNull
+    @NotBlank
     private String name;
     @Nullable
     private String facebookUrl;
@@ -27,6 +28,5 @@ public class MemberDescriptionDTO {
     private String image;
     @NotNull
     private String description;
-    //@NotNull
-    //private OrganizationEntity organization
+
 }

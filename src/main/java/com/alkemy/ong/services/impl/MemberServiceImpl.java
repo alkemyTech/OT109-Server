@@ -8,10 +8,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.alkemy.ong.dtos.ListMemberDTO;
-import com.alkemy.ong.dtos.MemberDescriptionDTO;
-import com.alkemy.ong.dtos.MemberRequestDTO;
+import com.alkemy.ong.dtos.MemberResponseDTO;
+import com.alkemy.ong.dtos.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
+import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.MemberRepository;
 import com.alkemy.ong.services.MemberService;
@@ -32,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
     private ModelMapper memberMapper;
 
     @Override
-    public MemberDescriptionDTO create(MemberRequestDTO request) throws DataAlreadyExistException{
+    public MemberResponseDTO create(MemberRequest request) throws DataAlreadyExistException{
         Optional<Member> optionalMember = memberRepository.findByName(request.getName());
         if (optionalMember.isPresent()) {
             throw new DataAlreadyExistException("Member already exists");
@@ -40,12 +41,12 @@ public class MemberServiceImpl implements MemberService {
 
         Member newMember = memberMapper.map(request, Member.class);
 
-       return memberMapper.map(memberRepository.save(newMember), MemberDescriptionDTO.class);
+       return memberMapper.map(memberRepository.save(newMember), MemberResponseDTO.class);
 
     }
 
     @Override
-    public MemberDescriptionDTO update(MemberRequestDTO member, Long id) throws NotFoundException {
+    public MemberResponseDTO update(MemberRequest member, Long id) throws NotFoundException {
         Member newMember = memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
 
         newMember.setName(member.getName());
@@ -55,25 +56,23 @@ public class MemberServiceImpl implements MemberService {
         newMember.setImage(member.getImage());
         newMember.setDescription(member.getDescription());
         newMember.setUpdatedAt(Date.valueOf(LocalDate.now()));
+
         newMember = memberRepository.save(newMember);
 
-        return memberMapper.map(newMember,MemberDescriptionDTO.class);
+        return memberMapper.map(newMember, MemberResponseDTO.class);
 
     }
 
     @Override
     public void delete(Long id) throws NotFoundException {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Member with id %id was not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Member with id %d was not found", id)));
         memberRepository.deleteById(id);
-
-        member.setDeletedAt((Date.valueOf(LocalDate.now())));
-        memberRepository.save(member);
     }
 
     @Override
     public Member findById(Long id) throws NotFoundException {
-        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Member with id %id was not found", id)));
+        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Member with id %d was not found", id)));
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.alkemy.ong.configurations;
 
 import com.alkemy.ong.dtos.ListMemberDTO;
-import com.alkemy.ong.dtos.MemberDescriptionDTO;
-import com.alkemy.ong.dtos.MemberRequestDTO;
+import com.alkemy.ong.dtos.MemberResponseDTO;
+import com.alkemy.ong.dtos.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -21,10 +21,17 @@ public class ModelMapperConfig {
                 map().setId(source.getId());
                 map().setImage(source.getImage());
                 map().setName(source.getName());
+                map().setDescription(source.getDescription());
+                map().setInstagramUrl(source.getInstagramUrl());
+                map().setLinkedinUrl(source.getLinkedinUrl());
+                map().setFacebookUrl(source.getFacebookUrl());
+                map().setCreatedAt(source.getCreatedAt());
+                map().setUpdatedAt(source.getUpdatedAt());
+                map().setDeletedAt(source.getUpdatedAt());
             }
         });
 
-        modelMapper.addMappings(new PropertyMap<Member, MemberDescriptionDTO>() {
+        modelMapper.addMappings(new PropertyMap<Member, MemberResponseDTO>() {
             @Override
             protected void configure(){
                 map().setId(source.getId());
@@ -37,7 +44,19 @@ public class ModelMapperConfig {
             }
         });
 
-        modelMapper.addMappings(new PropertyMap<MemberRequestDTO, Member>() {
+        modelMapper.addMappings(new PropertyMap<MemberRequest, Member>() {
+            @Override
+            protected void configure(){
+                map().setName(source.getName());
+                map().setImage(source.getImage());
+                map().setDescription(source.getDescription());
+                map().setFacebookUrl(source.getFacebookUrl());
+                map().setInstagramUrl(source.getInstagramUrl());
+                map().setLinkedinUrl(source.getLinkedinUrl());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<Member, MemberRequest>() {
             @Override
             protected void configure(){
                 map().setName(source.getName());
