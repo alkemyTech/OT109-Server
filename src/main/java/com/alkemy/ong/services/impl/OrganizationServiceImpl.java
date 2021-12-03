@@ -14,7 +14,7 @@ import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 
 @Service
-public class OrganizationServiceImpl implements OrganizationService{
+public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -25,7 +25,7 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     @Override
-    public void update(Long id, OrganizationEntity organizationEntity) {
+    public void update(Long id, OrganizationEntity organizationEntity) throws ParamNotFound {
         Optional<OrganizationEntity> entity = organizationRepository.findById(id);
         if (!entity.isPresent()) {
             throw new ParamNotFound("Error: invalid organization id");
@@ -43,14 +43,18 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     @Override
-    public OrganizationEntity findById(Long id) {
-        return organizationRepository.getById(id);
+    public OrganizationEntity findById(Long id) throws ParamNotFound {
+        Optional<OrganizationEntity> opt = organizationRepository.findById(id);
+        if (opt.isPresent()) {
+            return opt.get();
+        }
+        throw new ParamNotFound("Organization not found");
     }
 
     @Override
     public List<OrganizationEntity> findAll() {
         List<OrganizationEntity> entities = organizationRepository.findAll();
-        return  entities;
+        return entities;
     }
-    
+
 }

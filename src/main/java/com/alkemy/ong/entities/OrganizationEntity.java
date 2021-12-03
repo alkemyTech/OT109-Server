@@ -70,7 +70,7 @@ public class OrganizationEntity implements Serializable {
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(insertable = false, name = "updated_at")
     private Date updatedAt;
 
     @Temporal(value = TemporalType.TIMESTAMP)

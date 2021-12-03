@@ -2,6 +2,7 @@ package com.alkemy.ong.pojos.input;
 
 import com.alkemy.ong.entities.Member;
 import java.util.List;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,8 @@ public class CreateOrganizationDTO {
     private String image;
     private String address;
     private Integer phone;
+    
+    @Email(message = "Email has invalid format")
     private String email;
     private String welcomeText;
     private String aboutUsText;
