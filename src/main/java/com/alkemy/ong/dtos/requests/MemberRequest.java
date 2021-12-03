@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,14 +8,12 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListMemberDTO {
-    @NotNull
-    private Long Id;
+public class MemberRequest {
 
     @NotBlank
     private String name;
@@ -30,10 +28,4 @@ public class ListMemberDTO {
     @NotNull
     private String description;
 
-
-    private Date createdAt;
-
-    private Date updatedAt;
-
-    private Date deletedAt;
 }

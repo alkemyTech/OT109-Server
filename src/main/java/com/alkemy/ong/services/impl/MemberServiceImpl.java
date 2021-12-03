@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.alkemy.ong.dtos.ListMemberDTO;
-import com.alkemy.ong.dtos.MemberResponseDTO;
-import com.alkemy.ong.dtos.MemberRequest;
+import com.alkemy.ong.dtos.responses.ListMemberDTO;
+import com.alkemy.ong.dtos.responses.MemberResponseDTO;
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
-import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.MemberRepository;
 import com.alkemy.ong.services.MemberService;

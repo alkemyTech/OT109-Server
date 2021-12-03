@@ -1,8 +1,8 @@
 package com.alkemy.ong.configurations;
 
-import com.alkemy.ong.dtos.ListMemberDTO;
-import com.alkemy.ong.dtos.MemberResponseDTO;
-import com.alkemy.ong.dtos.MemberRequest;
+import com.alkemy.ong.dtos.responses.ListMemberDTO;
+import com.alkemy.ong.dtos.responses.MemberResponseDTO;
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;

@@ -1,5 +1,6 @@
-package com.alkemy.ong.dtos;
+package com.alkemy.ong.dtos.responses;
 
+import com.alkemy.ong.entities.OrganizationEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +11,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberRequest {
+public class MemberResponseDTO {
 
+    @NotNull
+    private Long id;
     @NotBlank
     private String name;
     @Nullable
@@ -28,5 +30,7 @@ public class MemberRequest {
     private String image;
     @NotNull
     private String description;
-
+    @Valid
+    @NotNull
+    private OrganizationEntity organization;
 }

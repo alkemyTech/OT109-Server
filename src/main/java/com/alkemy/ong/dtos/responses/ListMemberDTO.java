@@ -1,23 +1,22 @@
-package com.alkemy.ong.dtos;
+package com.alkemy.ong.dtos.responses;
 
-import com.alkemy.ong.entities.OrganizationEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberResponseDTO {
-
+public class ListMemberDTO {
     @NotNull
-    private Long id;
+    private Long Id;
+
     @NotBlank
     private String name;
     @Nullable
@@ -30,7 +29,11 @@ public class MemberResponseDTO {
     private String image;
     @NotNull
     private String description;
-    @Valid
-    @NotNull
-    private OrganizationEntity organization;
+
+
+    private Date createdAt;
+
+    private Date updatedAt;
+
+    private Date deletedAt;
 }
