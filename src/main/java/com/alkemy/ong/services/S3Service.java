@@ -1,5 +1,6 @@
 package com.alkemy.ong.services;
 
+import com.alkemy.ong.exceptions.S3Exception;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -45,13 +46,21 @@ public class S3Service {
     }
 
     // @Async annotation ensures that the method is executed in a different thread
+
+    /**Retrieves the an imput stream containing the objects's contents.
+     * @param fileName Key for the file's name in the server.
+     * @return An input stream containing the contents of the object.
+     */
     @Async
     public S3ObjectInputStream findByName(String fileName) {
         LOG.info("Downloading file with name {}", fileName);
         return amazonS3.getObject(s3BucketName, fileName).getObjectContent();
     }
 
-    //Must return a string with the absolute file path in the s3 bucket
+    /**Uploads the image to the S3 Bucket from Amazon Web Services.
+     * @param multipartFile Image file of extension .jpg .jpeg .png .gif ONLY
+     * @return The file's absolute path in the S3 Bucket server.
+     */
     @Async
     public String save(final MultipartFile multipartFile) {
         String filePath = null;

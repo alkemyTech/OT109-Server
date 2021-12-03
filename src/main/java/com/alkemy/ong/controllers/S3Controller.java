@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 /** Amazon Web Services S3 Bucket integration for uploading and downloading images.*/
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/s3/images")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class S3Controller {
 
@@ -22,19 +23,30 @@ public class S3Controller {
     @Autowired
     S3Service s3Service;
 
-    @GetMapping
-    public ResponseEntity<Object> findByName(@RequestBody(required = false) Map<String, String> params) {
+//    @GetMapping
+//    public ResponseEntity<Object> findByName(@RequestBody(required = false) Map<String, String> params) {
+//        return ResponseEntity
+//                .ok()
+//                .cacheControl(CacheControl.noCache())
+//                .header("Content-type", "application/octet-stream")
+//                .header("Content-disposition", "attachment; filename=\"" + params.get(FILE_NAME) + "\"")
+//                .body(new InputStreamResource(s3Service.findByName(params.get(FILE_NAME))));
+//    }
+
+    //testing endpoint
+    @GetMapping(params = "fileName")
+    public ResponseEntity<Object> findByName2(@RequestParam("fileName") String fileName) {
         return ResponseEntity
                 .ok()
                 .cacheControl(CacheControl.noCache())
                 .header("Content-type", "application/octet-stream")
-                .header("Content-disposition", "attachment; filename=\"" + params.get(FILE_NAME) + "\"")
-                .body(new InputStreamResource(s3Service.findByName(params.get(FILE_NAME))));
-
+                .header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
+                .body(new InputStreamResource(s3Service.findByName(fileName)));
     }
 
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestParam("file") MultipartFile multipartFile) {
+    @RequestMapping(method = RequestMethod.POST,
+                    consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> save(@RequestPart(value = "file") MultipartFile multipartFile) {
         String filePath = s3Service.save(multipartFile);
         return new ResponseEntity<>(filePath,HttpStatus.OK);
     }
