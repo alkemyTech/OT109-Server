@@ -35,6 +35,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public CategoryDTO update(Long id, CategoryPostPutRequestDTO category) {
+        if (category.getName() == null) {
+            throw new BadRequestException("Name may not be empty");
+        }
         Optional<Category> entity = categoryRepository.findById(id);
         if (!entity.isPresent()) {
             throw new ParamNotFound("Error: Invalid category id");
