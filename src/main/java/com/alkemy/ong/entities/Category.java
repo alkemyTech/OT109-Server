@@ -1,8 +1,11 @@
 package com.alkemy.ong.entities;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +21,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "categories")
+@SQLDelete(sql = "UPDATE categories SET deleted_at = current_timestamp() WHERE id = ?")
+@Where(clause = "deleted_at is null")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +53,7 @@ public class Category {
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "deleted_at")
+    //@ColumnDefault(value = "0000-00-00 00:00:00")
     private Date deletedAt;
 
 }

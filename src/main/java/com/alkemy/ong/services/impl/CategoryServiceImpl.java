@@ -4,6 +4,7 @@ import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
 import com.alkemy.ong.dtos.requests.CategoryPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
+import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.CategoryServiceException;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.CategoryRepository;
@@ -26,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public CategoryDTO create(CategoryPostRequestDTO categoryDTO) {
         if (categoryDTO.getName() == null) {
-            throw new ParamNotFound("Name may not be empty");
+            throw new BadRequestException("Name may not be empty");
         }
         Category entity = modelMapper.map(categoryDTO, Category.class);
         Category entityCreated = categoryRepository.save(entity);
@@ -39,18 +40,19 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    /*public Category delete(Long id) {
-        Category categoryToSoftDelete = this.findById(id);
-        categoryToSoftDelete.setDeletedAt(new Date());
-        return categoryRepository.save(categoryToSoftDelete);
-    }*/
+    public void delete(Long id) {
+        Optional<Category> entity = categoryRepository.findById(id);
+        if (!entity.isPresent()) {
+            throw new ParamNotFound("Error: Invalid category id");
+        }
+        categoryRepository.deleteById(id);
+    }
 
     public CategoryDTO findById(Long id) {
         Optional<Category> entity = categoryRepository.findById(id);
         if (!entity.isPresent()) {
             throw new ParamNotFound("Error: Invalid category id");
         }
-        //PostDTO result = postMapper.postEntity2DTO(entity.get());
         CategoryDTO result = modelMapper.map(entity.get(), CategoryDTO.class);
         return result;
     }

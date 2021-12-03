@@ -14,7 +14,7 @@ public interface CategoryService {
 
     public Category update(Category category);
 
-    //public Category delete(Long id);
+    public void delete(Long id);
 
     public CategoryDTO findById(Long id);
 
