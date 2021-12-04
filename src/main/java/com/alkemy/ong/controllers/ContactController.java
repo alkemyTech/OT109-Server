@@ -30,6 +30,9 @@ public class ContactController {
         if(!validatorUtil.isEmailValid(contactPostDto.getEmail())){
             return new ResponseEntity<>("Invalid email address.",HttpStatus.BAD_REQUEST);
         }
+        if(!validatorUtil.isPhoneValid(contactPostDto.getPhone())){
+            return new ResponseEntity<>("Invalid phone number.",HttpStatus.BAD_REQUEST);
+        }
         Contact contactToCreate = new Contact();
         contactToCreate.setName(contactPostDto.getName());
         contactToCreate.setPhone(contactPostDto.getPhone());
