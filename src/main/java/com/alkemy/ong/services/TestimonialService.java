@@ -21,9 +21,9 @@ public class TestimonialService {
 
     public void update(Long id, TestimonialEntity testimonialEntity) {
         Optional<TestimonialEntity> entity = testimonialRepository.findById(id);
-        if (!entity.isPresent()) {
-            throw new ParamNotFound("Error: invalid organization id");
-        }
+         if (!entity.isPresent()) {
+            throw new ParamNotFound("Error: invalid testimonial id");
+        } 
         entity.get().setName(testimonialEntity.getName());
         entity.get().setImage(testimonialEntity.getImage());
         entity.get().setContent(testimonialEntity.getContent());
@@ -36,10 +36,5 @@ public class TestimonialService {
 
     public TestimonialEntity findById(Long id) {
         return testimonialRepository.getById(id);
-    }
-
-    public List<TestimonialEntity> findAll() {
-        List<TestimonialEntity> entities = testimonialRepository.findAll();
-        return entities;
     }
 }
