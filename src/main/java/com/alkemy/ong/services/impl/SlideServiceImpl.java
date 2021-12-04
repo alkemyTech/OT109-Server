@@ -2,8 +2,9 @@ package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.repositories.SlideRepository;
+import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.services.OrganizationService;
 import com.alkemy.ong.services.SlideService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class SlideServiceImpl implements SlideService {
     @Autowired
     private SlideRepository slideRepository;
 
+    @Autowired
+    private OrganizationService organizationService;
+
     /**
      * Buscamos en la base de datos el mismo OrderNum de la slide dada,Si existe entonces
      * A a la slide que tenga ese OrderNum le damos un OrderNum superior a todas las demas slides,
@@ -25,16 +29,19 @@ public class SlideServiceImpl implements SlideService {
      * @return
      */
     @Override
-    public Slide save(Slide slide) {
-        try{
-            Slide slideBD = slideRepository.getByOrderNum(slide.getOrderNum());
-            slideBD.setOrderNum(slideRepository.getByMaxOrderNum().getOrderNum()+1);
-            slideRepository.save(slideBD);
-        }catch (Exception ex){
-            //Esta excepcion ocurre cuando no hay ningun slide con un orderNum dado
-        }finally {
-            return slideRepository.save(slide);
+    public Slide save(Slide slide) throws NotFoundException {
+
+        Long organization_id = slide.getOrganization().getId();
+        if(organizationService.findById(organization_id)== null){
+            throw new NotFoundException("Organization with id " + organization_id + " not found");
         }
+        if(slideRepository.existsByOrderNum(slide.getOrderNum())){
+            Slide slideBD = slideRepository.getByOrderNum(slide.getOrderNum());
+            slideBD.setOrderNum(slideRepository.getByMaxOrderNum()+1);
+            slideRepository.save(slideBD);
+        }
+        return slideRepository.save(slide);
+
     }
 
     @Override
@@ -55,8 +62,10 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public void delete(Long id) throws NotFoundException {
         try {
+            int orderNumFromEntity = getById(id).getOrderNum();
             slideRepository.deleteById(id);
-            slideRepository.decreaseHigherThan(id);
+            slideRepository.decreaseHigherThan(orderNumFromEntity);
+
         }catch (EmptyResultDataAccessException ex){
             throw new NotFoundException("Slide with id " + id + " not found");
         }
@@ -64,13 +73,16 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public Slide update(Long id, Slide slide) throws NotFoundException {
-       slide.setId(id);
-       return save(slide);
+        Slide slideBD = getById(id);
+        //Todos los los valores serian slideBD.setAtributte(slide.getAtributte)
+        slide.setId(id);
+        slide.setOrganization(slideBD.getOrganization());
+        return save(slide);
     }
 
     @Override
     public List<Slide> getAll() {
-        return slideRepository.findAll();
+        return slideRepository.findByOrderByOrderNumAsc();
     }
 
     @Override

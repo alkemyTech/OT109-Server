@@ -18,7 +18,6 @@ public class Slide {
     @Column(nullable = false, unique = true)
     private int orderNum;
     @ManyToOne
-    @JoinColumn(name = "organization_ID")
     private OrganizationEntity organization;
 
     public Slide(String imageUrl, String text, int orderNum, OrganizationEntity organization) {

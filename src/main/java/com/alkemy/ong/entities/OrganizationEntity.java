@@ -3,22 +3,12 @@ package com.alkemy.ong.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 
-import java.util.Date;
 import java.util.List;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,12 +17,13 @@ import org.hibernate.annotations.Where;
 import lombok.Getter;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "organizations")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE organizations SET deleted_at = current_timestamp() WHERE id = ?")
-@Where(clause = "deleted_at is null")
+@SQLDelete(sql = "UPDATE organizations SET deleted_at = now() WHERE organization_id=?")
+@Where(clause = "deleted_at IS NULL")
 public class OrganizationEntity implements Serializable {
 
     @Id
@@ -76,4 +67,18 @@ public class OrganizationEntity implements Serializable {
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "deleted_at")
     private Date deletedAt;
+
+    @OneToMany(targetEntity = Slide.class,mappedBy = "organization",cascade = {CascadeType.ALL, CascadeType.MERGE} ,fetch = FetchType.LAZY)
+    private List<Slide> slide;
+
+
+    public OrganizationEntity(String name, String image, String address, Integer phone, String email, String welcomeText, String aboutUsText) {
+        this.name = name;
+        this.image = image;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.welcomeText = welcomeText;
+        this.aboutUsText = aboutUsText;
+    }
 }
