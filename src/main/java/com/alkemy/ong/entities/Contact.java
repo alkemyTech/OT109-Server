@@ -1,5 +1,8 @@
 package com.alkemy.ong.entities;
 
+import com.alkemy.ong.dtos.requests.ContactPostDTO;
+import com.alkemy.ong.dtos.responses.ContactListDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +19,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "contacts")
 @SQLDelete(sql = "UPDATE posts SET deleted_at = now() WHERE id=?")
 @Where(clause = "deleted_at is null")
@@ -47,5 +51,7 @@ public class Contact implements Serializable {
 
     @Column(name = "updated_at")
     private Date updatedAt;
+
+
 
 }

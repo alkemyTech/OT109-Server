@@ -13,4 +13,13 @@ public class ContactPostDTO {
     private String email;
     private String message;
 
+    public Contact toContact(){
+        Contact contactToCreate = new Contact();
+        contactToCreate.setName(this.getName());
+        contactToCreate.setPhone(this.getPhone());
+        contactToCreate.setEmail(this.getEmail());
+        contactToCreate.setMessage(this.getMessage());
+        return contactToCreate;
+    }
+
 }

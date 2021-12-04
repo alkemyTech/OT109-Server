@@ -33,11 +33,7 @@ public class ContactController {
         if(!validatorUtil.isPhoneValid(contactPostDto.getPhone())){
             return new ResponseEntity<>("Invalid phone number.",HttpStatus.BAD_REQUEST);
         }
-        Contact contactToCreate = new Contact();
-        contactToCreate.setName(contactPostDto.getName());
-        contactToCreate.setPhone(contactPostDto.getPhone());
-        contactToCreate.setEmail(contactPostDto.getEmail());
-        contactToCreate.setMessage(contactPostDto.getMessage());
+        Contact contactToCreate = contactPostDto.toContact();
 
         Contact contactCreated = contactService.createContact(contactToCreate);
 
