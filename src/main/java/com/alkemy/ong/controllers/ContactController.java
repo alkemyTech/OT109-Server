@@ -1,16 +1,17 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.ContactPostDto;
+import com.alkemy.ong.dtos.requests.ContactPostDTO;
+import com.alkemy.ong.dtos.responses.ContactListDTO;
 import com.alkemy.ong.entities.Contact;
 import com.alkemy.ong.services.ContactService;
 import com.alkemy.ong.utils.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contacts")
@@ -21,9 +22,8 @@ public class ContactController {
     @Autowired
     private ValidatorUtil validatorUtil;
 
-
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ContactPostDto contactPostDto){
+    public ResponseEntity<?> create(@RequestBody ContactPostDTO contactPostDto){
         if(contactPostDto.getName().isEmpty()) {
             return new ResponseEntity<>("Name cannot be empty.",HttpStatus.BAD_REQUEST);
         }
@@ -42,5 +42,17 @@ public class ContactController {
         Contact contactCreated = contactService.createContact(contactToCreate);
 
         return new ResponseEntity<>(contactCreated, HttpStatus.CREATED);
+    }
+
+    /**Falta validación como administrador*/
+    @GetMapping
+    public List<ContactListDTO> getAll(){
+        //Falta validación como administrador
+        List<Contact> contactList = contactService.findAllContacts();
+        List<ContactListDTO> contactDTOList = new ArrayList<>();
+        for (Contact c : contactList) {
+            contactDTOList.add(new ContactListDTO(c));
+        }
+        return contactDTOList;
     }
 }

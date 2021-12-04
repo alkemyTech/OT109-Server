@@ -11,7 +11,7 @@ public class ValidatorUtil {
     //taken from https://www.baeldung.com/java-email-validation-regex 4. Strict Regular Expression Validation
     private static final String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-    //taken from https://es.stackoverflow.com/questions/136325/validar-tel%C3%A9fonos-de-argentina-con-una-expresi%C3%B3n-regular/136406
+    //taken from option 1 at https://es.stackoverflow.com/questions/136325/validar-tel%C3%A9fonos-de-argentina-con-una-expresi%C3%B3n-regular/136406
     private static final String ARG_PHONE_PATTERN = "^(?:(?:00)?549?)?0?(?:11|[2368]\\d)(?:(?=\\d{0,2}15)\\d{2})??\\d{8}$";
 
     public boolean isEmailValid(final String email) {

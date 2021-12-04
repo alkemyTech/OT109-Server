@@ -18,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "contacts")
 @SQLDelete(sql = "UPDATE posts SET deleted_at = now() WHERE id=?")
-@Where(clause = "deleted_at = null")
+@Where(clause = "deleted_at is null")
 @SQLUpdate(sql = "UPDATE posts SET update_at = now() WHERE id=?")
 public class Contact implements Serializable {
     @Id
