@@ -1,5 +1,6 @@
 package com.alkemy.ong.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -7,8 +8,6 @@ import javax.validation.constraints.Email;
 
 import java.util.Date;
 import java.util.List;
-
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,7 +18,6 @@ import org.hibernate.annotations.Where;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Table(name = "organizations")
 @Getter
@@ -29,47 +27,46 @@ import lombok.Setter;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
-public class OrganizationEntity {
+public class OrganizationEntity implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "organization_id")
+    private Long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Column(nullable = false)
+    private String name;
 
-	@Column(nullable = false)
-	private String name;
+    @Column(nullable = false)
+    private String image;
 
-	@Column(nullable = false)
-	private String image;
+    private String address;
 
-	private String address;
+    private Integer phone;
 
-	private Integer phone;
+    @Column(nullable = false)
+    @Email
+    private String email;
 
-	@Column(nullable = false)
-	@Email
-	private String email;
+    @Column(columnDefinition = "TEXT", name = "welcome_text", nullable = false)
+    private String welcomeText;
 
-	@Column(columnDefinition = "TEXT", name = "welcome_text", nullable = false)
-	private String welcomeText;
-
-	@Column(columnDefinition = "TEXT", name = "about_us_text")
-	private String aboutUsText;
-
+    @Column(columnDefinition = "TEXT", name = "about_us_text")
+    private String aboutUsText;
 
     @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
     private List<Member> members;
 
-	@Temporal(value = TemporalType.TIMESTAMP)
-	@CreationTimestamp
-	@Column(name = "created_at")
-	private Date createdAt;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Date createdAt;
 
-	@Temporal(value = TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	@Column(name = "updated_at")
-	private Date updatedAt;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    @Column(insertable = false, name = "updated_at")
+    private Date updatedAt;
 
-	@Temporal(value = TemporalType.TIMESTAMP)
-	@Column(name = "deleted_at")
-	private Date deletedAt;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "deleted_at")
+    private Date deletedAt;
 }

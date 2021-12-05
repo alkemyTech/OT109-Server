@@ -23,6 +23,12 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    @Operation(summary = "Filters movies")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Movie found",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieDTO.class)))
+            ),
+            @ApiResponse(responseCode = "204", description = "No content")})
     @GetMapping("")
     public ResponseEntity<?> getAll(){
         List<ListMemberDTO> members = memberService.findAll();

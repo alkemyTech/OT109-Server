@@ -77,7 +77,8 @@ Thumbs.db
 *.mov
 *.wmv
 
-/src/main/resources/application.properties
+#Application properties
+src/main/resources/application.properties
 
 #Git ignore
 .gitignore
