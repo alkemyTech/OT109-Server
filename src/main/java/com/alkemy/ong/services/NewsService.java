@@ -1,10 +1,15 @@
 package com.alkemy.ong.services;
 
+import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.entities.Category;
+import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.CategoryServiceException;
 import com.alkemy.ong.exceptions.NewsNotFoundException;
 import com.alkemy.ong.entities.News;
+import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.NewsRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +18,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NewsService {
+public class NewsService implements INewService{
     @Autowired
     private NewsRepository newsRepository;
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public News save(String name, String content, String image, Category categoryId){
         News news = new News();
@@ -81,9 +89,10 @@ public class NewsService {
     public void delete(Long id){
         Optional<News> news = newsRepository.findById(id);
 
-        if(news.isEmpty()){
+        if(!news.isPresent()){
             throw new NewsNotFoundException("News with id " + id + " not found");
         }
+
         newsRepository.deleteById(id);
     }
 
@@ -114,5 +123,42 @@ public class NewsService {
             c.setDescription(null);
         }
         return c;
+    }
+
+    @Override
+    public NewDTO saveNews(NewPostPutRequestDTO newPostRequestDTO) {
+        Category newsCategory = newsRepository.findCategoryByName("news");
+
+        if (newsCategory == null) {
+            throw new BadRequestException("News category not found.");
+        }
+
+        News news = new News();
+        news.setName(newPostRequestDTO.getName());
+        news.setContent(newPostRequestDTO.getContent());
+        news.setImage(newPostRequestDTO.getImage());
+        news.setCategory(newsCategory);
+        news.setCreatedAt(new Date());
+        News newNews =  newsRepository.save(news);
+        NewDTO newDTO = modelMapper.map(newNews, NewDTO.class );
+        return newDTO;
+    }
+
+    @Override
+    public NewDTO updateNews(Long id,NewPostPutRequestDTO newPutRequestDTO ) throws NotFoundException {
+
+        Optional<News> news = newsRepository.findById(id);
+        if(!news.isPresent()){
+            throw new NotFoundException("News Not Fonud");
+        }
+        news.get().setName(newPutRequestDTO.getName());
+        news.get().setContent(newPutRequestDTO.getContent());
+        news.get().setImage(newPutRequestDTO.getImage());
+        news.get().setCategory(newsRepository.findCategoryByName("news"));
+        news.get().setUpdatedAt(new Date());
+        News UptNews =  newsRepository.save(news.get());
+        NewDTO UptDTO = modelMapper.map(UptNews, NewDTO.class );
+        return UptDTO;
+
     }
 }
