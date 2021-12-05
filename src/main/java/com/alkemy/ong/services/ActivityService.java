@@ -1,20 +1,28 @@
 package com.alkemy.ong.services;
 
+import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;
+import com.alkemy.ong.dtos.responses.ActivityDTO;
 import com.alkemy.ong.entities.Activity;
 import com.alkemy.ong.exceptions.ActivityServiceException;
+import com.alkemy.ong.exceptions.BadRequestException;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.ActivityRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ActivityService {
+public class ActivityService  implements IActivityService{
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Activity create(Activity activity){
         activity.setCreatedAt(new Date());
@@ -45,4 +53,34 @@ public class ActivityService {
     }
 
 
+    @Override
+    public ActivityDTO create(ActivityPostPutRequestDTO activityPostRequestDTO) {
+        if (activityPostRequestDTO.getName().isBlank()) {
+            throw new BadRequestException("Name may not be empty");
+        }
+        if(activityPostRequestDTO.getContent().isBlank()){
+            throw new BadRequestException("Content may not be empty");
+        }
+
+        Activity activity = modelMapper.map(activityPostRequestDTO, Activity.class);
+        activity.setCreatedAt(new Date());
+        Activity activityCreated = activityRepository.save(activity);
+        ActivityDTO result = modelMapper.map(activityCreated, ActivityDTO.class);
+        return result;
+    }
+
+    @Override
+    public ActivityDTO update(Long id, ActivityPostPutRequestDTO activityPutRequestDTO) {
+        Optional<Activity> activityOptional = activityRepository.findById(id);
+        if(activityOptional.isEmpty()){
+            throw new ParamNotFound("Error: Invalid activity id");
+        }
+        activityOptional.get().setName(activityPutRequestDTO.getName());
+        activityOptional.get().setContent(activityPutRequestDTO.getContent());
+        activityOptional.get().setImage(activityPutRequestDTO.getImage());
+        activityOptional.get().setUpdatedAt(new Date());
+        Activity activitySave = activityRepository.save(activityOptional.get());
+        ActivityDTO activityDTO = modelMapper.map(activitySave, ActivityDTO.class);
+        return activityDTO;
+    }
 }
