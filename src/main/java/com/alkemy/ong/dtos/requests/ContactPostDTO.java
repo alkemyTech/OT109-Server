@@ -3,8 +3,6 @@ package com.alkemy.ong.dtos.requests;
 import com.alkemy.ong.entities.Contact;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -15,6 +13,7 @@ public class ContactPostDTO {
     @NotEmpty
     private String name;
 
+    @NotEmpty
     private String phone;
 
     @NotEmpty

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class ValidatorConfig {
 
     @Bean
-    public ValidatorUtil emailValidatorUtil(){
+    public ValidatorUtil ValidatorUtil(){
         return new ValidatorUtil();
     }
 }
