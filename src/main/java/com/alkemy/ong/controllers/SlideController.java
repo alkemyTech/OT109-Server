@@ -3,13 +3,11 @@ package com.alkemy.ong.controllers;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.pojos.output.SlideCompact;
-import com.alkemy.ong.pojos.output.SlideDetails;
 import com.alkemy.ong.pojos.output.SlideRequestUpdate;
 import com.alkemy.ong.services.SlideService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,43 +20,44 @@ public class SlideController {
     @Autowired
     private SlideService slideService;
 
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) throws NotFoundException {
+    public String delete(@PathVariable("id") Long id) throws NotFoundException {
         slideService.delete(id);
-        return new ResponseEntity<>( "Post with id " + id + " is deleted", HttpStatus.OK);
+        return "Post with id " + id + " is deleted";
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Slide> update(@PathVariable("id") Long id, @RequestBody SlideRequestUpdate slideRequestUpdate) throws NotFoundException {
-        return new ResponseEntity<>(slideService.update(id,new ModelMapper().map(slideRequestUpdate,Slide.class)), HttpStatus.OK);
+    public Slide update(@PathVariable("id") Long id, @RequestBody SlideRequestUpdate slideRequestUpdate) throws NotFoundException {
+        return slideService.update(id,new ModelMapper().map(slideRequestUpdate,Slide.class));
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public ResponseEntity<Slide> save(@RequestBody Slide slide) throws NotFoundException {
-        //cuando se le da a la slide una organizacion con un id no registrado en la base de datos devuelve
-        //una excepcion correspondiente a ParamNotFound
-        return new ResponseEntity<>(slideService.save(slide), HttpStatus.CREATED);
+    public Slide save(@RequestBody Slide slide) throws NotFoundException {
+        return slideService.save(slide);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/{id}")
-    public ResponseEntity<SlideDetails> getById(@PathVariable("id") Long id) throws NotFoundException {
-        ModelMapper modelMapper = new ModelMapper();
-        return new ResponseEntity<>(modelMapper.map(slideService.getById(id), SlideDetails.class), HttpStatus.OK);
+    public Slide getById(@PathVariable("id") Long id) throws NotFoundException {
+        return slideService.getById(id);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleExistsByEmail(NotFoundException existsWithEmailException) {
-        return new ResponseEntity<>(existsWithEmailException.getMessage(), HttpStatus.BAD_REQUEST);
+    public String handle(NotFoundException notFoundException) {
+        return notFoundException.getMessage();
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping()
-    public ResponseEntity<List<SlideCompact>> getSlides(){
-        return new ResponseEntity<>(
-                slideService.getAll()
-                    .stream().map(slide -> new SlideCompact(
-                            slide.getImageUrl(),
-                            slide.getOrderNum()))
-                    .collect(Collectors.toList()),
-                HttpStatus.OK);
+    public List<SlideCompact> getSlides(){
+        return slideService.getAll()
+                .stream().map(slide -> new SlideCompact(
+                        slide.getImageUrl(),
+                        slide.getOrderNum()))
+                .collect(Collectors.toList());
     }
 }

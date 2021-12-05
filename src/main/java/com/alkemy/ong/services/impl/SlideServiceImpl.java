@@ -22,16 +22,23 @@ public class SlideServiceImpl implements SlideService {
     private OrganizationService organizationService;
 
     /**
+     * Si el slide dado contiene un orderNum sin valor(null) le otorgamos un OrderNum mayor a todos los demas slides
+     * para que este se visualice ultimo.
+     *
      * Buscamos en la base de datos el mismo OrderNum de la slide dada,Si existe entonces
      * A a la slide que tenga ese OrderNum le damos un OrderNum superior a todas las demas slides,
      * y la slide dada se queda con su OrderNum seteada ocupando el "lugar" de la anterior slide
-     * @param slide
-     * @return
+     * @param slide a guardar
+     * @return Slide con su id registrado
+     * @throws NotFoundException Cuando la OrganizacionEntity de el Slide dado no tiene un id registrado en la base de dato
      */
     @Override
     public Slide save(Slide slide) throws NotFoundException {
-
         Long organization_id = slide.getOrganization().getId();
+
+        if(slide.getOrderNum() == null){
+            slide.setOrderNum(slideRepository.getByMaxOrderNum()+1);
+        }
         if(organizationService.findById(organization_id)== null){
             throw new NotFoundException("Organization with id " + organization_id + " not found");
         }
@@ -41,7 +48,6 @@ public class SlideServiceImpl implements SlideService {
             slideRepository.save(slideBD);
         }
         return slideRepository.save(slide);
-
     }
 
     @Override

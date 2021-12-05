@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -54,16 +55,19 @@ public class OrganizationEntity implements Serializable {
     @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
     private List<Member> members;
 
+    @JsonIgnore
     @Temporal(value = TemporalType.TIMESTAMP)
     @CreationTimestamp
     @Column(name = "created_at")
     private Date createdAt;
 
+    @JsonIgnore
     @Temporal(value = TemporalType.TIMESTAMP)
     @UpdateTimestamp
     @Column(insertable = false, name = "updated_at")
     private Date updatedAt;
 
+    @JsonIgnore
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "deleted_at")
     private Date deletedAt;
@@ -71,14 +75,4 @@ public class OrganizationEntity implements Serializable {
     @OneToMany(targetEntity = Slide.class,mappedBy = "organization",cascade = {CascadeType.ALL, CascadeType.MERGE} ,fetch = FetchType.LAZY)
     private List<Slide> slide;
 
-
-    public OrganizationEntity(String name, String image, String address, Integer phone, String email, String welcomeText, String aboutUsText) {
-        this.name = name;
-        this.image = image;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-        this.welcomeText = welcomeText;
-        this.aboutUsText = aboutUsText;
-    }
 }
