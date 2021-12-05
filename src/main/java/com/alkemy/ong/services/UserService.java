@@ -16,6 +16,7 @@ import org.modelmapper.config.Configuration.AccessLevel;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,9 +28,13 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepo;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     @Transactional
     public User create(@NonNull User user) {
         user.setCreatedAt(new Date());
+        user.setPassword(encoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
 
@@ -39,7 +44,7 @@ public class UserService {
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
-                .password(password)
+                .password(encoder.encode(password))
                 .photo(photo)
                 .role(role)
                 .build());
@@ -92,6 +97,7 @@ public class UserService {
             User user = opt.get();
             modelMapper.map(newUser, user);
             user.setUpdatedAt(new Date());
+            user.setPassword(encoder.encode(newUser.getPassword()));
             userRepo.save(user);
         } else {
             throw new UserServiceException("User not found");
@@ -107,6 +113,7 @@ public class UserService {
             newUser.setCreatedAt(user.getCreatedAt());
             BeanUtils.copyProperties(newUser, user);
             user.setUpdatedAt(new Date());
+            user.setPassword(encoder.encode(newUser.getPassword()));
             userRepo.save(user);
         } else {
             userRepo.putId(id);

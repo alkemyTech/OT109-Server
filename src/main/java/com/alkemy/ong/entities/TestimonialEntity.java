@@ -22,7 +22,7 @@ import java.util.Date;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE testimonials SET deleted_at = current_timestamp() WHERE id = ?")
-@Where(clause = "deleted_at = null")
+@Where(clause = "deleted_at is null")
 
 public class TestimonialEntity {
 
