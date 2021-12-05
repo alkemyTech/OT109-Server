@@ -1,5 +1,6 @@
 package com.alkemy.ong.pojos.input;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
@@ -11,11 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TestimonialDTO {
 
-    @NotEmpty(message = "this field can not be blank")
     private String name;
-
     private String image;
-    @NotEmpty(message = "this field can not be blank")
     private String content;
 
 }

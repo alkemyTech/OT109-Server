@@ -33,40 +33,23 @@ public class TestimonialsController {
     @PostMapping
     public ResponseEntity<TestimonialEntity> addTestimonial(@Valid @RequestBody TestimonialDTO testimonialDTO) {
 
-        TestimonialEntity testimonialEntity = new TestimonialEntity();
-
-        testimonialEntity.setContent(testimonialDTO.getContent());
-        testimonialEntity.setName(testimonialDTO.getName());
-        testimonialEntity.setImage(testimonialDTO.getImage());
-        testimonialService.create(testimonialEntity);
-
-        return new ResponseEntity<TestimonialEntity>(testimonialEntity, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(testimonialService.create(testimonialDTO));
 
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @PutMapping("/{id}")
-    public void updateTestimonial(@PathVariable Long id, @RequestBody TestimonialDTO testimonialDTO) {
+    public TestimonialEntity updateTestimonial(@PathVariable Long id, @RequestBody TestimonialDTO testimonialDTO) {
 
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
-                .setFieldAccessLevel(AccessLevel.PRIVATE);
-        TestimonialEntity testimonialEntity = new TestimonialEntity();
-        modelMapper.map(testimonialDTO, testimonialEntity);
-        testimonialEntity.setId(id);
-        testimonialService.update(testimonialEntity.getId(), testimonialEntity);
+        return testimonialService.update(id, testimonialDTO);
 
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) throws NotFoundException {
+    public void delete(@PathVariable Long id){
 
-        if (testimonialService.findById(id) != null) {
-            testimonialService.delete(id);
-        } else {
-            throw new NotFoundException("Testimonial not found");
-        }
+        testimonialService.delete(id);
 
     }
 
