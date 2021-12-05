@@ -28,6 +28,7 @@ public class ModelMapperConfig {
                 map().setCreatedAt(source.getCreatedAt());
                 map().setUpdatedAt(source.getUpdatedAt());
                 map().setDeletedAt(source.getUpdatedAt());
+                map().setOrganization(source.getOrganization());
             }
         });
 
@@ -53,6 +54,7 @@ public class ModelMapperConfig {
                 map().setFacebookUrl(source.getFacebookUrl());
                 map().setInstagramUrl(source.getInstagramUrl());
                 map().setLinkedinUrl(source.getLinkedinUrl());
+                map().setOrganization(source.getOrganization());
             }
         });
 

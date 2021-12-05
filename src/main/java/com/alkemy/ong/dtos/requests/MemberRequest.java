@@ -1,5 +1,6 @@
 package com.alkemy.ong.dtos.requests;
 
+import com.alkemy.ong.entities.OrganizationEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,6 @@ public class MemberRequest {
     private String image;
     @NotNull
     private String description;
+    private OrganizationEntity organization;
 
 }

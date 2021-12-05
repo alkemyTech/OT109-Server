@@ -2,17 +2,7 @@ package com.alkemy.ong.entities;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 
 import java.util.Date;
@@ -62,7 +52,7 @@ public class OrganizationEntity {
 	private String aboutUsText;
 
 
-    @OneToMany(mappedBy = "organization" , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
     private List<Member> members;
 
 	@Temporal(value = TemporalType.TIMESTAMP)

@@ -11,11 +11,13 @@ import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.entities.Member;
+import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.MemberRepository;
 import com.alkemy.ong.services.MemberService;
 
+import com.alkemy.ong.services.OrganizationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,6 +28,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private OrganizationService organizationService;
 
     @Autowired
     @Qualifier("Member-Mapper")
@@ -39,8 +44,9 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member newMember = memberMapper.map(request, Member.class);
+        newMember = memberRepository.save(newMember);
 
-       return memberMapper.map(memberRepository.save(newMember), MemberResponseDTO.class);
+       return memberMapper.map(newMember, MemberResponseDTO.class);
 
     }
 
@@ -48,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponseDTO update(MemberRequest member, Long id) throws NotFoundException {
         Member newMember = memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
 
+        newMember.setId(id);
         newMember.setName(member.getName());
         newMember.setFacebookUrl(member.getFacebookUrl());
         newMember.setInstagramUrl(member.getInstagramUrl());
@@ -55,6 +62,7 @@ public class MemberServiceImpl implements MemberService {
         newMember.setImage(member.getImage());
         newMember.setDescription(member.getDescription());
         newMember.setUpdatedAt(Date.valueOf(LocalDate.now()));
+        newMember.setOrganization(organizationService.findById(member.getOrganization().getId()));
 
         newMember = memberRepository.save(newMember);
 
