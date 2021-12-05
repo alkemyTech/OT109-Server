@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,8 +25,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE organizations SET deleted_at = current_timestamp() WHERE id = ?")
-@Where(clause = "deleted_at = null")
-
+@Where(clause = "deleted_at is null")
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id")
 public class OrganizationEntity {
 
 	@Id

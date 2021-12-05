@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,6 +30,9 @@ import lombok.Setter;
 @Table(name = "members")
 @SQLDelete(sql = "UPDATE members SET deleted_at = now() WHERE member_id=?")
 @Where(clause = "deleted_at IS NULL")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Member {
 
     @Id
@@ -52,7 +57,7 @@ public class Member {
     private String description;
 
     @Valid
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id")
     private OrganizationEntity organization;
 
