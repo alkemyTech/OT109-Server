@@ -34,7 +34,7 @@ public class UserService {
     @Transactional
     public User create(@NonNull User user) {
         user.setCreatedAt(new Date());
-        user.setPassword(encoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         return userRepo.save(user);
     }
 
@@ -44,7 +44,7 @@ public class UserService {
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
-                .password(encoder.encode(password))
+                .password(password)
                 .photo(photo)
                 .role(role)
                 .build());

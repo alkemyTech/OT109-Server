@@ -2,6 +2,8 @@ package com.alkemy.ong.pojos.input;
 
 import lombok.*;
 
+import java.util.Set;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -16,6 +18,8 @@ public class RequestUserDTO {
     @NonNull
     private String password;
 
-    private String photo;        
+    private String photo;
+
+    private Set<String> role;
     
 }
