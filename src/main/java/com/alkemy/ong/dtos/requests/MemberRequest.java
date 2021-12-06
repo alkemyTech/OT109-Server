@@ -8,6 +8,7 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
 public class MemberRequest {
 
     @NotBlank
+    @Pattern(regexp="[^0-9]*$",message = "Member name must have only letters")
     private String name;
     @Nullable
     private String facebookUrl;

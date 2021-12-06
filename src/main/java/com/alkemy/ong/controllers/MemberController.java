@@ -61,6 +61,9 @@ public class MemberController {
 
         try{
             memberService.update(request,id);
+        }catch (ConstraintViolationException ex){
+            String errorMessage = ex.getConstraintViolations().iterator().next().getMessage();
+            throw new InvalidParameterException(errorMessage);
         }catch (DataIntegrityViolationException ex){
             throw new InvalidParameterException("Image can't be null");
         }
