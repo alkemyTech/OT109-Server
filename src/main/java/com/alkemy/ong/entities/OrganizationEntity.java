@@ -8,6 +8,8 @@ import javax.validation.constraints.Email;
 
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,9 +26,6 @@ import lombok.Setter;
 @Setter
 @SQLDelete(sql = "UPDATE organizations SET deleted_at = current_timestamp() WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
-@JsonIdentityInfo(
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property = "id")
 public class OrganizationEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +51,7 @@ public class OrganizationEntity implements Serializable {
     @Column(columnDefinition = "TEXT", name = "about_us_text")
     private String aboutUsText;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
     private List<Member> members;
 
