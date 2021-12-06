@@ -1,6 +1,7 @@
 package com.alkemy.ong.dtos.responses;
 
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,6 @@ public class MemberResponseDTO {
     private String image;
     @NotNull
     private String description;
-    @Valid
-    @NotNull
-    private OrganizationEntity organization;
+
+    private ListOrganizationDTO organization;
 }

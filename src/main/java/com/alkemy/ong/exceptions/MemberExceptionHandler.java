@@ -17,7 +17,9 @@ import java.util.Date;
 public class MemberExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException exception, WebRequest request){
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false).substring(4));
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                request.getDescription(false).substring(4));
+        
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 

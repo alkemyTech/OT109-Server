@@ -54,7 +54,6 @@ public class MemberMapperConfig {
                 map().setFacebookUrl(source.getFacebookUrl());
                 map().setInstagramUrl(source.getInstagramUrl());
                 map().setLinkedinUrl(source.getLinkedinUrl());
-                map().setOrganization(source.getOrganization());
             }
         });
 

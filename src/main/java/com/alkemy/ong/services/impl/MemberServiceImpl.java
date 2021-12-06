@@ -14,6 +14,7 @@ import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.repositories.MemberRepository;
 import com.alkemy.ong.services.MemberService;
 
@@ -37,22 +38,37 @@ public class MemberServiceImpl implements MemberService {
     private ModelMapper memberMapper;
 
     @Override
-    public MemberResponseDTO create(MemberRequest request) throws DataAlreadyExistException{
+    public MemberResponseDTO create(MemberRequest request) throws DataAlreadyExistException, NotFoundException {
         Optional<Member> optionalMember = memberRepository.findByName(request.getName());
         if (optionalMember.isPresent()) {
             throw new DataAlreadyExistException("Member already exists");
         }
 
+        OrganizationEntity organization = organizationService.findById(request.getOrganizationId());
+
+        if(organization == null) throw new NotFoundException(String.format("Organization Id: %d not found",request.getOrganizationId()));
+
         Member newMember = memberMapper.map(request, Member.class);
+
+        newMember.setId(null);
+        newMember.setCreatedAt(new java.util.Date());
+        newMember.setOrganization(organization);
+
         newMember = memberRepository.save(newMember);
 
-       return memberMapper.map(newMember, MemberResponseDTO.class);
+        MemberResponseDTO response = memberMapper.map(newMember, MemberResponseDTO.class);
+        response.setOrganization(memberMapper.map(organization,ListOrganizationDTO.class));
+
+       return response;
 
     }
 
     @Override
     public MemberResponseDTO update(MemberRequest member, Long id) throws NotFoundException {
         Member newMember = memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
+        OrganizationEntity organization = organizationService.findById(member.getOrganizationId());
+
+        if(organization == null) throw new NotFoundException(String.format("Organization Id: %d not found",member.getOrganizationId()));
 
         newMember.setId(id);
         newMember.setName(member.getName());
@@ -62,7 +78,7 @@ public class MemberServiceImpl implements MemberService {
         newMember.setImage(member.getImage());
         newMember.setDescription(member.getDescription());
         newMember.setUpdatedAt(Date.valueOf(LocalDate.now()));
-        newMember.setOrganization(organizationService.findById(member.getOrganization().getId()));
+        newMember.setOrganization(organization);
 
         newMember = memberRepository.save(newMember);
 
@@ -97,5 +113,20 @@ public class MemberServiceImpl implements MemberService {
                 .stream()
                 .map(member -> memberMapper.map(member,ListMemberDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    private OrganizationEntity keepId(OrganizationEntity organization){
+        organization.setName(null);
+        organization.setImage(null);
+        organization.setAddress(null);
+        organization.setAboutUsText(null);
+        organization.setEmail(null);
+        organization.setMembers(null);
+        organization.setPhone(null);
+        organization.setWelcomeText(null);
+        organization.setUpdatedAt(null);
+        organization.setCreatedAt(null);
+        organization.setDeletedAt(null);
+        return organization;
     }
 }

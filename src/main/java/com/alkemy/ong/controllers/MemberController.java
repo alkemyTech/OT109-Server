@@ -11,6 +11,7 @@ import com.alkemy.ong.services.MemberService;
 import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class MemberController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> save(@Valid @RequestBody MemberRequest request) throws DataAlreadyExistException{
+    public ResponseEntity<?> save(@Valid @RequestBody MemberRequest request) throws DataAlreadyExistException, NotFoundException{
         try{
             MemberResponseDTO response = memberService.create(request);
             return ResponseEntity.ok(response);
