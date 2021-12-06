@@ -1,6 +1,7 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.entities.Slide;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.SlideRepository;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.services.OrganizationService;
@@ -35,7 +36,7 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public Slide save(Slide slide) throws NotFoundException {
         Long organization_id = slide.getOrganization().getId();
-
+        validateSlide(slide);
         if(slide.getOrderNum() == null){
             slide.setOrderNum(slideRepository.getByMaxOrderNum()+1);
         }
@@ -93,6 +94,18 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public void deleteAll() {
         slideRepository.deleteAll();
+    }
+
+    private void validateSlide(Slide slide)throws ParamNotFound {
+        if(slide.getOrderNum()<0){
+            throw new ParamNotFound("Atributte *orderNum* only admits values greater than or equal to 0 ");
+        }
+        if(!slide.getImageUrl().endsWith(".png") && !slide.getImageUrl().endsWith(".jpg")){
+            throw new ParamNotFound("Atributte *imageUrl* only supports a path that supports strings ending with .png or .jpg ");
+        }
+        if(slide.getText().isBlank()){
+            throw new ParamNotFound("Atributte *text* is empty");
+        }
     }
 
 }
