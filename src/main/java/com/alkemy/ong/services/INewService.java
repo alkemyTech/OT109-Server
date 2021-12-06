@@ -5,8 +5,8 @@ import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.exceptions.NotFoundException;
 
 public interface INewService {
-    NewDTO saveNews(NewPostPutRequestDTO newPostRequestDTO);
+    NewDTO saveNews(NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException;
     NewDTO updateNews( Long id,NewPostPutRequestDTO newPutRequestDTO) throws NotFoundException;
-    void delete(Long id);
+    void delete(Long id) throws NotFoundException;
 
 }

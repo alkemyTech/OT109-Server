@@ -13,5 +13,5 @@ public class NewPostPutRequestDTO {
 
     private String image;
 
-    private Category category;
+    private Long categoryId;
 }

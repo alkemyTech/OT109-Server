@@ -17,21 +17,36 @@ public class NewController {
     @Autowired
     private INewService newService;
     @PostMapping()
-    public ResponseEntity<NewDTO> create(@Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO){
-        NewDTO newDTO = newService.saveNews(newPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newDTO);
+    public ResponseEntity<?> create(@Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
+        try{
+            NewDTO newDTO = newService.saveNews(newPostRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newDTO);
+        }catch (NotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NewDTO> update( @PathVariable Long id,@Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
-        NewDTO newDTO = newService.updateNews(id,newPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(newDTO);
+    public ResponseEntity<?> update( @PathVariable Long id,@Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
+
+        try{
+            NewDTO newDTO = newService.updateNews(id,newPostRequestDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(newDTO);
+        }catch (NotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        newService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
+        try{
+            newService.delete(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (NotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+
+
     }
 
 
