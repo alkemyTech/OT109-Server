@@ -5,6 +5,7 @@ import com.alkemy.ong.dtos.responses.ActivityDTO;
 import com.alkemy.ong.entities.Activity;
 import com.alkemy.ong.exceptions.ActivityServiceException;
 import com.alkemy.ong.exceptions.BadRequestException;
+import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.ActivityRepository;
 import org.modelmapper.ModelMapper;
@@ -70,16 +71,13 @@ public class ActivityService  implements IActivityService{
     }
 
     @Override
-    public ActivityDTO update(Long id, ActivityPostPutRequestDTO activityPutRequestDTO) {
-        Optional<Activity> activityOptional = activityRepository.findById(id);
-        if(activityOptional.isEmpty()){
-            throw new ParamNotFound("Error: Invalid activity id");
-        }
-        activityOptional.get().setName(activityPutRequestDTO.getName());
-        activityOptional.get().setContent(activityPutRequestDTO.getContent());
-        activityOptional.get().setImage(activityPutRequestDTO.getImage());
-        activityOptional.get().setUpdatedAt(new Date());
-        Activity activitySave = activityRepository.save(activityOptional.get());
+    public ActivityDTO update(Long id, ActivityPostPutRequestDTO activityPutRequestDTO) throws NotFoundException {
+        Activity activityOptional = activityRepository.findById(id).orElseThrow(() -> new NotFoundException("Activity does not exist"));
+        activityOptional.setName(activityPutRequestDTO.getName());
+        activityOptional.setContent(activityPutRequestDTO.getContent());
+        activityOptional.setImage(activityPutRequestDTO.getImage());
+        activityOptional.setUpdatedAt(new Date());
+        Activity activitySave = activityRepository.save(activityOptional);
         ActivityDTO activityDTO = modelMapper.map(activitySave, ActivityDTO.class);
         return activityDTO;
     }
