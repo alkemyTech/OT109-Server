@@ -1,6 +1,7 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.User;
+import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.UserServiceException;
 import com.alkemy.ong.pojos.input.RegisterUserDTO;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
@@ -38,14 +39,14 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.OK)
-    public ListUserDTO register(@RequestBody RegisterUserDTO registerUserDTO){
+    public ListUserDTO register(@RequestBody RegisterUserDTO registerUserDTO) throws DataAlreadyExistException {
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 
         Optional<User> userOptional = userRepository.findByEmail(registerUserDTO.getEmail());
         if(userOptional.isPresent()){
-            throw new UserServiceException("Email already exists");
+            throw new DataAlreadyExistException(String.format("Email %s already exists", registerUserDTO.getEmail()));
         }
 
         User user = new User();
@@ -69,7 +70,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseLoginDTO login(@RequestBody RequestLoginDTO loginRequestDTO) throws JsonProcessingException {
+    public ResponseLoginDTO login(@RequestBody RequestLoginDTO loginRequestDTO){
 
         return authService.authentication(loginRequestDTO);
     }

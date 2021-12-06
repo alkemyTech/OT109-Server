@@ -1,11 +1,11 @@
 package com.alkemy.ong;
 
 import com.alkemy.ong.entities.Role;
-import com.alkemy.ong.entities.TestimonialEntity;
+
 import com.alkemy.ong.entities.User;
-import com.alkemy.ong.repositories.TestimonialRepository;
+
 import com.alkemy.ong.services.RoleService;
-import com.alkemy.ong.services.TestimonialService;
+
 import com.alkemy.ong.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -30,6 +30,11 @@ public class OngApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+		Role role = new Role("ADMIN");
+		roleService.create(role);
+		Role role2 = new Role("USER");
+		roleService.create(role);
+
 
 
 	}
