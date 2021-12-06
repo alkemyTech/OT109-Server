@@ -6,10 +6,14 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -52,6 +56,7 @@ public class OrganizationEntity implements Serializable {
     @Column(columnDefinition = "TEXT", name = "about_us_text")
     private String aboutUsText;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
     private List<Member> members;
 
