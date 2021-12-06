@@ -22,12 +22,13 @@ import java.util.Date;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE testimonials SET deleted_at = current_timestamp() WHERE id = ?")
-@Where(clause = "deleted_at = null")
+@Where(clause = "deleted_at IS null")
 
 public class TestimonialEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     @Column(nullable = false)
