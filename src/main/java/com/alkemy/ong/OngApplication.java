@@ -32,15 +32,5 @@ public class OngApplication implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 
 
-
-//			User user = new User();
-//			user.setEmail("admin@admin.com");
-//			user.setPassword("admin");
-//			user.setLastName("unUser");
-//			user.setFirstName("Juan");
-//			user.setRole(roles[0]);
-			userService.create("Juan", "Perez", "admin@admin.com", "admin", "",1L);
-
-
 	}
 }

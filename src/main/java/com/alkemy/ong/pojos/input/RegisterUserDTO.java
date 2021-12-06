@@ -23,5 +23,5 @@ public class RegisterUserDTO {
 
     private String photo;
     @NonNull
-    private String role;
+    private Long role;
 }

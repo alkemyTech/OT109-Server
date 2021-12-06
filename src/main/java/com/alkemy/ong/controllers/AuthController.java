@@ -54,7 +54,7 @@ public class AuthController {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(registerUserDTO.getPassword());
         user.setPhoto(registerUserDTO.getPhoto());
-        user.setRole(roleRepository.findByName(registerUserDTO.getRole()));
+        user.setRole(roleRepository.findById(registerUserDTO.getRole()).get());
 
         System.out.println(user);
 

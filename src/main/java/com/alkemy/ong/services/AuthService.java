@@ -50,6 +50,7 @@ public class AuthService {
             response.setFirstName(userOptional.get().getFirstName());
             response.setToken(jwtTokenUtil.generateToken(response));
             response.setEmail(userOptional.get().getEmail());
+            response.setRole(userOptional.get().getRole().getName());
             return response;
         }else {
             throw new UserServiceException("Email not found");
