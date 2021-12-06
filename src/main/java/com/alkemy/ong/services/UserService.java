@@ -34,8 +34,8 @@ public class UserService {
     @Transactional
     public User create(@NonNull User user) {
         user.setCreatedAt(new Date());
-        user.setPassword(user.getPassword());
-        return userRepo.save(user);
+        user.setPassword(encoder.encode(user.getPassword()));
+       return userRepo.save(user);
     }
 
     @Transactional

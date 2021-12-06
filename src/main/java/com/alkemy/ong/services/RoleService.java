@@ -47,7 +47,7 @@ public class RoleService {
         throw new RoleServiceException("Role not found");
     }
     
-    public List<Role> findByName(@NonNull String name) {
+    public Role findByName(@NonNull String name) {
         return roleRepo.findByName(name);
     }
     

@@ -1,15 +1,21 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.entities.User;
+import com.alkemy.ong.exceptions.UserServiceException;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
+import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.util.JwtUtil;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 
 @Service
@@ -22,6 +28,9 @@ public class AuthService {
     private UserDetailsServices userDetailsServices;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -29,28 +38,27 @@ public class AuthService {
 
     public ResponseLoginDTO authentication(RequestLoginDTO requestLoginDTO) {
 
-
+        // SecurityContextHolder.getContext().setAuthentication(authentication);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(requestLoginDTO.getUsername(), requestLoginDTO.getPassword());
         authenticationManager.authenticate(authenticationToken);
 
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
+        Optional<User> userOptional = userRepository.findByEmail(requestLoginDTO.getUsername());
+        if (userOptional.isPresent()){
+            ResponseLoginDTO response = new ResponseLoginDTO();
 
-        final UserDetails userDetails = userDetailsServices
-                .loadUserByUsername(requestLoginDTO.getUsername());
+            response.setFirstName(userOptional.get().getFirstName());
+            response.setToken(jwtTokenUtil.generateToken(response));
+            response.setEmail(userOptional.get().getEmail());
+            return response;
+        }else {
+            throw new UserServiceException("Email not found");
+        }
 
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        User user = userService.findByEmail(requestLoginDTO.getUsername());
 
-        ResponseLoginDTO response = new ResponseLoginDTO(
-                user.getFirstName(),
-                jwt,
-                user.getEmail(),
-                user.getRole().getName()
-        );
 
-        return response;
+
     }
 
 

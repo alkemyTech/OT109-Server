@@ -31,9 +31,6 @@ public class OngApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-			Role role = new Role("ADMIN");
-			roleService.create(role);
-
 
 
 //			User user = new User();
@@ -42,7 +39,7 @@ public class OngApplication implements ApplicationRunner {
 //			user.setLastName("unUser");
 //			user.setFirstName("Juan");
 //			user.setRole(roles[0]);
-			userService.create("Juan", "Perez", "admin@admin.com", "admin", "", role );
+			userService.create("Juan", "Perez", "admin@admin.com", "admin", "",1L);
 
 
 	}
