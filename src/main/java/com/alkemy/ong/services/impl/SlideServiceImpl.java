@@ -35,14 +35,7 @@ public class SlideServiceImpl implements SlideService {
      */
     @Override
     public Slide save(Slide slide) throws NotFoundException {
-        Long organization_id = slide.getOrganization().getId();
         validateSlide(slide);
-        if(slide.getOrderNum() == null){
-            slide.setOrderNum(slideRepository.getByMaxOrderNum()+1);
-        }
-        if(organizationService.findById(organization_id)== null){
-            throw new NotFoundException("Organization with id " + organization_id + " not found");
-        }
         if(slideRepository.existsByOrderNum(slide.getOrderNum())){
             Slide slideBD = slideRepository.getByOrderNum(slide.getOrderNum());
             slideBD.setOrderNum(slideRepository.getByMaxOrderNum()+1);
@@ -97,15 +90,24 @@ public class SlideServiceImpl implements SlideService {
     }
 
     private void validateSlide(Slide slide)throws ParamNotFound {
+        if(slide.getImageUrl() == null || slide.getText() == null){
+            throw new ParamNotFound("Atributtes can't be null");
+        }
+        if(slide.getOrderNum() == null){
+            slide.setOrderNum(slideRepository.getByMaxOrderNum()+1);
+        }
         if(slide.getOrderNum()<0){
             throw new ParamNotFound("Atributte *orderNum* only admits values greater than or equal to 0 ");
         }
-        if(!slide.getImageUrl().endsWith(".png") && !slide.getImageUrl().endsWith(".jpg")){
+        if(!slide.getImageUrl().endsWith(".png") && !slide.getImageUrl().endsWith(".jpg")) {
             throw new ParamNotFound("Atributte *imageUrl* only supports a path that supports strings ending with .png or .jpg ");
         }
         if(slide.getText().isBlank()){
             throw new ParamNotFound("Atributte *text* is empty");
         }
+        Long organization_id = slide.getOrganization().getId();
+        if(organizationService.findById(organization_id)== null){
+            throw new NotFoundException("Organization with id " + organization_id + " not found");
+        }
     }
-
 }
