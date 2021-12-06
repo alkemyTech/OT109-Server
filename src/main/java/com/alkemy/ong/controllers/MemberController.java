@@ -8,6 +8,7 @@ import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.services.MemberService;
+import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Operation(summary = "Filters movies")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Movie found",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieDTO.class)))
-            ),
-            @ApiResponse(responseCode = "204", description = "No content")})
     @GetMapping("")
     public ResponseEntity<?> getAll(){
         List<ListMemberDTO> members = memberService.findAll();
@@ -63,7 +58,12 @@ public class MemberController {
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
         if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
 
-        memberService.update(request,id);
+        try{
+            memberService.update(request,id);
+        }catch (DataIntegrityViolationException ex){
+            throw new InvalidParameterException("Image can't be null");
+        }
+
         return ResponseEntity.ok().build();
     }
 }

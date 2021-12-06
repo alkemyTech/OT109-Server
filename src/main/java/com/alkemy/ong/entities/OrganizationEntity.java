@@ -23,14 +23,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE organizations SET deleted_at = current_timestamp() WHERE id = ?")
-@Where(clause = "deleted_at is null")
+@Where(clause = "deleted_at IS NULL")
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id")
 public class OrganizationEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "organization_id")
     private Long id;
 
     @Column(nullable = false)
@@ -53,7 +52,7 @@ public class OrganizationEntity implements Serializable {
     @Column(columnDefinition = "TEXT", name = "about_us_text")
     private String aboutUsText;
 
-    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
     private List<Member> members;
 
     @Temporal(value = TemporalType.TIMESTAMP)
