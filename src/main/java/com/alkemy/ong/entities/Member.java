@@ -2,21 +2,16 @@ package com.alkemy.ong.entities;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,16 +30,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "members")
 @SQLDelete(sql = "UPDATE members SET deleted_at = now() WHERE member_id=?")
-@Where(clause = "deleted_at=null")
+@Where(clause = "deleted_at IS NULL")
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
+    //@Setter(AccessLevel.NONE)
     @Column(name = "member_id" ,nullable = false, unique = true)
     private Long Id;
 
-    @NotNull
+    @NotBlank(message = "Member name can't be null,empty or whitespace.")
+    @Pattern(regexp="[^0-9]*$",message = "Member name must have only letters")
     @Column(nullable = false)
     private String name;
     @Nullable
@@ -58,8 +54,10 @@ public class Member {
     @NotNull
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "organization_id", referencedColumnName = "organization_id")
+    @Valid
+    @JsonManagedReference
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id")
     private OrganizationEntity organization;
 
     
