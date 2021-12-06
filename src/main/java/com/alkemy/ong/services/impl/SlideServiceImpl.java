@@ -82,7 +82,6 @@ public class SlideServiceImpl implements SlideService {
         Slide slideBD = getById(id);
         //Todos los los valores serian slideBD.setAtributte(slide.getAtributte)
         slide.setId(id);
-        slide.setOrganization(slideBD.getOrganization());
         return save(slide);
     }
 

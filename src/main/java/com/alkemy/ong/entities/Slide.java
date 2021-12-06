@@ -19,6 +19,7 @@ public class Slide {
     @Column(nullable = false, unique = true)
     private Integer orderNum;
     @JsonIgnoreProperties(value = {"slide"})
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_ID")
     private OrganizationEntity organization;
 }
