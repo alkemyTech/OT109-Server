@@ -1,5 +1,6 @@
 package com.alkemy.ong.controllers;
 
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.pojos.output.SlideCompact;
@@ -35,8 +36,8 @@ public class SlideController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public Slide save(@RequestBody Slide slide) throws NotFoundException {
-        return slideService.save(slide);
+    public Slide save(@RequestBody SlideRequest slideRequest) throws NotFoundException {
+        return slideService.save(new ModelMapper().map(slideRequest,Slide.class));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -45,7 +46,7 @@ public class SlideController {
         return slideService.getById(id);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public String handle(NotFoundException notFoundException) {
         return notFoundException.getMessage();
