@@ -35,12 +35,20 @@ public class TestimonialService {
 
     public TestimonialEntity update(Long id, TestimonialDTO testimonialDTO) {
 
+        if (testimonialDTO.getName() == null || testimonialDTO.getName() == "") {
+            throw new BadRequestException("Name may not be empty");
+        }
+        if (testimonialDTO.getContent() == null || testimonialDTO.getContent() == "") {
+            throw new BadRequestException("Content may not be empty");
+        }
         if (!testimonialRepository.findById(id).isPresent()) {
             throw new ParamNotFound("Error: invalid testimonial id");
         }
         TestimonialEntity testimonialEntity = testimonialRepository.getById(id);
         modelMapper.map(testimonialDTO, testimonialEntity);
-
+        if (testimonialDTO.getImage() == null || testimonialDTO.getImage() == "") {
+            testimonialEntity.setImage(testimonialDTO.getImage());
+        }
         return testimonialRepository.save(testimonialEntity);
 
     }
