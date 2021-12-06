@@ -34,8 +34,7 @@ public class MemberServiceImpl implements MemberService {
     private OrganizationService organizationService;
 
     @Autowired
-    @Qualifier("Member-Mapper")
-    private ModelMapper memberMapper;
+    private ModelMapper modelMapper;
 
     @Override
     public MemberResponseDTO create(MemberRequest request) throws DataAlreadyExistException, NotFoundException {
@@ -48,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
 
         if(organization == null) throw new NotFoundException(String.format("Organization Id: %d not found",request.getOrganizationId()));
 
-        Member newMember = memberMapper.map(request, Member.class);
+        Member newMember = modelMapper.map(request, Member.class);
 
         newMember.setId(null);
         newMember.setCreatedAt(new java.util.Date());
@@ -56,8 +55,8 @@ public class MemberServiceImpl implements MemberService {
 
         newMember = memberRepository.save(newMember);
 
-        MemberResponseDTO response = memberMapper.map(newMember, MemberResponseDTO.class);
-        response.setOrganization(memberMapper.map(organization,ListOrganizationDTO.class));
+        MemberResponseDTO response = modelMapper.map(newMember, MemberResponseDTO.class);
+        response.setOrganization(modelMapper.map(organization,ListOrganizationDTO.class));
 
        return response;
 
@@ -82,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
 
         newMember = memberRepository.save(newMember);
 
-        return memberMapper.map(newMember, MemberResponseDTO.class);
+        return modelMapper.map(newMember, MemberResponseDTO.class);
 
     }
 
@@ -111,7 +110,7 @@ public class MemberServiceImpl implements MemberService {
 
         return members
                 .stream()
-                .map(member -> memberMapper.map(member,ListMemberDTO.class))
+                .map(member -> modelMapper.map(member,ListMemberDTO.class))
                 .collect(Collectors.toList());
     }
 
