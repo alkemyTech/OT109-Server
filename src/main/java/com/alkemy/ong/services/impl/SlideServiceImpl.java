@@ -90,7 +90,7 @@ public class SlideServiceImpl implements SlideService {
     }
 
     private void validateSlide(Slide slide)throws ParamNotFound {
-        if(slide.getImageUrl() == null || slide.getText() == null){
+        if(slide.getImageUrl() == null || slide.getText() == null || slide.getOrganization().getId() == null){
             throw new ParamNotFound("Atributtes can't be null");
         }
         if(slide.getOrderNum() == null){
