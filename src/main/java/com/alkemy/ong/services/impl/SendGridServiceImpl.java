@@ -3,12 +3,16 @@ package com.alkemy.ong.services.impl;
 import com.alkemy.ong.services.SendGridService;
 import com.sendgrid.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
 public class SendGridServiceImpl implements SendGridService {
+
+    @Value("${SENDGRID_API_KEY}")
+    private String sendGridApiKey;
 
     @Override
     public void welcomeMessage(String firstName, String lastName, String email) throws IOException {
@@ -28,7 +32,7 @@ public class SendGridServiceImpl implements SendGridService {
         Email to = new Email(email);
         Content content = new Content("text/plain",message);
         Mail mail = new Mail(from, subject, to, content);
-        SendGrid sg = new SendGrid("SENDGRID_API_KEY");
+        SendGrid sg = new SendGrid(sendGridApiKey);
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
