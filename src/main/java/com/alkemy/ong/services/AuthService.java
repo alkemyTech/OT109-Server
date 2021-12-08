@@ -6,9 +6,6 @@ import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.util.JwtUtil;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.config.Configuration;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,11 +39,12 @@ public class AuthService {
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(requestLoginDTO.getUsername(), requestLoginDTO.getPassword());
+
         authenticationManager.authenticate(authentication);
 
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtTokenUtil.generateToken(authentication);
+        UserDetails userDetails = userDetailsServices.loadUserByUsername(requestLoginDTO.getUsername());
+                String jwt = jwtTokenUtil.generateToken(userDetails);
 
         Optional<User> userOptional = userRepository.findByEmail(requestLoginDTO.getUsername());
         if (userOptional.isPresent()){

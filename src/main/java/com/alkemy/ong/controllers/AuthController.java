@@ -26,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,31 +86,37 @@ public class AuthController {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(registerUserDTO.getPassword());
         user.setPhoto(registerUserDTO.getPhoto());
-        user.setRole(roleService.findByName("USER"));
+        user.setRole(roleService.findByName("ADMIN"));
 
         System.out.println(user);
 
         userService.create(user);
 
-        ResponseRegisterDTO userDTO = new ResponseRegisterDTO();
-        modelMapper.map(user, userDTO);
+        ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO();
+        modelMapper.map(user, responseRegisterDTO);
 
 
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        authenticationManager.authenticate(token);
-       // userDTO.setToken(jwtTokenUtil.generateToken(user.getFirstName());
-
-        return ResponseEntity.ok().body(userDTO);
+        return ResponseEntity.ok().body(responseRegisterDTO);
 
     }
 
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseLoginDTO login(@RequestBody RequestLoginDTO loginRequestDTO){
-
-        return authService.authentication(loginRequestDTO);
+    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO, BindingResult result){
+        Map<String, Object> response = new HashMap<>();
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors()
+                    .stream()
+                    .map(err -> {
+                        return "Error en el campo: " + err.getField() + ": " + err.getDefaultMessage();
+                    })
+                    .collect(Collectors.toList());
+            response.put("Verifique los datos ingresados", errors);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+        ResponseLoginDTO responseLoginDTO = authService.authentication(loginRequestDTO);
+        return ResponseEntity.ok().body(responseLoginDTO);
     }
 
 }
