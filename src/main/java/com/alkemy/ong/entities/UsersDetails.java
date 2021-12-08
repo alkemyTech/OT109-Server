@@ -11,21 +11,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UsersDetails implements UserDetails {
-    private String userName;
-    private String password;
 
-    List<GrantedAuthority> authorities;
+    private Long id;
+    private String username;
+    private String password;
+    private Collection<? extends GrantedAuthority> authorities;
+    //List<GrantedAuthority> authorities;
 
 
 
     public UsersDetails (User user) {
-        this.userName = user.getEmail();
+        this.username = user.getEmail();
         this.password = user.getPassword();
         this.authorities = Arrays.stream(user.getRole().getName().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
-
+    public UsersDetails(Long id, String username, String email, String password,
+                           Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+   //     this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+    }
 
 
     @Override
@@ -41,7 +50,7 @@ public class UsersDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override

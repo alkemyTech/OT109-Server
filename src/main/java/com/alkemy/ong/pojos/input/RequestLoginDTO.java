@@ -3,15 +3,17 @@ package com.alkemy.ong.pojos.input;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+
+
+import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class RequestLoginDTO {
-    @NonNull
+    @NotBlank
     private String username;
-    @NonNull
+    @NotBlank
     private String password;
 
 
