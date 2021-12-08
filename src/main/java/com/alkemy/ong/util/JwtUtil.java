@@ -54,8 +54,7 @@ public class JwtUtil {
     }
 
 
-    public String extractUserEmail(String authorizationHeader) {
-        String jwtToken = authorizationHeader.replace(BEARER_PART, EMPTY);
+    public String extractUserEmail(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
     public boolean validateJwtToken(String authToken, UserDetails userDetails) {

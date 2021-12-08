@@ -1,23 +1,16 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.entities.Role;
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
-import com.alkemy.ong.exceptions.ParamNotFound;
-import com.alkemy.ong.exceptions.UserServiceException;
 import com.alkemy.ong.pojos.input.RegisterUserDTO;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
-import com.alkemy.ong.pojos.input.RequestUserDTO;
-import com.alkemy.ong.pojos.output.ListUserDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseRegisterDTO;
-import com.alkemy.ong.repositories.RoleRepository;
 import com.alkemy.ong.repositories.UserRepository;
-import com.alkemy.ong.services.AuthService;
 import com.alkemy.ong.services.RoleService;
+import com.alkemy.ong.services.UserDetailsServices;
 import com.alkemy.ong.services.UserService;
 import com.alkemy.ong.util.JwtUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
@@ -28,6 +21,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,11 +45,13 @@ public class AuthController {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private AuthService authService;
-    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtUtil jwtTokenUtil;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserDetailsServices userDetailsServices;
 
 
     @PostMapping("/register")
@@ -115,8 +112,36 @@ public class AuthController {
             response.put("Verifique los datos ingresados", errors);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
-        ResponseLoginDTO responseLoginDTO = authService.authentication(loginRequestDTO);
-        return ResponseEntity.ok().body(responseLoginDTO);
+        Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
+
+        ResponseLoginDTO loginResponse = new ResponseLoginDTO();
+
+        if (userOptional.isPresent()) {
+            UserDetails userDetails = userDetailsServices.loadUserByUsername(loginRequestDTO.getUsername());
+            if (passwordEncoder.matches(loginRequestDTO.getPassword(), userDetails.getPassword())) {
+                Authentication authentication =
+                        new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
+
+                authenticationManager.authenticate(authentication);
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                String jwt = jwtTokenUtil.generateToken(userDetails);
+
+                loginResponse.setFirstName(userOptional.get().getFirstName());
+                loginResponse.setToken(jwt);
+                loginResponse.setEmail(userOptional.get().getEmail());
+                loginResponse.setRole(userOptional.get().getRole().getName());
+
+            } else {
+                return ResponseEntity.badRequest().body("No coninciden las contraseñas");
+            }
+
+        return ResponseEntity.ok().body(loginResponse);
+
+        } else {
+            return ResponseEntity.badRequest().body("No existe el usuario");
+        }
     }
 
 }

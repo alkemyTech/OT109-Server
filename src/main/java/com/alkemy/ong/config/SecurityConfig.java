@@ -4,6 +4,7 @@ import com.alkemy.ong.util.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/docs",
                         "/api/docs/**")
                 .permitAll()
+                .antMatchers(HttpMethod.POST, "/comments").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.GET, "/comments").hasAnyRole("ADMIN")
                 .anyRequest().hasAnyRole("ADMIN","USER");
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
