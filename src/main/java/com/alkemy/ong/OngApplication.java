@@ -35,7 +35,5 @@ public class OngApplication implements ApplicationRunner {
 //		Role role2 = new Role("USER");
 //		roleService.create(role);
 
-
-
 	}
 }
