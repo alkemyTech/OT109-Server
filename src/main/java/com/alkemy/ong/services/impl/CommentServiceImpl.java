@@ -1,5 +1,6 @@
 package com.alkemy.ong.services.impl;
 
+import com.alkemy.ong.dtos.responses.CommentListDTO;
 import com.alkemy.ong.entities.Comment;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.CommentRepository;
@@ -19,12 +20,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment create(Comment comment) throws NotFoundException {
-        if(!newsRepository.existsById(comment.getNew_id().getId())){
+        if(!newsRepository.existsById(comment.getNews().getId())){
             throw new NotFoundException("News Not Found.");
         }
         comment.setBody(comment.getBody());
-        comment.setUser_id(comment.getUser_id());
-        comment.setNew_id(comment.getNew_id());
+        comment.setUser(comment.getUser());
+        comment.setNews(comment.getNews());
         return commentRepository.save(comment);
     }
 
@@ -44,16 +45,21 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment update(Comment comment, Long id) throws NotFoundException {
 
-        Comment uptComment= commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));;
+        Comment uptComment= commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
 
         uptComment.setBody(comment.getBody());
-        uptComment.setUser_id(comment.getUser_id());
-        uptComment.setNew_id(comment.getNew_id());
+        uptComment.setUser(comment.getUser());
+        uptComment.setNews(comment.getNews());
         return uptComment;
     }
 
     @Override
     public void deleteById(Long id) throws NotFoundException {
         commentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CommentListDTO> findCommentsByNewsId(Long id) {
+        return commentRepository.findCommentsByNewsId(id);
     }
 }
