@@ -1,31 +1,65 @@
 package com.alkemy.ong.services.impl;
 
+import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
+import com.alkemy.ong.dtos.responses.CategoryDTO;
+import com.alkemy.ong.dtos.responses.CommentDTO;
+import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.entities.Comment;
+import com.alkemy.ong.entities.News;
+import com.alkemy.ong.entities.User;
+import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.CommentRepository;
 import com.alkemy.ong.repositories.NewsRepository;
+import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.CommentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CommentServiceImpl implements CommentService {
+
     @Autowired
     CommentRepository commentRepository;
-
     @Autowired
     NewsRepository newsRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public Comment create(Comment comment) throws NotFoundException {
-        if(!newsRepository.existsById(comment.getNew_id().getId())){
-            throw new NotFoundException("News Not Found.");
+    public CommentDTO create(CommentPostRequestDTO commentDTO) {
+        if (commentDTO.getNewId() == null) {
+            throw new BadRequestException("New id may not be empty");
         }
-        comment.setBody(comment.getBody());
-        comment.setUser_id(comment.getUser_id());
-        comment.setNew_id(comment.getNew_id());
-        return commentRepository.save(comment);
+        if (commentDTO.getUserId() == null) {
+            throw new BadRequestException("User id may not be empty");
+        }
+
+        Optional<News> newEntity = newsRepository.findById(commentDTO.getNewId());
+        if (!newEntity.isPresent()) {
+            throw new ParamNotFound("Error: Invalid new id");
+        }
+
+        Optional<User> userEntity = userRepository.findById(commentDTO.getUserId());
+        if (!userEntity.isPresent()) {
+            throw new ParamNotFound("Error: Invalid user id");
+        }
+
+        if (commentDTO.getBody() == "" || commentDTO.getBody() == null) {
+            throw new BadRequestException("Comment may not be empty");
+        }
+
+        Comment entity = modelMapper.map(commentDTO, Comment.class);
+        Comment entityCreated = commentRepository.save(entity);
+        CommentDTO result = modelMapper.map(entityCreated, CommentDTO.class);
+        return result;
     }
 
     @Override
