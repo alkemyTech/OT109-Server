@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findAll() throws NotFoundException {
-        return commentRepository.findAll();
+        return commentRepository.findByOrderByCreatedAtDesc();
     }
 
     @Override
