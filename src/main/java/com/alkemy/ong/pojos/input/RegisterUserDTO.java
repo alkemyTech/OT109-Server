@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Data
@@ -12,16 +15,16 @@ import java.util.Set;
 @AllArgsConstructor
 public class RegisterUserDTO {
 
-    @NonNull
+    @NotBlank
     private String firstName;
-    @NonNull
+    @NotBlank
     private String lastName;
-    @NonNull
+    @NotBlank
+    @Email
     private String email;
-    @NonNull
+    @NotBlank
     private String password;
-
+    @URL
     private String photo;
-    @NonNull
-    private Long role;
+
 }

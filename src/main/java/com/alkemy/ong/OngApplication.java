@@ -30,10 +30,10 @@ public class OngApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		Role role = new Role("ADMIN");
-		roleService.create(role);
-		Role role2 = new Role("USER");
-		roleService.create(role);
+//		Role role = new Role("ADMIN");
+//		roleService.create(role);
+//		Role role2 = new Role("USER");
+//		roleService.create(role);
 
 
 

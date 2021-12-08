@@ -12,6 +12,8 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -38,17 +40,20 @@ public class AuthService {
 
     public ResponseLoginDTO authentication(RequestLoginDTO requestLoginDTO) {
 
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-        UsernamePasswordAuthenticationToken authenticationToken =
+        Authentication authentication =
                 new UsernamePasswordAuthenticationToken(requestLoginDTO.getUsername(), requestLoginDTO.getPassword());
-        authenticationManager.authenticate(authenticationToken);
+        authenticationManager.authenticate(authentication);
+
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtTokenUtil.generateToken(authentication);
 
         Optional<User> userOptional = userRepository.findByEmail(requestLoginDTO.getUsername());
         if (userOptional.isPresent()){
             ResponseLoginDTO response = new ResponseLoginDTO();
 
             response.setFirstName(userOptional.get().getFirstName());
-            response.setToken(jwtTokenUtil.generateToken(response));
+            response.setToken(jwt);
             response.setEmail(userOptional.get().getEmail());
             response.setRole(userOptional.get().getRole().getName());
             return response;

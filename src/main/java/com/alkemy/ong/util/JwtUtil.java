@@ -1,10 +1,12 @@
 package com.alkemy.ong.util;
 
 
+import com.alkemy.ong.entities.UsersDetails;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,30 +49,40 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(ResponseLoginDTO login) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, login.getEmail(), login.getRole());
-    }
+//    public String generateToken(Authentication authentication) {
+//        Map<String, Object> claims = new HashMap<>();
+//        return createToken(claims, authentication.getName(), authentication.getAuthorities());
+//    }
+    public String generateToken(Authentication authentication) {
 
+        UsersDetails userPrincipal = (UsersDetails) authentication.getPrincipal();
+
+        return Jwts.builder()
+                .setSubject((userPrincipal.getUsername()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private String createToken(Map<String, Object> claims, String subject, String role) {
-        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList(role);
-
-        return  Jwts.builder()
-                .setSubject(subject)
-                .claim(AUTHORITIES, grantedAuthorities.stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))//1 hour
-                .signWith(SignatureAlgorithm.HS512,
-                        SECRET_KEY.getBytes(StandardCharsets.UTF_8)).compact();
-
-    }
+//    private String createToken(Map<String, Object> claims, String subject, String role) {
+//        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+//                .commaSeparatedStringToAuthorityList(role);
+//
+//        return  Jwts.builder()
+//                .setSubject(subject)
+//                .claim(AUTHORITIES, grantedAuthorities.stream()
+//                                .map(GrantedAuthority::getAuthority)
+//                                .collect(Collectors.toList()))
+//                .setIssuedAt(new Date(System.currentTimeMillis()))
+//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))//1 hour
+//                .signWith(SignatureAlgorithm.HS512,
+//                        SECRET_KEY.getBytes(StandardCharsets.UTF_8)).compact();
+//
+//    }
 
     public String extractUserEmail(String authorizationHeader) {
         String jwtToken = authorizationHeader.replace(BEARER_PART, EMPTY);
