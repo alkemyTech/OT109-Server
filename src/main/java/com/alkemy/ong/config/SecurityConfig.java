@@ -1,11 +1,13 @@
 package com.alkemy.ong.config;
 
+import com.alkemy.ong.services.UserDetailsServices;
 import com.alkemy.ong.util.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServices userDetailsService;
 
     @Autowired
     private JwtFilter jwtFilter;
@@ -33,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.authenticationProvider(authProvider());
+                //.passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -49,9 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/docs",
                         "/api/docs/**")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/comments").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.POST, "/comments").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/comments").hasAnyRole("ADMIN")
-                .anyRequest().hasAnyRole("ADMIN","USER");
+                .anyRequest().hasAnyRole("ADMIN", "USER");
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -62,6 +65,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
 
 }
