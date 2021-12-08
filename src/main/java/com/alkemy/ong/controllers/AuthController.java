@@ -26,13 +26,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -53,9 +53,9 @@ public class AuthController {
     @Autowired
     private UserDetailsServices userDetailsServices;
 
-
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result) throws DataAlreadyExistException {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result)
+            throws DataAlreadyExistException {
 
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
@@ -70,10 +70,11 @@ public class AuthController {
         }
 
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+        modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 
         Optional<User> userOptional = userRepository.findByEmail(registerUserDTO.getEmail());
-        if(userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             throw new DataAlreadyExistException(String.format("Email %s already exists", registerUserDTO.getEmail()));
         }
 
@@ -92,15 +93,13 @@ public class AuthController {
         ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO();
         modelMapper.map(user, responseRegisterDTO);
 
-
         return ResponseEntity.ok().body(responseRegisterDTO);
 
     }
 
-
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO, BindingResult result){
+    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO, BindingResult result) {
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -119,8 +118,8 @@ public class AuthController {
         if (userOptional.isPresent()) {
             UserDetails userDetails = userDetailsServices.loadUserByUsername(loginRequestDTO.getUsername());
             if (passwordEncoder.matches(loginRequestDTO.getPassword(), userDetails.getPassword())) {
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(),
+                        loginRequestDTO.getPassword());
 
                 authenticationManager.authenticate(authentication);
 
@@ -137,11 +136,23 @@ public class AuthController {
                 return ResponseEntity.badRequest().body("No coninciden las contraseñas");
             }
 
-        return ResponseEntity.ok().body(loginResponse);
+            return ResponseEntity.ok().body(loginResponse);
 
         } else {
             return ResponseEntity.badRequest().body("No existe el usuario");
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<RegisterUserDTO> getUserProfile(HttpServletRequest httpServletRequest) {
+
+        String jwt = httpServletRequest.getHeader("Authorization").substring(7);
+        User user = userService.findByEmail(jwtTokenUtil.extractUserEmail(jwt));
+        ModelMapper modelMapper = new ModelMapper();
+        RegisterUserDTO registerUserDTO = new RegisterUserDTO();
+        modelMapper.map(user, registerUserDTO);
+
+        return ResponseEntity.ok().body(registerUserDTO);
     }
 
 }
