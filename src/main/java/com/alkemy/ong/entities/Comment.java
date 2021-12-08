@@ -29,6 +29,6 @@ public class Comment {
 
     @JoinColumn(name = "news_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private News new_id;
+    private News news_id;
 
 }
