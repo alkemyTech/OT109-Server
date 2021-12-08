@@ -29,7 +29,7 @@ public class News {
     @Column(nullable = false)
     private String image;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "categories_id", nullable = false)
     private Category category;
 
