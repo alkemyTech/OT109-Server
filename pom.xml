@@ -58,10 +58,6 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>2.4.4</version>
@@ -79,10 +75,11 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.5.12</version>
 		</dependency>
+		<!-- AWS -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.12.111</version>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.125</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sendgrid</groupId>
@@ -94,6 +91,7 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.6</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
