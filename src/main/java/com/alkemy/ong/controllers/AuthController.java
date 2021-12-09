@@ -88,13 +88,21 @@ public class AuthController {
         user.setRole(roleService.findByName("USER"));
 
         System.out.println(user);
-
         userService.create(user);
+
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(registerUserDTO.getEmail(), registerUserDTO.getPassword());
+
+        authenticationManager.authenticate(authentication);
+
+        UserDetails userDetails = userDetailsServices.loadUserByUsername(user.getEmail());
+        String jwt = jwtTokenUtil.generateToken(userDetails);
 
         ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO();
         modelMapper.map(user, responseRegisterDTO);
+        responseRegisterDTO.setToken(jwt);
 
-        return ResponseEntity.ok().body(responseRegisterDTO);
+        return ResponseEntity.created(null).body(responseRegisterDTO);
 
     }
 
@@ -125,8 +133,6 @@ public class AuthController {
                         loginRequestDTO.getPassword());
 
                 authenticationManager.authenticate(authentication);
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 String jwt = jwtTokenUtil.generateToken(userDetails);
 
