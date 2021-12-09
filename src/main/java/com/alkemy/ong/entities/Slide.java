@@ -1,5 +1,6 @@
 package com.alkemy.ong.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import javax.persistence.*;
 
@@ -16,15 +17,9 @@ public class Slide {
     @Column(nullable = false)
     private String text;
     @Column(nullable = false, unique = true)
-    private int orderNum;
-    @ManyToOne
+    private Integer orderNum;
+    @JsonIgnoreProperties(value = {"slide"})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_ID")
     private OrganizationEntity organization;
-
-    public Slide(String imageUrl, String text, int orderNum, OrganizationEntity organization) {
-        this.imageUrl = imageUrl;
-        this.text = text;
-        this.orderNum = orderNum;
-        this.organization = organization;
-    }
 }
