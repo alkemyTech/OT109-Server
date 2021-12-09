@@ -21,8 +21,11 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping("posts/{id}/comments")
-    public ResponseEntity<?> findCommentsByNewsId (@PathVariable @Min(value = 1)Long id){
+    public ResponseEntity<?> findCommentsByNewsId (@PathVariable @Min(value = 1, message = "Id must be equal or greater than 1")Long id){
         List<CommentListDTO> commentList = commentService.findCommentsByNewsId(id);
+        if(commentList.isEmpty()){
+            return new ResponseEntity<>("There are not comments related to that news_id.",HttpStatus.NOT_FOUND);
+        }
         return new  ResponseEntity<>(commentList,HttpStatus.OK);
     }
 }
