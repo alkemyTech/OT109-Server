@@ -6,6 +6,7 @@ import com.alkemy.ong.pojos.input.RegisterUserDTO;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseRegisterDTO;
+import com.alkemy.ong.pojos.output.UserProfileDTO;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserDetailsServices;
@@ -146,15 +147,15 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<RegisterUserDTO> getUserProfile(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<UserProfileDTO> getUserProfile(HttpServletRequest httpServletRequest) {
 
         String jwt = httpServletRequest.getHeader("Authorization").substring(7);
         User user = userService.findByEmail(jwtTokenUtil.extractUserEmail(jwt));
         ModelMapper modelMapper = new ModelMapper();
-        RegisterUserDTO registerUserDTO = new RegisterUserDTO();
-        modelMapper.map(user, registerUserDTO);
+        UserProfileDTO userProfileDTO = new UserProfileDTO();
+        modelMapper.map(user, userProfileDTO);
 
-        return ResponseEntity.ok().body(registerUserDTO);
+        return ResponseEntity.ok().body(userProfileDTO);
     }
 
 }
