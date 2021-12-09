@@ -56,4 +56,9 @@ public class CommentServiceImpl implements CommentService {
     public void deleteById(Long id) throws NotFoundException {
         commentRepository.deleteById(id);
     }
+
+    @Override
+    public Boolean validUser(String email, Long commentId) {
+        return commentRepository.isOwner(email,commentId);
+    }
 }

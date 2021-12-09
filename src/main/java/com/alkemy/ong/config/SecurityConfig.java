@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/comments").hasAnyRole("USER","ADMIN")
                 .antMatchers(HttpMethod.GET, "/comments").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/comments/{id}").hasAnyRole("USER","ADMIN")
                 .anyRequest().hasAnyRole("ADMIN","USER");
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

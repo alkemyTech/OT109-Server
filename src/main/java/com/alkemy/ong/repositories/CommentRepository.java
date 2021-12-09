@@ -11,9 +11,9 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByOrderByCreatedAtDesc();
 
-    @Query(value = "select case when (u.email is null) then false else true end " +
+    @Query(value = "select case when (u.email LIKE ?1) then true else false end " +
             "from comments c join users u on u.id = c.user_id " +
-            "where u.email like ?1 and c.comments_id = ?2", nativeQuery = true)
-    boolean isOwner(String email, Long commentId);
+            "where c.comments_id = ?2", nativeQuery = true)
+    Boolean isOwner(String email, Long commentId);
 
 }
