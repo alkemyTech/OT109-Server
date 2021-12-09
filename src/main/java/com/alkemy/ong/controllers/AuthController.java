@@ -6,6 +6,7 @@ import com.alkemy.ong.pojos.input.RegisterUserDTO;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseRegisterDTO;
+import com.alkemy.ong.pojos.output.UserProfileDTO;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserDetailsServices;
@@ -26,13 +27,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -53,9 +54,9 @@ public class AuthController {
     @Autowired
     private UserDetailsServices userDetailsServices;
 
-
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result) throws DataAlreadyExistException {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result)
+            throws DataAlreadyExistException {
 
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
@@ -70,7 +71,8 @@ public class AuthController {
         }
 
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+        modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 
         Optional<User> userOptional = userRepository.findByEmail(registerUserDTO.getEmail());
         if (userOptional.isPresent()) {
@@ -127,8 +129,8 @@ public class AuthController {
 
 
             if (passwordEncoder.matches(loginRequestDTO.getPassword(), userDetails.getPassword())) {
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(),
+                        loginRequestDTO.getPassword());
 
                 authenticationManager.authenticate(authentication);
 
@@ -148,6 +150,18 @@ public class AuthController {
         } else {
             return ResponseEntity.badRequest().body("User not found");
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileDTO> getUserProfile(HttpServletRequest httpServletRequest) {
+
+        String jwt = httpServletRequest.getHeader("Authorization").substring(7);
+        User user = userService.findByEmail(jwtTokenUtil.extractUserEmail(jwt));
+        ModelMapper modelMapper = new ModelMapper();
+        UserProfileDTO userProfileDTO = new UserProfileDTO();
+        modelMapper.map(user, userProfileDTO);
+
+        return ResponseEntity.ok().body(userProfileDTO);
     }
 
 }
