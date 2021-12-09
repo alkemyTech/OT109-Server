@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @EnableWebSecurity
-@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -52,8 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/docs",
                         "/api/docs/**")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/comments").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.GET, "/comments").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/categories").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/categories").hasAnyRole("ADMIN")
                 .anyRequest().hasAnyRole("ADMIN", "USER");
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
