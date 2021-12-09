@@ -17,5 +17,5 @@ public interface RoleRepository extends JpaRepository<Role, Long>{
     @Transactional
     void putId(@Param("id") Long id);
     
-    List<Role> findByName(String name);
+    Role findByName(String name);
 }
