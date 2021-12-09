@@ -62,10 +62,10 @@ public class AuthController {
             List<String> errors = result.getFieldErrors()
                     .stream()
                     .map(err -> {
-                        return "Error en el campo: " + err.getField() + ": " + err.getDefaultMessage();
+                        return "Error in field: " + err.getField() + ": " + err.getDefaultMessage();
                     })
                     .collect(Collectors.toList());
-            response.put("Verifique los datos ingresados", errors);
+            response.put("Verify inputs data", errors);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -84,7 +84,7 @@ public class AuthController {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(registerUserDTO.getPassword());
         user.setPhoto(registerUserDTO.getPhoto());
-        user.setRole(roleService.findByName("ADMIN"));
+        user.setRole(roleService.findByName("USER"));
 
         System.out.println(user);
 
@@ -105,10 +105,10 @@ public class AuthController {
             List<String> errors = result.getFieldErrors()
                     .stream()
                     .map(err -> {
-                        return "Error en el campo: " + err.getField() + ": " + err.getDefaultMessage();
+                        return "Error in field: " + err.getField() + ": " + err.getDefaultMessage();
                     })
                     .collect(Collectors.toList());
-            response.put("Verifique los datos ingresados", errors);
+            response.put("Verify inputs data", errors);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
         Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
@@ -117,6 +117,8 @@ public class AuthController {
 
         if (userOptional.isPresent()) {
             UserDetails userDetails = userDetailsServices.loadUserByUsername(loginRequestDTO.getUsername());
+
+
             if (passwordEncoder.matches(loginRequestDTO.getPassword(), userDetails.getPassword())) {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(),
                         loginRequestDTO.getPassword());
@@ -133,13 +135,13 @@ public class AuthController {
                 loginResponse.setRole(userOptional.get().getRole().getName());
 
             } else {
-                return ResponseEntity.badRequest().body("No coninciden las contraseñas");
+                return ResponseEntity.badRequest().body("Password doesn't match");
             }
 
             return ResponseEntity.ok().body(loginResponse);
 
         } else {
-            return ResponseEntity.badRequest().body("No existe el usuario");
+            return ResponseEntity.badRequest().body("User not found");
         }
     }
 

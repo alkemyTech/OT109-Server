@@ -11,15 +11,12 @@ import java.util.Date;
 import java.util.function.Function;
 
 
-
 @Service
 public class JwtUtil {
 
     private static final String SECRET_KEY = "secret";
-    private static final String BEARER_PART = "Bearer ";
-    private static final String EMPTY = "";
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+    //private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -28,17 +25,15 @@ public class JwtUtil {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    public String extractId(String token){
+    public String extractId(String token) {
         return extractClaim(token, Claims::getId);
     }
-
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
     }
-
 
     public String generateToken(UserDetails authentication) {
 
@@ -49,11 +44,10 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
+
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-
-
     public String extractUserEmail(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
