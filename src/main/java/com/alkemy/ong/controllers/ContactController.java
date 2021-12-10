@@ -3,8 +3,11 @@ package com.alkemy.ong.controllers;
 import com.alkemy.ong.dtos.requests.ContactPostDTO;
 import com.alkemy.ong.dtos.responses.ContactListDTO;
 import com.alkemy.ong.entities.Contact;
+import com.alkemy.ong.entities.User;
 import com.alkemy.ong.services.ContactService;
 import com.alkemy.ong.services.SendGridService;
+import com.alkemy.ong.services.UserService;
+import com.alkemy.ong.util.JwtUtil;
 import com.alkemy.ong.utils.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/contacts")
@@ -27,9 +31,13 @@ public class ContactController {
     private ValidatorUtil validatorUtil;
     @Autowired
     private SendGridService sendGridService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ContactPostDTO contactPostDto){
+    public ResponseEntity<?> create(@RequestHeader (name="Authorization") String token, @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse){
         Contact contactCreated;
         try {
             if (contactPostDto.getName().isEmpty()) {
@@ -46,8 +54,12 @@ public class ContactController {
             }
             Contact contactToCreate = contactPostDto.toContact();
             contactCreated = contactService.createContact(contactToCreate);
-            sendGridService.contactMessage(contactCreated.getName(),contactCreated.getEmail());
-        }catch(NullPointerException | IOException npe){
+            User user = userService.findByEmail(jwtUtil.extractUserEmail(token));
+            
+            httpResponse.addHeader("Contact-Mail-Sent", String.valueOf(sendGridService.contactMessage(contactCreated.getName(),contactCreated.getEmail())));
+            httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(String.format("%s %s", user.getFirstName(), user.getLastName()), user.getEmail())));
+            
+        }catch(NullPointerException npe){
             System.out.println("Name, email, phone number and message cannot be empty.");
             return new ResponseEntity<>("Name, email, phone number and message cannot be empty.",HttpStatus.BAD_REQUEST);
         }
