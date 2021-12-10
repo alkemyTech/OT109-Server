@@ -1,14 +1,14 @@
 package com.alkemy.ong.util;
 
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 
 
 @Service
@@ -39,6 +39,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(authentication.getUsername())
+                .claim("roles",authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
@@ -48,9 +49,11 @@ public class JwtUtil {
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
     public String extractUserEmail(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
+
     public boolean validateJwtToken(String authToken, UserDetails userDetails) {
         final String username = extractUsername(authToken);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(authToken));

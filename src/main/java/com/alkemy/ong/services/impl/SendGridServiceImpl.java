@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -19,9 +18,8 @@ public class SendGridServiceImpl implements SendGridService {
 
     private final Email from = new Email("alkemy109@gmail.com");
 
-    @Value("${SENDGRID_KEY}")
-    private SendGrid SG;
-    
+    @Value("${SENDGRID_API_KEY}")
+    private SendGrid sendGridApiKey;
     @Override
     public boolean welcomeMessage(String firstName, String lastName, String email) {
         try {
@@ -52,11 +50,13 @@ public class SendGridServiceImpl implements SendGridService {
         Content content = new Content("text/plain", message);
         Mail mail = new Mail(from, subject, to, content);
 
+        
+
         Request request = new Request();
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
         request.setBody(mail.build());
-        Response response = SG.api(request);
+        Response response = sendGridApiKey.api(request);
     }
 
     private void sendHtmlEmail(String email, String subjectText, String message) throws IOException {
@@ -65,11 +65,13 @@ public class SendGridServiceImpl implements SendGridService {
         Content content = new Content("text/html", message);
         Mail mail = new Mail(from, subject, to, content);
 
+        
+        
         Request request = new Request();
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
         request.setBody(mail.build());
-        Response response = SG.api(request);
+        Response response = sendGridApiKey.api(request);
 
     }
     
