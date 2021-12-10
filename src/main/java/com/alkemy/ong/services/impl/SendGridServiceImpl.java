@@ -17,7 +17,9 @@ import org.springframework.core.io.ClassPathResource;
 @Service
 public class SendGridServiceImpl implements SendGridService {
 
-   @Value("${SENDGRID_API_KEY}")
+    private final Email from = new Email("alkemy109@gmail.com");
+
+    @Value("${SENDGRID_API_KEY}")
     private SendGrid sendGridApiKey;
 
     @Override
@@ -63,8 +65,6 @@ public class SendGridServiceImpl implements SendGridService {
         Content content = new Content("text/html", message);
         Mail mail = new Mail(from, subject, to, content);
 
-        
-        
         Request request = new Request();
         request.setMethod(Method.POST);
         request.setEndpoint("mail/send");
@@ -72,18 +72,17 @@ public class SendGridServiceImpl implements SendGridService {
         Response response = sendGridApiKey.api(request);
 
     }
-    
-    private String getHtmlContent(String fileName) throws FileNotFoundException, IOException{
+
+    private String getHtmlContent(String fileName) throws FileNotFoundException, IOException {
         File resource = new ClassPathResource(fileName + ".html").getFile();
         String response;
         response = "";
         try (Scanner scanner = new Scanner(resource)) {
-            while(scanner.hasNext()){
+            while (scanner.hasNext()) {
                 response += scanner.nextLine() + "\n";
             }
         }
         return response;
     }
-    
-    
+
 }
