@@ -4,19 +4,25 @@ import com.alkemy.ong.entities.Contact;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Builder
 @Data
 public class ContactPostDTO {
 
     @NotEmpty
+    @Size(min = 3, message = "Name should be at least three characters")
     private String name;
 
     @NotEmpty
+    @Size(min = 10, message = "Phone number should be at least nine characters")
     private String phone;
 
     @NotEmpty
+    @Email(message = "Email is not valid", regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
     private String email;
 
     @NotEmpty
