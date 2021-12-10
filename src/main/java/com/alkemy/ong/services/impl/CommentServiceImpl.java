@@ -1,20 +1,18 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
-import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
-import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.entities.Comment;
 import com.alkemy.ong.entities.News;
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
+import com.alkemy.ong.mapper.CommentMapper;
 import com.alkemy.ong.repositories.CommentRepository;
 import com.alkemy.ong.repositories.NewsRepository;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.CommentService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    private ModelMapper modelMapper;
+    CommentMapper commentMapper;
 
     @Override
     public CommentDTO create(CommentPostRequestDTO commentDTO) {
@@ -56,11 +54,12 @@ public class CommentServiceImpl implements CommentService {
             throw new BadRequestException("Comment may not be empty");
         }
 
-        Comment entity = modelMapper.map(commentDTO, Comment.class);
+        Comment entity = commentMapper.commentDto2Entity(commentDTO);
         Comment entityCreated = commentRepository.save(entity);
-        CommentDTO result = modelMapper.map(entityCreated, CommentDTO.class);
+        CommentDTO result = commentMapper.commentEntity2Dto(entityCreated);
         return result;
     }
+
 
     @Override
     public List<Comment> findAll() throws NotFoundException {
@@ -69,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment findById(Long id) throws NotFoundException {
-        if(!commentRepository.existsById(id)){
+        if (!commentRepository.existsById(id)) {
             throw new NotFoundException("Comment Not Found.");
         }
         return commentRepository.findById(id).get();
@@ -78,7 +77,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment update(Comment comment, Long id) throws NotFoundException {
 
-        Comment uptComment= commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));;
+        Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
+        ;
 
         uptComment.setBody(comment.getBody());
         uptComment.setUser_id(comment.getUser_id());
