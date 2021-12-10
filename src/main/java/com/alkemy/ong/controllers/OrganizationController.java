@@ -62,13 +62,11 @@ public class OrganizationController {
     public FindOrganizationDTO findById(@PathVariable Long id) {
         OrganizationEntity organization = orgService.findById(id);
         FindOrganizationDTO response = new FindOrganizationDTO();
-        List<Slide> slides = organization.getSlide();
-        System.out.println(slides);
-        List<SlideRequest> slideRequests = new ArrayList<>();
-        BeanUtils.copyProperties(slides, slideRequests);
-        System.out.println(slideRequests.toString());
-        response.setSlide(slideRequests);
         BeanUtils.copyProperties(organization, response);
+
+        List<SlideRequest> slideRequests = SlideRequest.slideToSlideRequest(organization.getSlide());
+        response.setSlide(slideRequests);
+
         return response;
     }
 
