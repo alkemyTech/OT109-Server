@@ -1,6 +1,8 @@
 package com.alkemy.ong.controllers;
 
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.input.CreateOrganizationDTO;
 import com.alkemy.ong.pojos.input.UpdateOrganizationDTO;
@@ -60,6 +62,12 @@ public class OrganizationController {
     public FindOrganizationDTO findById(@PathVariable Long id) {
         OrganizationEntity organization = orgService.findById(id);
         FindOrganizationDTO response = new FindOrganizationDTO();
+        List<Slide> slides = organization.getSlide();
+        System.out.println(slides);
+        List<SlideRequest> slideRequests = new ArrayList<>();
+        BeanUtils.copyProperties(slides, slideRequests);
+        System.out.println(slideRequests.toString());
+        response.setSlide(slideRequests);
         BeanUtils.copyProperties(organization, response);
         return response;
     }

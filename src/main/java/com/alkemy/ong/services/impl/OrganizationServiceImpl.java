@@ -57,7 +57,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationEntity findById(Long id) throws ParamNotFound {
         Optional<OrganizationEntity> opt = organizationRepository.findById(id);
         if (opt.isPresent()) {
-            //List<Slide> slides = slideRepository.getSlidesSortedAsc(id);
             opt.get().setSlide(slideRepository.getSlidesSortedAsc(id));
             return opt.get();
         }
