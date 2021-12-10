@@ -49,9 +49,7 @@ public class CommentServiceImpl implements CommentService {
         Comment uptComment= commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));;
 
         uptComment.setBody(comment.getBody());
-        uptComment.setUser_id(comment.getUser_id());
-        uptComment.setNew_id(comment.getNew_id());
-        return uptComment;
+        return commentRepository.save(uptComment);
     }
 
     @Override
