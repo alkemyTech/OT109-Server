@@ -5,14 +5,12 @@ import com.alkemy.ong.dtos.responses.ContactListDTO;
 import com.alkemy.ong.entities.Contact;
 import com.alkemy.ong.services.ContactService;
 import com.alkemy.ong.services.SendGridService;
-import com.alkemy.ong.utils.ValidatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Null;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,33 +21,24 @@ public class ContactController {
 
     @Autowired
     private ContactService contactService;
-    @Autowired
-    private ValidatorUtil validatorUtil;
+
     @Autowired
     private SendGridService sendGridService;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ContactPostDTO contactPostDto){
+    public ResponseEntity<?> create(@RequestBody @Valid ContactPostDTO contactPostDto){
         Contact contactCreated;
         try {
-            if (contactPostDto.getName().isEmpty()) {
-                return new ResponseEntity<>("Name cannot be empty.", HttpStatus.BAD_REQUEST);
-            }
-            if (!validatorUtil.isEmailValid(contactPostDto.getEmail())) {
-                return new ResponseEntity<>("Invalid email address.", HttpStatus.BAD_REQUEST);
-            }
-            if (!validatorUtil.isPhoneValid(contactPostDto.getPhone())) {
-                return new ResponseEntity<>("Invalid phone number.", HttpStatus.BAD_REQUEST);
-            }
-            if(contactPostDto.getMessage().isEmpty()){
-                return new ResponseEntity<>("Invalid message.", HttpStatus.BAD_REQUEST);
-            }
             Contact contactToCreate = contactPostDto.toContact();
             contactCreated = contactService.createContact(contactToCreate);
             sendGridService.contactMessage(contactCreated.getName(),contactCreated.getEmail());
-        }catch(NullPointerException | IOException npe){
+        }catch(NullPointerException npe){
             System.out.println("Name, email, phone number and message cannot be empty.");
             return new ResponseEntity<>("Name, email, phone number and message cannot be empty.",HttpStatus.BAD_REQUEST);
+        }
+        catch (IOException ioe){
+            System.out.println("There was a problem with the email service.");
+            return new ResponseEntity<>("There was a problem with the email service.",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(contactCreated, HttpStatus.CREATED);
     }
