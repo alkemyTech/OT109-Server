@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/v3/api-docs",
                         "/api/docs",
-                        "/api/docs/**")
+                        "/api/docs/**",
+                        "/contacts")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/categories").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/categories").hasAnyRole("ADMIN")

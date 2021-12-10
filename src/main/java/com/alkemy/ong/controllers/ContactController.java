@@ -35,16 +35,14 @@ public class ContactController {
     private JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestHeader(name = "Authorization") String token, @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
+    public ResponseEntity<?> create(@RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
         Contact contactCreated;
         try {
             Contact contactToCreate = contactPostDto.toContact();
             contactCreated = contactService.createContact(contactToCreate);
 
             //Contact Mail Sending
-            User user = userService.findByEmail(jwtUtil.extractUserEmail(token));
-            httpResponse.addHeader("Contact-Mail-Sent", String.valueOf(sendGridService.contactMessage(contactCreated.getName(), contactCreated.getEmail())));
-            httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(String.format("%s %s", user.getFirstName(), user.getLastName()), user.getEmail())));
+            httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(contactPostDto.getName(), contactPostDto.getEmail())));
 
         } catch (NullPointerException npe) {
 
