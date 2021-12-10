@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -74,7 +75,6 @@ public class AuthController {
         }
 
         ModelMapper modelMapper = new ModelMapper();
-
         modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 
@@ -127,6 +127,7 @@ public class AuthController {
             response.put("Verify inputs data", errors);
 
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
         }
         Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
 

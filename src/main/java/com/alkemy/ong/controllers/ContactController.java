@@ -47,10 +47,10 @@ public class ContactController {
             httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(String.format("%s %s", user.getFirstName(), user.getLastName()), user.getEmail())));
 
         } catch (NullPointerException npe) {
+
             System.out.println("Name, email, phone number and message cannot be empty.");
             return new ResponseEntity<>("Name, email, phone number and message cannot be empty.", HttpStatus.BAD_REQUEST);
         }
-
         return new ResponseEntity<>(contactCreated, HttpStatus.CREATED);
     }
 

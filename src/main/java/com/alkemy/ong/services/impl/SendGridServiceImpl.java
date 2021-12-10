@@ -5,6 +5,7 @@ import com.sendgrid.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Scanner;
@@ -16,10 +17,9 @@ import org.springframework.core.io.ClassPathResource;
 @Service
 public class SendGridServiceImpl implements SendGridService {
 
-    private final Email from = new Email("alkemy109@gmail.com");
-
-    @Value("${SENDGRID_API_KEY}")
+   @Value("${SENDGRID_API_KEY}")
     private SendGrid sendGridApiKey;
+
     @Override
     public boolean welcomeMessage(String firstName, String lastName, String email) {
         try {
@@ -49,8 +49,6 @@ public class SendGridServiceImpl implements SendGridService {
         Email to = new Email(email);
         Content content = new Content("text/plain", message);
         Mail mail = new Mail(from, subject, to, content);
-
-        
 
         Request request = new Request();
         request.setMethod(Method.POST);
