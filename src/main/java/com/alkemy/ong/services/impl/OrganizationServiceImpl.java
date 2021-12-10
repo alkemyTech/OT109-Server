@@ -1,14 +1,22 @@
 package com.alkemy.ong.services.impl;
 
+import com.alkemy.ong.dtos.requests.SlideRequest;
+import com.alkemy.ong.dtos.responses.ListMemberDTO;
+import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.OrganizationRepository;
+import com.alkemy.ong.repositories.SlideRepository;
 import com.alkemy.ong.services.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
@@ -18,6 +26,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
     OrganizationRepository organizationRepository;
+    @Autowired
+    SlideRepository slideRepository;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public OrganizationEntity create(OrganizationEntity entity) {
@@ -30,7 +42,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (!entity.isPresent()) {
             throw new ParamNotFound("Error: invalid organization id");
         }
-        ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
         OrganizationEntity organization = entity.get();
         modelMapper.map(organizationEntity, organization);
@@ -46,6 +57,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationEntity findById(Long id) throws ParamNotFound {
         Optional<OrganizationEntity> opt = organizationRepository.findById(id);
         if (opt.isPresent()) {
+            //List<Slide> slides = slideRepository.getSlidesSortedAsc(id);
+            opt.get().setSlide(slideRepository.getSlidesSortedAsc(id));
             return opt.get();
         }
         throw new ParamNotFound("Organization not found");

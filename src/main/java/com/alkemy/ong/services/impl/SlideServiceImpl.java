@@ -1,5 +1,6 @@
 package com.alkemy.ong.services.impl;
 
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.SlideRepository;
@@ -109,5 +110,9 @@ public class SlideServiceImpl implements SlideService {
         if(organizationService.findById(organization_id)== null){
             throw new NotFoundException("Organization with id " + organization_id + " not found");
         }
+    }
+
+    public List<Slide> getSlidesSortedASCbyOrganizationId(Long idOrganization){
+        return slideRepository.getSlidesSortedAsc(idOrganization);
     }
 }
