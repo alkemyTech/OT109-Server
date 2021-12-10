@@ -95,7 +95,7 @@ public class AuthController {
 
         UserDetails userDetails = userDetailsServices.loadUserByUsername(user.getEmail());
         String jwt = jwtTokenUtil.generateToken(userDetails);
-
+        System.out.println(userDetails);
         ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO();
         modelMapper.map(user, responseRegisterDTO);
         responseRegisterDTO.setToken(jwt);
@@ -133,7 +133,7 @@ public class AuthController {
                 authenticationManager.authenticate(authentication);
 
                 String jwt = jwtTokenUtil.generateToken(userDetails);
-
+                System.out.println(userDetails.getAuthorities());
                 loginResponse.setFirstName(userOptional.get().getFirstName());
                 loginResponse.setToken(jwt);
                 loginResponse.setEmail(userOptional.get().getEmail());

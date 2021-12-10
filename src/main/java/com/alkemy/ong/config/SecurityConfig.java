@@ -43,17 +43,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/**",
-                        "/auth/**",
+                .antMatchers("/auth/**",
                         "/register",
                         "/login",
+                        "/v3/api-docs/swagger-config",
                         "/v3/api-docs",
-                        "/api/docs",
-                        "/api/docs/**")
+                        "/v3/api-docs/**",
+                        "/api/swagger-ui/**")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/categories").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.GET, "/categories").hasAnyRole("ADMIN")
-                .anyRequest().hasAnyRole("ADMIN", "USER");
+                .antMatchers(HttpMethod.GET,
+                        "/members",
+                        "/categories/{id}",
+                        "/categories",
+                        "/s3/images",
+                        "/organization/public",
+                        "/organization/public/{id}",
+                        "/contacts",
+                        "/users").hasAnyAuthority("ADMIN","USER")
+                .antMatchers(HttpMethod.POST,
+                        "/testimonials",
+                        "/members",
+                        "/categories",
+                        "/s3/images",
+                        "/organization/public",
+                        "/contacts").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,
+                        "/testimonials",
+                        "/members/{id}",
+                        "/categories/{id}").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PATCH,
+                "/organization/public/{id}",
+                        "/users/{id}").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE,
+                        "/testimonials/{id}",
+                        "/members/{id}",
+                        "/categories/{id}",
+                        "/users/{id}").hasAuthority("ADMIN")
+                .anyRequest().authenticated().and().sessionManagement();
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
