@@ -1,25 +1,18 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.requests.SlideRequest;
-import com.alkemy.ong.dtos.responses.ListMemberDTO;
-import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
-import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.OrganizationRepository;
 import com.alkemy.ong.repositories.SlideRepository;
 import com.alkemy.ong.services.OrganizationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
