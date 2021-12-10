@@ -1,20 +1,11 @@
 package com.alkemy.ong;
 
 import com.alkemy.ong.entities.Role;
-<<<<<<< HEAD
-
-import com.alkemy.ong.entities.User;
-
-import com.alkemy.ong.services.RoleService;
-
-import com.alkemy.ong.services.UserService;
-=======
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
 
->>>>>>> c1b853d4f2e01b9ad8a450172355dfa355c1a04c
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -30,26 +21,6 @@ import java.util.Random;
 @SpringBootApplication
 public class OngApplication implements ApplicationRunner {
 
-<<<<<<< HEAD
-	@Autowired
-	UserService userService;
-	@Autowired
-	RoleService roleService;
-
-
-	public static void main(String[] args) {
-		SpringApplication.run(OngApplication.class, args);
-	}
-
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-//		Role role = new Role("ADMIN");
-//		roleService.create(role);
-//		Role role2 = new Role("USER");
-//		roleService.create(role2);
-
-	}
-=======
     @Autowired
     UserService userService;
     @Autowired
@@ -96,5 +67,4 @@ public class OngApplication implements ApplicationRunner {
 
         }
     }
->>>>>>> c1b853d4f2e01b9ad8a450172355dfa355c1a04c
 }

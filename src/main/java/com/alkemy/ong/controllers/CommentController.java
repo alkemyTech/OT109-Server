@@ -2,6 +2,7 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
+import com.alkemy.ong.entities.Role;
 import com.alkemy.ong.services.impl.CommentServiceImpl;
 import com.alkemy.ong.util.JwtUtil;
 import org.apache.coyote.Response;
@@ -39,18 +40,20 @@ public class CommentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentDTO request, @RequestHeader("Authorization") String token){
-        //extract id/email and role of user from jwt
+
         String email = jwtUtil.extractUserEmail(token.substring(7));
-        Comment comment = modelMapper.map(request,Comment.class);
-        //verify identity or role
-        if(commentService.validUser(email,id)){
+        List<String> roles = jwtUtil.extractRoles(token.substring(7));
+
+        if(commentService.validUser(email,id) || isAdmin(roles)){
+            Comment comment = modelMapper.map(request,Comment.class);
             comment = commentService.update(comment,id);
-        }else return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
-        //if owner or admin allow access to update method
-        //else unauthorized
+            return ResponseEntity.ok(modelMapper.map(comment,CommentDTO.class));
+        }else
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
+    }
 
-
-        return ResponseEntity.ok(modelMapper.map(comment,CommentDTO.class));
+    private boolean isAdmin(List<String> roles){
+        return roles.contains("ADMIN");
     }
 
 }

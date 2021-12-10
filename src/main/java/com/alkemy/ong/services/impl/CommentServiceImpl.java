@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CommentServiceImpl implements CommentService {
     @Autowired
@@ -58,7 +60,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Boolean validUser(String email, Long commentId) {
-        return commentRepository.isOwner(email,commentId);
+    public Boolean validUser(String email,Long commentId) {
+        Optional<String> owner = commentRepository.findOwnerEmail(commentId);
+        return owner.map(s -> s.equals(email)).orElse(false);
     }
 }

@@ -1,5 +1,6 @@
 package com.alkemy.ong.util;
 
+import com.alkemy.ong.entities.Role;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ public class JwtUtil {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+
     }
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -35,6 +38,8 @@ public class JwtUtil {
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+    public List<String> extractRoles(String token) { return (List<String>)Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+            .parseClaimsJws(token).getBody().get("roles");}
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
     }
