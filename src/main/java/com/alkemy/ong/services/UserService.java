@@ -72,6 +72,11 @@ public class UserService {
         return userRepo.findByRole_Id(id);
     }
 
+    public boolean emailExists(String email) {
+        Optional<User> users = userRepo.findByEmail(email);
+        return users.isPresent();
+    }
+
     public User findById(@NonNull Long id) throws UserServiceException {
         Optional<User> opt = userRepo.findById(id);
         if (opt.isPresent()) {
