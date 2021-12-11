@@ -1,8 +1,9 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.requests.SlideRequest;
+import com.alkemy.ong.dtos.responses.SlidePostResponse;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.ParamNotFound;
+import com.alkemy.ong.mapper.SlideMapper;
 import com.alkemy.ong.repositories.SlideRepository;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.services.OrganizationService;
@@ -23,6 +24,9 @@ public class SlideServiceImpl implements SlideService {
     @Autowired
     private OrganizationService organizationService;
 
+    @Autowired
+    private SlideMapper slideMapper;
+
     /**
      * Si el slide dado contiene un orderNum sin valor(null) le otorgamos un OrderNum mayor a todos los demas slides
      * para que este se visualice ultimo.
@@ -35,14 +39,15 @@ public class SlideServiceImpl implements SlideService {
      * @throws NotFoundException Cuando la OrganizacionEntity de el Slide dado no tiene un id registrado en la base de dato
      */
     @Override
-    public Slide save(Slide slide) throws NotFoundException {
+    public SlidePostResponse save(Slide slide) throws NotFoundException {
         validateSlide(slide);
         if(slideRepository.existsByOrderNum(slide.getOrderNum())){
             Slide slideBD = slideRepository.getByOrderNum(slide.getOrderNum());
             slideBD.setOrderNum(slideRepository.getByMaxOrderNum()+1);
             slideRepository.save(slideBD);
         }
-        return slideRepository.save(slide);
+        SlidePostResponse slideResponse = slideMapper.slideEntity2PostResponse(slideRepository.save(slide));
+        return slideResponse;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Slide update(Long id, Slide slide) throws NotFoundException {
+    public SlidePostResponse update(Long id, Slide slide) throws NotFoundException {
         Slide slideBD = getById(id);
         //Todos los los valores serian slideBD.setAtributte(slide.getAtributte)
         slide.setId(id);
