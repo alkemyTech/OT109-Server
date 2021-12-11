@@ -1,13 +1,27 @@
 package com.alkemy.ong.dtos.requests;
 
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+@Data
+@Builder
 public class CommentPostRequestDTO {
 
-    private Long newId;
-    private Long userId;
+    @NotBlank
+    @Min(value = 1, message = "Comment id cannot be less than one.")
+    private Long id;
+    @NotBlank
+    @Min(value = 1, message = "News id cannot be less than one.")
+    private Long news_id;
+    @NotBlank
+    @Min(value = 1, message = "News id cannot be less than one.")
+    private Long user_id;
+    @NotBlank
     private String body;
 }
