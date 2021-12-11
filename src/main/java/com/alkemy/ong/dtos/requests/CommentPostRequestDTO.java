@@ -7,16 +7,17 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
 @Builder
 public class CommentPostRequestDTO {
 
-    @NotBlank
+    @NotNull
     @Min(value = 1, message = "News id cannot be less than one.")
     private Long news_id;
-    @NotBlank
+    @NotNull
     @Min(value = 1, message = "News id cannot be less than one.")
     private Long user_id;
     @NotBlank

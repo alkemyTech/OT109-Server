@@ -40,7 +40,7 @@ public class CommentController {
         return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
         @PostMapping
-        public ResponseEntity<CommentDTO> create(@RequestBody @Valid CommentPostRequestDTO commentPostRequestDTO){
+        public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO){
             CommentDTO commentCreated = commentService.create(commentPostRequestDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
         }
