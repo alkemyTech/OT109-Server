@@ -53,7 +53,7 @@ public class OngApplication implements ApplicationRunner {
 
         }
         Optional<User> opt = userRepository.findByEmailIgnoreCase("admin@admin.com");
-        if (opt.isEmpty()) {
+        if (!opt.isPresent()) {
             User user = new User();
             user.setEmail("admin@admin.com");
             user.setFirstName("Administrador");
