@@ -1,32 +1,40 @@
 package com.alkemy.ong.controllers;
 
+import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
+import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
-import com.alkemy.ong.entities.Role;
-import com.alkemy.ong.services.impl.CommentServiceImpl;
+import com.alkemy.ong.services.CommentService;
 import com.alkemy.ong.util.JwtUtil;
-import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("comments")
 public class CommentController {
 
     @Autowired
-    private CommentServiceImpl commentService;
+    CommentService commentService;
 
     @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @PostMapping
+    public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO) {
+        CommentDTO commentCreated = commentService.create(commentPostRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
+    }
 
     @GetMapping
     private ResponseEntity<?> getAll(){
