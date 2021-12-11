@@ -6,6 +6,7 @@ import com.alkemy.ong.pojos.input.RegisterUserDTO;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseRegisterDTO;
+import com.alkemy.ong.services.SendGridService;
 import com.alkemy.ong.pojos.output.UserProfileDTO;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.RoleService;
@@ -33,7 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -53,11 +56,12 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
     @Autowired
     private UserDetailsServices userDetailsServices;
+    @Autowired
+    private SendGridService sendGridService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result)
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result, HttpServletResponse httpResponse)
             throws DataAlreadyExistException {
-
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -102,6 +106,9 @@ public class AuthController {
         modelMapper.map(user, responseRegisterDTO);
         responseRegisterDTO.setToken(jwt);
 
+        // Welcome mail sending
+        httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.welcomeMessage(registerUserDTO.getFirstName(), registerUserDTO.getLastName(), registerUserDTO.getEmail())));
+        
         return ResponseEntity.created(null).body(responseRegisterDTO);
 
     }
@@ -118,7 +125,9 @@ public class AuthController {
                     })
                     .collect(Collectors.toList());
             response.put("Verify inputs data", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
         }
         Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
 
@@ -126,7 +135,6 @@ public class AuthController {
 
         if (userOptional.isPresent()) {
             UserDetails userDetails = userDetailsServices.loadUserByUsername(loginRequestDTO.getUsername());
-
 
             if (passwordEncoder.matches(loginRequestDTO.getPassword(), userDetails.getPassword())) {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(),
@@ -163,5 +171,4 @@ public class AuthController {
 
         return ResponseEntity.ok().body(userProfileDTO);
     }
-
 }
