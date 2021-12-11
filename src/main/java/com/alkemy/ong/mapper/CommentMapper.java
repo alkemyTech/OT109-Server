@@ -3,6 +3,7 @@ package com.alkemy.ong.mapper;
 import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
+import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.NewsRepository;
 import com.alkemy.ong.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class CommentMapper {
         CommentDTO result = new CommentDTO();
         result.setId(entityCreated.getId());
         result.setBody(entityCreated.getBody());
-        result.setNew_id(entityCreated.getNew_id().getId());
-        result.setUser_id(entityCreated.getUser_id().getId());
+        result.setNews_id(entityCreated.getNews().getId());
+        result.setUser_id(entityCreated.getUser().getId());
         return result;
     }
 
@@ -28,8 +29,8 @@ public class CommentMapper {
     public Comment commentDto2Entity(CommentPostRequestDTO commentDTO) {
         Comment entity = new Comment();
         entity.setBody(commentDTO.getBody());
-        entity.setUser_id(userRepository.findById(commentDTO.getUserId()).get());
-        entity.setNew_id(newsRepository.findById(commentDTO.getNewId()).get());
+        entity.setUser(userRepository.findById(commentDTO.getUser_id()).orElseThrow( () -> new NotFoundException("User not found.")));
+        entity.setNews(newsRepository.findById(commentDTO.getNews_id()).orElseThrow( () -> new NotFoundException("News not found." )));
         return entity;
     }
 }
