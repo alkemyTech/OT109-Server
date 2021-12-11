@@ -8,13 +8,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataSeeder implements CommandLineRunner{
+public class ActivityDataSeeder implements CommandLineRunner{
 
     @Autowired
     ActivityService activityService;
 
     @Override
     public void run(String... args) throws Exception {
+        
         Activity activity = new Activity();
         activity.setName("name");
         activity.setContent("content");
