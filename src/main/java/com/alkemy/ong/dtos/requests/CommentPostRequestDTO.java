@@ -14,9 +14,6 @@ import javax.validation.constraints.Size;
 public class CommentPostRequestDTO {
 
     @NotBlank
-    @Min(value = 1, message = "Comment id cannot be less than one.")
-    private Long id;
-    @NotBlank
     @Min(value = 1, message = "News id cannot be less than one.")
     private Long news_id;
     @NotBlank
