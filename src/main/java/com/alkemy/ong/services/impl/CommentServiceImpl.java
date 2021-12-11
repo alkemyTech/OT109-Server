@@ -1,14 +1,10 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.responses.CommentListDTO;
 import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
+import com.alkemy.ong.dtos.responses.CommentListDTO;
 import com.alkemy.ong.entities.Comment;
-import com.alkemy.ong.entities.News;
-import com.alkemy.ong.entities.User;
-import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.mapper.CommentMapper;
 import com.alkemy.ong.repositories.CommentRepository;
 import com.alkemy.ong.repositories.NewsRepository;
@@ -18,14 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
     @Autowired
     CommentRepository commentRepository;
-
     @Autowired
     NewsRepository newsRepository;
     @Autowired
@@ -35,26 +29,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO create(CommentPostRequestDTO commentDTO) {
-        if (commentDTO.getNewId() == null) {
-            throw new BadRequestException("New id may not be empty");
-        }
-        if (commentDTO.getUserId() == null) {
-            throw new BadRequestException("User id may not be empty");
-        }
-
-        Optional<News> newEntity = newsRepository.findById(commentDTO.getNewId());
-        if (!newEntity.isPresent()) {
-            throw new ParamNotFound("Error: Invalid new id");
-        }
-
-        Optional<User> userEntity = userRepository.findById(commentDTO.getUserId());
-        if (!userEntity.isPresent()) {
-            throw new ParamNotFound("Error: Invalid user id");
-        }
-
-        if (commentDTO.getBody() == "" || commentDTO.getBody() == null) {
-            throw new BadRequestException("Comment may not be empty");
-        }
 
         Comment entity = commentMapper.commentDto2Entity(commentDTO);
         Comment entityCreated = commentRepository.save(entity);
@@ -73,18 +47,17 @@ public class CommentServiceImpl implements CommentService {
         if(!commentRepository.existsById(id)){
             throw new NotFoundException("Comment Not Found.");
         }
-        return commentRepository.findById(id).get();
+        return commentRepository.findById(id).orElseThrow( () -> new NotFoundException("Comment not found."));
     }
 
     @Override
     public Comment update(Comment comment, Long id) throws NotFoundException {
 
-        Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
-
+        Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment does not exist"));
 
         uptComment.setBody(comment.getBody());
-        uptComment.setUser_id(comment.getUser_id());
-        uptComment.setNew_id(comment.getNew_id());
+        uptComment.setUser(comment.getUser());
+        uptComment.setNews(comment.getNews());
         return uptComment;
     }
 
