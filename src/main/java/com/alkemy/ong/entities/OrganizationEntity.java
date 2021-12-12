@@ -1,6 +1,7 @@
 package com.alkemy.ong.entities;
 
 import java.io.Serializable;
+import java.lang.annotation.Repeatable;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -21,6 +22,8 @@ import org.hibernate.annotations.Where;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.lang.Nullable;
 
 @NoArgsConstructor
 @Entity
@@ -79,5 +82,9 @@ public class OrganizationEntity implements Serializable {
 
     @OneToMany(targetEntity = Slide.class,mappedBy = "organization",cascade = {CascadeType.ALL, CascadeType.MERGE} ,fetch = FetchType.LAZY)
     private List<Slide> slide;
+
+    private String facebookUrl;
+    private String linkedinUrl;
+    private String instagramUrl;
 
 }
