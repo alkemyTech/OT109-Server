@@ -1,6 +1,7 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.requests.SlideRequest;
+import com.alkemy.ong.dtos.responses.SlidePostResponse;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
@@ -31,13 +32,13 @@ public class SlideController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(path = "/{id}")
-    public Slide update(@PathVariable("id") Long id, @RequestBody SlideRequest slideRequestUpdate) throws NotFoundException {
+    public SlidePostResponse update(@PathVariable("id") Long id, @RequestBody SlideRequest slideRequestUpdate) throws NotFoundException {
         return slideService.update(id,slideRequestToSlide(slideRequestUpdate));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public Slide save(@RequestBody SlideRequest slideRequest) throws NotFoundException {
+    public SlidePostResponse save(@RequestBody SlideRequest slideRequest) throws NotFoundException {
         return slideService.save(slideRequestToSlide(slideRequest));
     }
 
