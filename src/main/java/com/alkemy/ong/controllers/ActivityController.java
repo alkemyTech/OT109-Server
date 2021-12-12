@@ -30,7 +30,7 @@ public class ActivityController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody ActivityPostPutRequestDTO activityPutRequestDTO ){
+                                    @Valid @RequestBody ActivityPostPutRequestDTO activityPutRequestDTO ){
         try{
             ActivityDTO activityDTO = activityService.update(id,activityPutRequestDTO);
             return ResponseEntity.ok().body(activityDTO);
