@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 
+import java.util.Random;
+
 @SpringBootApplication
 public class OngApplication implements ApplicationRunner {
 
@@ -53,7 +55,7 @@ public class OngApplication implements ApplicationRunner {
 
         }
         Optional<User> opt = userRepository.findByEmailIgnoreCase("admin@admin.com");
-        if (opt.isEmpty()) {
+        if (!opt.isPresent()) {
             User user = new User();
             user.setEmail("admin@admin.com");
             user.setFirstName("Administrador");

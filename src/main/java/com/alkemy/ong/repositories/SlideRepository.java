@@ -25,4 +25,7 @@ public interface SlideRepository extends JpaRepository<Slide,Long> {
     List<Slide> findByOrderByOrderNumAsc();
 
     boolean existsByOrderNum(int orderNum);
+
+    @Query(value = "SELECT * FROM slides ORDER BY slides.order_num ASC", nativeQuery = true)
+    List<Slide> getSlidesSortedAsc(Long idOrganization);
 }

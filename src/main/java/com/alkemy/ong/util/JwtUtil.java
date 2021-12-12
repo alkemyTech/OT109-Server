@@ -1,42 +1,45 @@
 package com.alkemy.ong.util;
 
+import com.alkemy.ong.entities.Role;
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 
 @Service
 public class JwtUtil {
 
     private static final String SECRET_KEY = "secret";
+    private static final String BEARER_PART = "Bearer ";
+    private static final String EMPTY = "";
 
     //private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+
     }
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    public String extractId(String token) {
+    public String extractId(String token){
         return extractClaim(token, Claims::getId);
     }
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+    public List<String> extractRoles(String token) { return (List<String>)Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+            .parseClaimsJws(token).getBody().get("roles");}
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
     }
-
     public String generateToken(UserDetails authentication) {
 
         return Jwts.builder()
@@ -47,7 +50,6 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
-
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
