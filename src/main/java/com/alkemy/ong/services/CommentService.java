@@ -11,8 +11,8 @@ import java.util.List;
 public interface CommentService {
     CommentDTO create(CommentPostRequestDTO commentDTO);
     List<Comment> findAll() throws NotFoundException;
-    Comment findById(Long id) throws NotFoundException;;
-    Comment update(Comment comment, Long id) throws NotFoundException;;
-    void deleteById(Long id) throws NotFoundException;;
-
+    Comment findById(Long id) throws NotFoundException;
+    Comment update(Comment comment, Long id) throws NotFoundException;
+    void deleteById(Long id) throws NotFoundException;
+    Boolean validUser(String email,Long commentId);
 }

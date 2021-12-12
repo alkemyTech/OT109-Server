@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findAll() throws NotFoundException {
-        return commentRepository.findAll();
+        return commentRepository.findByOrderByCreatedAtDesc();
     }
 
     @Override
@@ -77,17 +77,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment update(Comment comment, Long id) throws NotFoundException {
 
-        Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
-        ;
+        Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment does not exist"));
 
         uptComment.setBody(comment.getBody());
-        uptComment.setUser_id(comment.getUser_id());
-        uptComment.setNew_id(comment.getNew_id());
-        return uptComment;
+        return commentRepository.save(uptComment);
     }
 
     @Override
     public void deleteById(Long id) throws NotFoundException {
         commentRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean validUser(String email,Long commentId) {
+        Optional<String> owner = commentRepository.findOwnerEmail(commentId);
+        return owner.map(s -> s.equals(email)).orElse(false);
     }
 }

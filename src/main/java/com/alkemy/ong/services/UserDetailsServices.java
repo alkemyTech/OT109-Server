@@ -1,6 +1,7 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.entities.User;
+import com.alkemy.ong.entities.UsersDetails;
 import com.alkemy.ong.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
