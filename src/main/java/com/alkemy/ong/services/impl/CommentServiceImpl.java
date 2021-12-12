@@ -4,7 +4,11 @@ import com.alkemy.ong.dtos.responses.CommentListDTO;
 import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
+import com.alkemy.ong.entities.News;
+import com.alkemy.ong.entities.User;
+import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.mapper.CommentMapper;
 import com.alkemy.ong.repositories.CommentRepository;
 import com.alkemy.ong.repositories.NewsRepository;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -28,7 +33,6 @@ public class CommentServiceImpl implements CommentService {
     CommentMapper commentMapper;
 
     @Override
-
     public CommentDTO create(CommentPostRequestDTO commentDTO) {
 
         Comment entity = commentMapper.commentDto2Entity(commentDTO);
@@ -40,12 +44,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> findAll() throws NotFoundException {
-        return commentRepository.findAll();
+        return commentRepository.findByOrderByCreatedAtDesc();
     }
 
     @Override
     public Comment findById(Long id) throws NotFoundException {
-        if(!commentRepository.existsById(id)){
+        if (!commentRepository.existsById(id)) {
             throw new NotFoundException("Comment Not Found.");
         }
         return commentRepository.findById(id).orElseThrow( () -> new NotFoundException("Comment not found."));
@@ -57,9 +61,7 @@ public class CommentServiceImpl implements CommentService {
         Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment does not exist"));
 
         uptComment.setBody(comment.getBody());
-        uptComment.setUser(comment.getUser());
-        uptComment.setNews(comment.getNews());
-        return uptComment;
+        return commentRepository.save(uptComment);
     }
 
     @Override
@@ -70,5 +72,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentListDTO> findCommentsByNewsId(Long id) {
         return commentRepository.findCommentsByNewsId(id);
+    }
+
+    @Override
+    public Boolean validUser(String email,Long commentId) {
+        Optional<String> owner = commentRepository.findOwnerEmail(commentId);
+        return owner.map(s -> s.equals(email)).orElse(false);
     }
 }

@@ -16,4 +16,5 @@ public interface CommentService {
     Comment update(Comment comment, Long id) throws NotFoundException;
     void deleteById(Long id) throws NotFoundException;
     List<CommentListDTO> findCommentsByNewsId(Long id);
+    Boolean validUser(String email,Long commentId);
 }

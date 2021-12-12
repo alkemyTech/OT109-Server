@@ -59,9 +59,10 @@ public class AuthController {
     @Autowired
     private SendGridService sendGridService;
 
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result, HttpServletResponse httpResponse)
-            throws DataAlreadyExistException {
+        throws DataAlreadyExistException {
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -89,22 +90,14 @@ public class AuthController {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(registerUserDTO.getPassword());
         user.setPhoto(registerUserDTO.getPhoto());
-        user.setRole(roleService.findByName("USER"));
+        user.setRole(roleService.findByName("ADMIN"));
 
         System.out.println(user);
+
         userService.create(user);
-
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(registerUserDTO.getEmail(), registerUserDTO.getPassword());
-
-        authenticationManager.authenticate(authentication);
-
-        UserDetails userDetails = userDetailsServices.loadUserByUsername(user.getEmail());
-        String jwt = jwtTokenUtil.generateToken(userDetails);
 
         ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO();
         modelMapper.map(user, responseRegisterDTO);
-        responseRegisterDTO.setToken(jwt);
 
         // Welcome mail sending
         httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.welcomeMessage(registerUserDTO.getFirstName(), registerUserDTO.getLastName(), registerUserDTO.getEmail())));
@@ -113,9 +106,10 @@ public class AuthController {
 
     }
 
+
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO, BindingResult result) {
+    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO, BindingResult result){
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()

@@ -45,12 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/**",
                         "/register",
                         "/login",
-                        "/api/docs",
                         "/v3/api-docs/swagger-config",
+                        "/api/swagger-ui/**",
                         "/v3/api-docs",
-                        "/v3/api-docs/**",
-                        "/api/swagger-ui/**")
-                .permitAll()
+                        "/api/docs",
+                        "/api/docs/**",
+                        "/contacts")
+               .permitAll()
                 .antMatchers(HttpMethod.GET,
                         "/members",
                         "/categories/{id}",
@@ -60,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/organization/public/{id}",
                         "/contacts",
                         "/users").hasAnyAuthority("ADMIN","USER")
+                .antMatchers(HttpMethod.GET,
+                        "/comments").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,
                         "/testimonials",
                         "/members",
@@ -71,6 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/testimonials",
                         "/members/{id}",
                         "/categories/{id}").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,
+                        "comments/{id}").hasAnyAuthority("ADMIN","USER")
                 .antMatchers(HttpMethod.PATCH,
                         "/organization/public/{id}",
                         "/users/{id}").hasAuthority("ADMIN")
@@ -90,6 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
