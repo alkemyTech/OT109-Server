@@ -42,13 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/auth/",
+                .antMatchers("/auth",
                         "/register",
                         "/login",
                         "/api/docs",
                         "/v3/api-docs/swagger-config",
                         "/v3/api-docs",
-                        "/v3/api-docs/",
+                        "/v3/api-docs/**",
                         "/api/swagger-ui/**")
                 .permitAll()
                 .antMatchers(HttpMethod.GET,
