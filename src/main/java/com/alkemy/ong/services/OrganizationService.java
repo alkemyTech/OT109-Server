@@ -1,6 +1,8 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.alkemy.ong.pojos.output.FindOrganizationDTO;
+
 import java.util.List;
 
 public interface OrganizationService {

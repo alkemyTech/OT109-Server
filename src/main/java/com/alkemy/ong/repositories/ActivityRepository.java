@@ -12,4 +12,5 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Optional<Activity> findByName(String name);
 
     List<Activity> findByDeletedAtIsNull();
+    boolean existsByName(String name);
 }

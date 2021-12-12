@@ -1,15 +1,14 @@
 package com.alkemy.ong.controllers;
 
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.ParamNotFound;
+import com.alkemy.ong.mapper.SlideMapper;
 import com.alkemy.ong.pojos.input.CreateOrganizationDTO;
 import com.alkemy.ong.pojos.input.UpdateOrganizationDTO;
 import com.alkemy.ong.pojos.output.FindOrganizationDTO;
 import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.services.OrganizationService;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +24,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
 
     @Autowired
     private OrganizationService orgService;
+    @Autowired
+    SlideMapper slideMapper;
 
     @PostMapping("/public")
     @ResponseStatus(HttpStatus.CREATED)
@@ -61,6 +66,10 @@ public class OrganizationController {
         OrganizationEntity organization = orgService.findById(id);
         FindOrganizationDTO response = new FindOrganizationDTO();
         BeanUtils.copyProperties(organization, response);
+
+        List<SlideRequest> slideRequests = slideMapper.slideToSlideRequest(organization.getSlide());
+        response.setSlide(slideRequests);
+
         return response;
     }
 
