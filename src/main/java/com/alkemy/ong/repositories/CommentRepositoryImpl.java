@@ -13,7 +13,7 @@ public class CommentRepositoryImpl {
 
 
     public List<CommentListDTO> findCommentsByNewsId(Long id){
-        String query = "SELECT NEW com.alkemy.ong.dtos.responses.CommentListDTO(c.id, c.body, c.user.email) FROM Comment c WHERE c.news.id = :id";
+        String query = "SELECT NEW com.alkemy.ong.dtos.responses.CommentListDTO(c.id, c.body, c.user.email) FROM Comment c WHERE c.news.id = :id ORDER BY c.createdAt DESC";
         TypedQuery<CommentListDTO> typedQuery = em.createQuery(query, CommentListDTO.class);
         typedQuery.setParameter("id",id);
         return typedQuery.getResultList();
