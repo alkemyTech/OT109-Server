@@ -23,8 +23,8 @@ public class ModelMapperConfig {
                 .setPropertyCondition(Conditions.isNotNull())
                 .setFieldAccessLevel(PRIVATE);
         mapper.typeMap(Comment.class,CommentDTO.class)
-                .addMapping(src -> src.getNew_id().getId(),CommentDTO::setNew_id)
-                .addMapping(src -> src.getUser_id().getId(),CommentDTO::setUser_id);
+                .addMapping(src -> src.getNews().getId(),CommentDTO::setNews_id)
+                .addMapping(src -> src.getUser().getId(),CommentDTO::setUser_id);
 
         return mapper;
     }

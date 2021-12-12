@@ -27,11 +27,11 @@ public class Comment {
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private User user_id;
+    private User user;
 
     @JoinColumn(name = "news_id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private News new_id;
+    private News news;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

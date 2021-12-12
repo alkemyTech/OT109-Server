@@ -1,5 +1,6 @@
 package com.alkemy.ong.services.impl;
 
+import com.alkemy.ong.dtos.responses.CommentListDTO;
 import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
@@ -33,26 +34,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO create(CommentPostRequestDTO commentDTO) {
-        if (commentDTO.getNewId() == null) {
-            throw new BadRequestException("New id may not be empty");
-        }
-        if (commentDTO.getUserId() == null) {
-            throw new BadRequestException("User id may not be empty");
-        }
-
-        Optional<News> newEntity = newsRepository.findById(commentDTO.getNewId());
-        if (!newEntity.isPresent()) {
-            throw new ParamNotFound("Error: Invalid new id");
-        }
-
-        Optional<User> userEntity = userRepository.findById(commentDTO.getUserId());
-        if (!userEntity.isPresent()) {
-            throw new ParamNotFound("Error: Invalid user id");
-        }
-
-        if (commentDTO.getBody() == "" || commentDTO.getBody() == null) {
-            throw new BadRequestException("Comment may not be empty");
-        }
 
         Comment entity = commentMapper.commentDto2Entity(commentDTO);
         Comment entityCreated = commentRepository.save(entity);
@@ -71,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
         if (!commentRepository.existsById(id)) {
             throw new NotFoundException("Comment Not Found.");
         }
-        return commentRepository.findById(id).get();
+        return commentRepository.findById(id).orElseThrow( () -> new NotFoundException("Comment not found."));
     }
 
     @Override
@@ -86,6 +67,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteById(Long id) throws NotFoundException {
         commentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CommentListDTO> findCommentsByNewsId(Long id) {
+        return commentRepository.findCommentsByNewsId(id);
     }
 
     @Override
