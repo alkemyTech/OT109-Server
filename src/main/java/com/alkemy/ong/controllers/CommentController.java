@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,14 +48,13 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentDTO request, @RequestHeader("Authorization") String token){
-
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentDTO request, HttpServletRequest header){
+        String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));
         List<String> roles = jwtUtil.extractRoles(token.substring(7));
 
         if(commentService.validUser(email,id) || isAdmin(roles)){
-            Comment comment = modelMapper.map(request,Comment.class);
-            comment = commentService.update(comment,id);
+            Comment comment = commentService.update(request,id);
             return ResponseEntity.ok(modelMapper.map(comment,CommentDTO.class));
         }else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
