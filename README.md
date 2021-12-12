@@ -4,7 +4,11 @@ Alkemy Academy.
 Spring Boot & Swagger.
 ***
 
-Aquí iría la información del proyecto (que falta completar)
+Es un proyecto para el desarrollo de un sitio web para una ONG donde se puedan compartir novedades con la
+comunidad, contar sobre el trabajo que llevan a cabo, invitar a interesados/as a
+participar como voluntarios/as o donantes (de dinero o materiales), y donde puedan
+compartir información (a partir de información recopilada a través de la página)
+sobre el equipo que está atrás de cada acción que lleva a cabo la organización. 
 
 ##Instalation
 
@@ -20,25 +24,9 @@ Aquí iría la información del proyecto (que falta completar)
 ###Datos de prueba
  * #####Usuarios:
 ######**Usuarios administradores:**
-* **USERNAME:** tamaraceballos@gmail.com ------ **PASSWORD:** tamaraceballos
-* **USERNAME:** hernanretamar@gmail.com -------**PASSWORD:** hernanretamar
-* **USERNAME:** jazmincabello@gmail.com -------- **PASSWORD:** jazmincabello
-* **USERNAME:** lucasbracamonte@gmail.com --- **PASSWORD:** lucasbracamonte
-* **USERNAME:** salvadorcorrea@gmail.com ------ **PASSWORD:** salvadorcorrea
-* **USERNAME:** bautistapearson@gmail.com ----- **PASSWORD:** bautistapearson
-* **USERNAME:** silviapoliti@gmail.com ------------- **PASSWORD:** silviapoliti
-* **USERNAME:** candelarialuna@gmail.com ------- **PASSWORD:** candelarialuna
 * **USERNAME:** monicasala@gmail.com ----------- **PASSWORD:** monicasala
-* **USERNAME:** diegopeloso@gmail.com ---------- **PASSWORD:** diegopeloso
+* **USERNAME:** tamaraceballos@gmail.com ------ **PASSWORD:** tamaraceballos
 
 ######**Usuarios regulares:**
 * **USERNAME:** juanperez@gmail.com ------------- **PASSWORD:** juanperez
 * **USERNAME:** marcossanchez@gmail.com ----- **PASSWORD:** marcossanchez
-* **USERNAME:** anapaulagonzalez@gmail.com -- **PASSWORD:** anapaulagonzalez
-* **USERNAME:** pablocaceres@gmail.com -------- **PASSWORD:** pablocaceres
-* **USERNAME:** ceciliarodriguez@gmail.com ----- **PASSWORD:** ceciliarodriguez
-* **USERNAME:** maurovina@gmail.com ------------ **PASSWORD:** maurovina
-* **USERNAME:** pedronunez@gmail.com ---------- **PASSWORD:** pedronunez
-* **USERNAME:** josefinaramirez@gmail.com ------ **PASSWORD:** josefinaramirez
-* **USERNAME:** gimenaroth@gmail.com ----------- **PASSWORD:** gimenaroth
-* **USERNAME:** leandrogomez@gmail.com ------- **PASSWORD:** leandrogomez
