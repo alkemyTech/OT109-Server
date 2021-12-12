@@ -55,7 +55,7 @@ public class CommentController {
         if(commentService.validUser(email,id) || isAdmin(roles)){
             Comment comment = modelMapper.map(request,Comment.class);
             comment = commentService.update(comment,id);
-            return ResponseEntity.ok(modelMapper.map(comment,CommentPutRequestDTO.class));
+            return ResponseEntity.ok(modelMapper.map(comment,CommentDTO.class));
         }else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
     }
