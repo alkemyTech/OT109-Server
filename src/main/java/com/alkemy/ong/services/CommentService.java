@@ -13,7 +13,6 @@ public interface CommentService {
     List<Comment> findAll() throws NotFoundException;
     Comment findById(Long id) throws NotFoundException;
     Comment update(Comment comment, Long id) throws NotFoundException;
-    Comment update(CommentDTO comment, Long id) throws NotFoundException;
     void deleteById(Long id) throws NotFoundException;
     Boolean validUser(String email,Long commentId);
 }

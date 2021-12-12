@@ -1,8 +1,7 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
-import com.alkemy.ong.dtos.responses.CategoryDTO;
+import com.alkemy.ong.dtos.requests.CommentPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
 import com.alkemy.ong.services.CommentService;
@@ -48,14 +47,15 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentDTO request, HttpServletRequest header){
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentPutRequestDTO request, HttpServletRequest header){
         String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));
         List<String> roles = jwtUtil.extractRoles(token.substring(7));
 
         if(commentService.validUser(email,id) || isAdmin(roles)){
-            Comment comment = commentService.update(request,id);
-            return ResponseEntity.ok(modelMapper.map(comment,CommentDTO.class));
+            Comment comment = modelMapper.map(request,Comment.class);
+            comment = commentService.update(comment,id);
+            return ResponseEntity.ok(modelMapper.map(comment,CommentPutRequestDTO.class));
         }else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
     }

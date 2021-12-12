@@ -78,27 +78,8 @@ public class CommentServiceImpl implements CommentService {
     public Comment update(Comment comment, Long id) throws NotFoundException {
 
         Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment does not exist"));
-        User usr = userRepository.findById(comment.getUser_id().getId()).orElseThrow(() -> new NotFoundException("User does not exist")) ;
-        News news = newsRepository.findById(comment.getNew_id().getId()).orElseThrow(() -> new NotFoundException("News does not exist"));
 
-        uptComment.setId(id);
         uptComment.setBody(comment.getBody());
-        uptComment.setNew_id(comment.getNew_id());
-        uptComment.setUser_id(comment.getUser_id());
-        return commentRepository.save(uptComment);
-    }
-
-    @Override
-    public Comment update(CommentDTO comment, Long id) throws NotFoundException {
-
-        Comment uptComment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException("Comment does not exist"));
-        User usr = userRepository.findById(comment.getUser_id()).orElseThrow(() -> new NotFoundException("User does not exist")) ;
-        News news = newsRepository.findById(comment.getNew_id()).orElseThrow(() -> new NotFoundException("News does not exist"));
-
-        uptComment.setId(id);
-        uptComment.setBody(comment.getBody());
-        uptComment.setNew_id(news);
-        uptComment.setUser_id(usr);
         return commentRepository.save(uptComment);
     }
 
