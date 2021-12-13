@@ -90,7 +90,7 @@ public class AuthController {
         user.setEmail(registerUserDTO.getEmail());
         user.setPassword(registerUserDTO.getPassword());
         user.setPhoto(registerUserDTO.getPhoto());
-        user.setRole(roleService.findByName("ADMIN"));
+        user.setRole(roleService.findByName("USER"));
 
         System.out.println(user);
 
