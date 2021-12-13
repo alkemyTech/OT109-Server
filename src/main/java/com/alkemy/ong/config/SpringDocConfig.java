@@ -15,7 +15,13 @@ public class SpringDocConfig {
     public OpenAPI myOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI().info(new Info().title("Ong API")
-                .description("Ong description ")
+                .description("DATOS DE PRUEBA:\n\n" +
+                        "Usuarios administradores:\n" +
+                        "* USERNAME: monicasala@gmail.com -------- PASSWORD: monicasala\n" +
+                        "* USERNAME: tamaraceballos@gmail.com --- PASSWORD: tamaraceballos\n\n" +
+                        "Usuarios regulares:\n" +
+                        "* USERNAME: juanperez@gmail.com ----------- PASSWORD: juanperez\n" +
+                        "* USERNAME: marcossanchez@gmail.com --- PASSWORD: marcossanchez")
                 .version("v1"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components().addSecuritySchemes(securitySchemeName,

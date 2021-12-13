@@ -32,20 +32,9 @@ public class CommentController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @RequestMapping(value = "/posts/{id}/comments", method = RequestMethod.GET)
-    public ResponseEntity<?> findCommentsByNewsId(@PathVariable @Min(value = 1, message = "Id must be equal or greater than 1") Long id) {
-        List<CommentListDTO> commentList = commentService.findCommentsByNewsId(id);
-        if (commentList.isEmpty()) {
-            return new ResponseEntity<>("There are not comments related to that news_id.", HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(commentList, HttpStatus.OK);
-    }
-
     @PostMapping("/comments")
     public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO) {
         CommentDTO commentCreated = commentService.create(commentPostRequestDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
     }
 
