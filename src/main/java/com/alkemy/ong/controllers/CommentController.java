@@ -32,23 +32,24 @@ public class CommentController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("posts/{id}/comments")
+    @RequestMapping(value = "/posts/{id}/comments", method = RequestMethod.GET)
     public ResponseEntity<?> findCommentsByNewsId(@PathVariable @Min(value = 1, message = "Id must be equal or greater than 1") Long id) {
         List<CommentListDTO> commentList = commentService.findCommentsByNewsId(id);
         if (commentList.isEmpty()) {
             return new ResponseEntity<>("There are not comments related to that news_id.", HttpStatus.NOT_FOUND);
         }
+
         return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
 
     @PostMapping("/comments")
     public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO) {
         CommentDTO commentCreated = commentService.create(commentPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
     }
 
-    @GetMapping
+    @GetMapping("/comments")
     private ResponseEntity<?> getAll(){
         List<CommentDTO> comments = commentService.findAll()
                 .stream()
@@ -58,7 +59,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/comments/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentPutRequestDTO request, HttpServletRequest header){
         String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));
@@ -74,6 +75,24 @@ public class CommentController {
 
     private boolean isAdmin(List<String> roles){
         return roles.contains("ADMIN");
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public ResponseEntity<String> delete(@PathVariable @Min(value = 1, message = "Comment id cannot be less than one") Long id, HttpServletRequest header){
+        if(!commentService.existsById(id)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found.");
+        }
+        String token = header.getHeader("Authorization");
+        String email = jwtUtil.extractUserEmail(token.substring(7));
+        List<String> roles = jwtUtil.extractRoles(token.substring(7));
+
+        if(commentService.validUser(email, id) || isAdmin(roles)){
+            commentService.deleteById(id);
+            return ResponseEntity.ok("Comment id: " + id + " deleted.");
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(email + "is not authorized to delete this comments.");
+        }
     }
 
 }
