@@ -79,4 +79,11 @@ public class CommentServiceImpl implements CommentService {
         Optional<String> owner = commentRepository.findOwnerEmail(commentId);
         return owner.map(s -> s.equals(email)).orElse(false);
     }
+
+    @Override
+    public Boolean existsById(Long id) {
+        return commentRepository.existsById(id);
+    }
+
+
 }
