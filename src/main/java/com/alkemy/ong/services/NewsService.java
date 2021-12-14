@@ -12,6 +12,8 @@ import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.repositories.NewsRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -77,8 +79,8 @@ public class NewsService implements INewsService {
         return news;
     }
 
-    public List<News> getAll(){
-        return newsRepository.findAll();
+    public Page<News> getAll(Pageable page){
+        return newsRepository.findAll(page);
     }
     @Override
     public NewDTO getById(Long id) throws NotFoundException {
