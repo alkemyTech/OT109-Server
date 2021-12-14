@@ -1,7 +1,7 @@
 package com.alkemy.ong.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.alkemy.ong.dtos.responses.TestimonialListDTO;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -21,6 +21,9 @@ import java.util.Date;
 @Table(name = "testimonials")
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE testimonials SET deleted_at = current_timestamp() WHERE id = ?")
 @Where(clause = "deleted_at is null")
 
@@ -37,17 +40,18 @@ public class TestimonialEntity {
 
     private String content;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
     @UpdateTimestamp
+    @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "deleted_at")
     private Date deletedAt;
+
 }
