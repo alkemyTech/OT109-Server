@@ -1,15 +1,10 @@
 package com.alkemy.ong.dtos.responses;
 
-import com.alkemy.ong.entities.TestimonialEntity;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
@@ -24,6 +19,5 @@ public class TestimonialListDTO {
     //en la base de datos figura default null
     private String content;
     private Date createdAt;
-
 
 }

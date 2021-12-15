@@ -1,27 +1,17 @@
 package com.alkemy.ong.services;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import com.alkemy.ong.dtos.responses.TestimonialListDTO;
 import com.alkemy.ong.entities.TestimonialEntity;
 import com.alkemy.ong.exceptions.BadRequestException;
-import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.input.TestimonialDTO;
 import com.alkemy.ong.repositories.TestimonialRepository;
 
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class TestimonialService {
@@ -31,8 +21,6 @@ public class TestimonialService {
 
     @Autowired
     ModelMapper modelMapper;
-
-    private final int GET_ALL_PAGE_SIZE = 10;
 
     public TestimonialEntity create(TestimonialDTO testimonialDTO) {
         if (testimonialDTO.getName() == null || testimonialDTO.getName() == "") {
@@ -79,10 +67,10 @@ public class TestimonialService {
         return testimonialRepository.getById(id);
     }
 
-    public List<TestimonialEntity> findAll(int page) {
-        PageRequest pageRequest = PageRequest.of(page, GET_ALL_PAGE_SIZE);
-        Slice<TestimonialEntity> testimonialsSlice = testimonialRepository.findAll(pageRequest);
-        return testimonialsSlice.getContent();
+    public Page<TestimonialEntity> findAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return testimonialRepository.findAll(pageRequest);
+
     }
 
 }
