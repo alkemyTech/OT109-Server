@@ -4,6 +4,8 @@ import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
 import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
+import com.alkemy.ong.exceptions.ParamNotFound;
+import com.alkemy.ong.pojos.output.PageDTO;
 import com.alkemy.ong.services.CategoryService;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
@@ -44,15 +47,20 @@ public class CategoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<CategoryListRequestDTO> findAll(@NotNull @PageableDefault(value = 10) final Pageable pageable) {
+    public PageDTO<CategoryListRequestDTO> findAll(@NotNull @PageableDefault(value = 10) Pageable pageable) {
+        final String url = "localhost:9800/categories?page=";
         Page<Category> page = categoryService.findAllPageable(pageable);
+        if(page.getNumberOfElements() == 0){
+            throw new ParamNotFound("Page not found");
+        }
         List<CategoryListRequestDTO> categories = new ArrayList();
         for(Category c : page){
             CategoryListRequestDTO item = new CategoryListRequestDTO();
             BeanUtils.copyProperties(c, item);
             categories.add(item);
         }
-        return new PageImpl<>(categories, pageable, page.getTotalElements());
+        Page<CategoryListRequestDTO> outputPage = new PageImpl<>(categories, pageable, page.getTotalElements());
+        return new PageDTO<>(outputPage, url);
     }
 
     @GetMapping("/{id}")
@@ -71,5 +79,11 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryPostPutRequestDTO categoryDTO) {
         CategoryDTO result = categoryService.update(id, categoryDTO);
         return ResponseEntity.ok().body(result);
+    }
+    
+    @ExceptionHandler(ParamNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String paramNotFoundExceptionHandler(ParamNotFound ex) {
+        return ex.getMessage();
     }
 }
