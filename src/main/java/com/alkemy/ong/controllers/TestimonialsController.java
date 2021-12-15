@@ -7,6 +7,7 @@ import com.alkemy.ong.pojos.input.TestimonialDTO;
 import com.alkemy.ong.services.TestimonialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,26 +56,12 @@ public class TestimonialsController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0")  @Min(value = 0, message = "Page must be 0 or greater.") int page,
+    public ResponseEntity<?> findAll(@RequestParam(defaultValue = "0")  @Min(value = 0, message = "Page must be 0 or greater.") int page,
                                     @RequestParam(defaultValue = "10") @Min(value = 1, message = "Page size cannot be less than one.") int size
     ) {
-        Slice<TestimonialEntity> testimonialsSlice = testimonialService.findAll(page,size);
+        Slice<TestimonialEntity> testimonialsSlice = testimonialService.findAll(page, size);
         //aca tengo el dto convertido, esta es mi lista que va en el testimonial page, falta next and previous page
-        List<TestimonialListDTO> testimonialsDTOS = testimonialsSlice.stream()
-                .map(this::convertToListDTO)
-                .collect(Collectors.toList());
-
-        //string base para links next y previous page
-        String url = "http://localhost:9800/testimonials/getAll?page=";
-        TestimonialsPageDTO testimonialsPage = new TestimonialsPageDTO();
-        testimonialsPage.setTestimonialsDTOS(testimonialsDTOS);
-
-        if(testimonialsSlice.hasPrevious()) {
-            testimonialsPage.setPreviousPage(url + --page);
-        }
-        if(testimonialsSlice.hasNext()) {
-            testimonialsPage.setNextPage(url + ++page);
-        }
+        TestimonialsPageDTO testimonialsPage = toTestimonialPageDTO(testimonialsSlice);
 
         return new ResponseEntity<>(testimonialsPage,HttpStatus.OK);
     }
@@ -83,4 +70,23 @@ public class TestimonialsController {
         TestimonialListDTO teDTO = modelMapper.map(te, TestimonialListDTO.class);
         return teDTO;
     }
+
+    public TestimonialsPageDTO toTestimonialPageDTO(Slice<TestimonialEntity> testimonialsSlice){
+        List<TestimonialListDTO> testimonialsDTOS = testimonialsSlice.stream()
+                .map(this::convertToListDTO)
+                .collect(Collectors.toList());
+
+        String url = "http://localhost:9800/testimonials/getAll?page=";
+        TestimonialsPageDTO testimonialsPage = new TestimonialsPageDTO();
+        testimonialsPage.setTestimonialsDTOS(testimonialsDTOS);
+        if(testimonialsSlice.hasPrevious()) {
+            testimonialsPage.setPreviousPage(url + testimonialsSlice.previousOrFirstPageable().getPageNumber());
+        }
+        if(testimonialsSlice.hasNext()) {
+            testimonialsPage.setNextPage(url + testimonialsSlice.nextOrLastPageable().getPageNumber());
+        }
+        return testimonialsPage;
+    }
+
+
 }
