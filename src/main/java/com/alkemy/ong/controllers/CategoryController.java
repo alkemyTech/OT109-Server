@@ -3,7 +3,9 @@ package com.alkemy.ong.controllers;
 import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
 import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
+import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.services.CategoryService;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
 @RequestMapping("categories")
@@ -34,9 +43,16 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryListRequestDTO>> findAll() {
-        List<CategoryListRequestDTO> categories = categoryService.findAll();
-        return ResponseEntity.ok().body(categories);
+    @ResponseStatus(HttpStatus.OK)
+    public Page<CategoryListRequestDTO> findAll(@NotNull @PageableDefault(value = 10) final Pageable pageable) {
+        Page<Category> page = categoryService.findAllPageable(pageable);
+        List<CategoryListRequestDTO> categories = new ArrayList();
+        for(Category c : page){
+            CategoryListRequestDTO item = new CategoryListRequestDTO();
+            BeanUtils.copyProperties(c, item);
+            categories.add(item);
+        }
+        return new PageImpl<>(categories, pageable, page.getTotalElements());
     }
 
     @GetMapping("/{id}")
