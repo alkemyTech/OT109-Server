@@ -60,9 +60,7 @@ public class TestimonialsController {
                                     @RequestParam(defaultValue = "10") @Min(value = 1, message = "Page size cannot be less than one.") int size
     ) {
         Slice<TestimonialEntity> testimonialsSlice = testimonialService.findAll(page, size);
-        //aca tengo el dto convertido, esta es mi lista que va en el testimonial page, falta next and previous page
         TestimonialsPageDTO testimonialsPage = toTestimonialPageDTO(testimonialsSlice);
-
         return new ResponseEntity<>(testimonialsPage,HttpStatus.OK);
     }
 
@@ -76,14 +74,14 @@ public class TestimonialsController {
                 .map(this::convertToListDTO)
                 .collect(Collectors.toList());
 
-        String url = "http://localhost:9800/testimonials/getAll?page=";
+        String url = "http://localhost:9800/testimonials?page=";
         TestimonialsPageDTO testimonialsPage = new TestimonialsPageDTO();
         testimonialsPage.setTestimonialsDTOS(testimonialsDTOS);
         if(testimonialsSlice.hasPrevious()) {
-            testimonialsPage.setPreviousPage(url + testimonialsSlice.previousOrFirstPageable().getPageNumber());
+            testimonialsPage.setPreviousPage(url + testimonialsSlice.previousPageable().getPageNumber());
         }
         if(testimonialsSlice.hasNext()) {
-            testimonialsPage.setNextPage(url + testimonialsSlice.nextOrLastPageable().getPageNumber());
+            testimonialsPage.setNextPage(url + testimonialsSlice.nextPageable().getPageNumber());
         }
         return testimonialsPage;
     }
