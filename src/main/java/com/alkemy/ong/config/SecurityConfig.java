@@ -63,6 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/users",
                         "/testimonials").hasAnyAuthority("ADMIN","USER")
                 .antMatchers(HttpMethod.GET,
+                        "/news**").hasAuthority("USER")
+                .antMatchers(HttpMethod.GET,
                         "/comments").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,
                         "/testimonials",
