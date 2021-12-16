@@ -69,7 +69,7 @@ public class TestimonialService {
 
     public Slice<TestimonialEntity> findAll(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return testimonialRepository.findAll(pageRequest);
+        return testimonialRepository.findBy(pageRequest);
 
     }
 
