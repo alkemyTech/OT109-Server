@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.alkemy.ong.entities.TestimonialEntity;
 import com.alkemy.ong.exceptions.BadRequestException;
+import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.input.TestimonialDTO;
 import com.alkemy.ong.repositories.TestimonialRepository;
@@ -69,7 +70,13 @@ public class TestimonialService {
 
     public Slice<TestimonialEntity> findAll(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return testimonialRepository.findBy(pageRequest);
+        Slice<TestimonialEntity> testimonialsSlice = testimonialRepository.findBy(pageRequest);
+        if(testimonialsSlice.isEmpty()){
+            throw new NotFoundException("Page not found.");
+        }
+        else{
+            return testimonialsSlice;
+        }
 
     }
 
