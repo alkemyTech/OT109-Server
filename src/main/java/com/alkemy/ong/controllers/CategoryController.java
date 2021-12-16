@@ -26,9 +26,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
@@ -47,20 +49,14 @@ public class CategoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PageDTO<CategoryListRequestDTO> findAll(@NotNull @PageableDefault(value = 10) Pageable pageable) {
-        final String url = "localhost:9800/categories?page=";
+    public PageDTO<CategoryListRequestDTO> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer pageNumber, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size) {
+        PageRequest pageable = PageRequest.of(pageNumber, size);
         Page<Category> page = categoryService.findAllPageable(pageable);
         if(page.getNumberOfElements() == 0){
             throw new ParamNotFound("Page not found");
         }
-        List<CategoryListRequestDTO> categories = new ArrayList();
-        for(Category c : page){
-            CategoryListRequestDTO item = new CategoryListRequestDTO();
-            BeanUtils.copyProperties(c, item);
-            categories.add(item);
-        }
-        Page<CategoryListRequestDTO> outputPage = new PageImpl<>(categories, pageable, page.getTotalElements());
-        return new PageDTO<>(outputPage, url);
+        return preparePageDTO(page, pageable);
+        
     }
 
     @GetMapping("/{id}")
@@ -81,9 +77,27 @@ public class CategoryController {
         return ResponseEntity.ok().body(result);
     }
     
+    private PageDTO preparePageDTO(Page<Category> page, Pageable pageable){
+        final String url = "localhost:9800/categories?page=";
+        List<CategoryListRequestDTO> categories = new ArrayList();
+        for(Category c : page){
+            CategoryListRequestDTO item = new CategoryListRequestDTO();
+            BeanUtils.copyProperties(c, item);
+            categories.add(item);
+        }
+        Page<CategoryListRequestDTO> outputPage = new PageImpl<>(categories, pageable, page.getTotalElements());
+        return new PageDTO<>(outputPage, url);
+    }
+    
     @ExceptionHandler(ParamNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String paramNotFoundExceptionHandler(ParamNotFound ex) {
+        return ex.getMessage();
+    }
+    
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String globalExceptionHandler(Exception ex) {
         return ex.getMessage();
     }
 }
