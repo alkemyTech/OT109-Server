@@ -43,7 +43,7 @@ public class MemberController {
                 .map(member -> modelMapper.map(member,ListMemberDTO.class))
                 .collect(Collectors.toList());
 
-        String url = "http://localhost:9800/testimonials?page=";
+        String url = "http://localhost:9800/members?page=";
         MembersPageResponseDTO membersPageResponseDTO = new MembersPageResponseDTO();
         membersPageResponseDTO.setMembersDto(membersPageResponseDTOS);
         if(membersSlice.hasPrevious()) {
