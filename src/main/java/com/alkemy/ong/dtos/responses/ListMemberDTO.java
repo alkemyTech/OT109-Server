@@ -33,10 +33,17 @@ public class ListMemberDTO {
 
     private OrganizationEntity organization;
 
-
     private Date createdAt;
 
     private Date updatedAt;
 
     private Date deletedAt;
+
+    public ListMemberDTO(Long id, String name, @Nullable String image, String description, Date createdAt) {
+        Id = id;
+        this.name = name;
+        this.image = image;
+        this.description = description;
+        this.createdAt = createdAt;
+    }
 }
