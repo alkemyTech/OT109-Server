@@ -52,33 +52,9 @@ public class UserControllerTest {
     
     private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
     
-    private String adminJwt;
-    
-    private String regularJwt;
-    
     @BeforeAll
     public void setup() throws Exception{
-        ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
         
-        RequestLoginDTO user = new RequestLoginDTO();
-        user.setUsername("monicasala@gmail.com");
-        user.setPassword("monicasala");
-        
-        String requestJson = writer.writeValueAsString(user);
-        String response = this.mockMvc.perform(post("/auth/login")
-                .content(requestJson).contentType(APPLICATION_JSON_UTF8))
-                .andReturn().getResponse().getContentAsString();
-        adminJwt = "Bearer " + (new JSONObject(response).getString("token"));
-        
-        user.setUsername("juanperez@gmail.com");
-        user.setPassword("juanperez");
-        
-        requestJson = writer.writeValueAsString(user);
-        response = this.mockMvc.perform(post("/auth/login")
-                .content(requestJson).contentType(APPLICATION_JSON_UTF8))
-                .andReturn().getResponse().getContentAsString();
-        regularJwt = "Bearer " + (new JSONObject(response).getString("token"));
     }
     
     @Test
@@ -89,8 +65,9 @@ public class UserControllerTest {
     }
     
     @Test
+    @WithUserDetails(value = "juanperez@gmail.com")
     public void findAllWithRegularAuthorityShouldReturnUserList() throws Exception{
-        this.mockMvc.perform(get("/users").header("Authorization", regularJwt))
+        this.mockMvc.perform(get("/users"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -98,7 +75,7 @@ public class UserControllerTest {
     }
     
     @Test
-    @WithUserDetails(value = "admin@admn.com")
+    @WithUserDetails(value = "monicasala@gmail.com")
     public void findAllWithAdminAuthorityShouldReturnUserList() throws Exception{
         this.mockMvc.perform(get("/users"))
                 .andDo(print())
