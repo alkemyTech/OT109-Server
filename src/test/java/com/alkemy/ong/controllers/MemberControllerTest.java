@@ -72,7 +72,7 @@ public class MemberControllerTest {
    //@WithMockUser(username = "admin@admin.com", password = "admin", roles = )
    @Test
    @WithUserDetails(value = "admin@admin.com")
-   public void getAll() throws Exception{
+   public void findAll() throws Exception{
         //given
        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
        Date datenow = sdf.parse("2021-12-17 17:38:02");
@@ -97,7 +97,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("Pepe"))
                 .andExpect(jsonPath("$[0].organization.id").value(1L))
-                .andExpect(content().json(objectMapper.writeValueAsString(memberDTOS), false));
+                .andExpect(content().json(objectMapper.writeValueAsString(memberDTOS)));
 
        verify(memberService).findAll();
    }
