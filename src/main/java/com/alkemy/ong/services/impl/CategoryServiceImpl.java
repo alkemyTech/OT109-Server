@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -79,6 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
             result.add(categoryListRequestDTO);
         }
         return result;
+    }
+
+    @Override
+    public Page<Category> findAllPageable(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
     }
 
 }
