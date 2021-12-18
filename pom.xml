@@ -101,10 +101,12 @@
 			<artifactId>springdoc-openapi-security</artifactId>
 			<version>1.5.13</version>
 		 </dependency>
-
-
-
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
