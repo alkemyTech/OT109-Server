@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 class ActivityControllerTest {
-
+    //.andDo(print())
     @Autowired
     private MockMvc mockMvc;
 
@@ -46,12 +46,23 @@ class ActivityControllerTest {
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isCreated())
-                .andDo(print())
                 .andExpect(jsonPath("$.name").value("aName"))
                 .andExpect(jsonPath("$.content").value("aContent"))
                 .andExpect(jsonPath("$.image").value("https://www.image.com"));
+    }
+
+    @Test @Transactional
+    @WithUserDetails(value = "admin@admin.com")
+    void tryCreateWithValuesNull() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .post("/activities")
+                        .content(asJsonString(new ActivityPostPutRequestDTO()))
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
     }
 
     @Test @Transactional
@@ -66,6 +77,28 @@ class ActivityControllerTest {
                 .andExpect(jsonPath("$.name").value("aNewName"))
                 .andExpect(jsonPath("$.content").value("aNewContent"))
                 .andExpect(jsonPath("$.image").value("https://www.newImage.com"));
+    }
+
+    @Test @Transactional
+    @WithUserDetails(value = "admin@admin.com")
+    void tryUpdateWithIdNotExistst() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .put("/activities/{id}", 123*5+10)
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test @Transactional
+    @WithUserDetails(value = "admin@admin.com")
+    void tryUpdateWithValuesNull() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .put("/activities/{id}", 1)
+                        .content(asJsonString(new ActivityPostPutRequestDTO()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     public static String asJsonString(final Object obj) {
