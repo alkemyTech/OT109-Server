@@ -5,26 +5,23 @@ import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.services.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
@@ -32,7 +29,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-//@WebMvcTest(MemberController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MemberControllerTest {
@@ -54,7 +50,6 @@ public class MemberControllerTest {
         assertNotNull(mockMvc);
     }
 
-    //@WithMockUser(username = "admin@admin.com", roles = {"ADMIN"})
     @Test
     public void authRequestOnLoginWithAdmin_shouldSucceedWith200() throws Exception{
         //Given
@@ -69,7 +64,6 @@ public class MemberControllerTest {
                 .andExpect(status().isOk());
     }
 
-   //@WithMockUser(username = "admin@admin.com", password = "admin", roles = )
    @Test
    @WithUserDetails(value = "admin@admin.com")
    public void findAll() throws Exception{
@@ -97,6 +91,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("Pepe"))
                 .andExpect(jsonPath("$[0].organization.id").value(1L))
+                .andExpect(jsonPath("$[0].deletedAt").value(IsNull.nullValue()))//chequear que todos tengan deletedAtNull;
                 .andExpect(content().json(objectMapper.writeValueAsString(memberDTOS)));
 
        verify(memberService).findAll();
