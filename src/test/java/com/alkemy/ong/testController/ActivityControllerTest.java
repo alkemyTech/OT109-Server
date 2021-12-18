@@ -52,6 +52,17 @@ class ActivityControllerTest {
                 .andExpect(jsonPath("$.image").value("https://www.image.com"));
     }
 
+    @Test
+    void createWithoutUser() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .post("/activities")
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com")))
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
     @Test @Transactional
     @WithUserDetails(value = "admin@admin.com")
     void tryCreateWithValuesNull() throws Exception {
@@ -62,7 +73,6 @@ class ActivityControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test @Transactional
@@ -79,9 +89,19 @@ class ActivityControllerTest {
                 .andExpect(jsonPath("$.image").value("https://www.newImage.com"));
     }
 
+    @Test
+    void updateWithoutUser() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .put("/activities/{id}", 1)
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
     @Test @Transactional
     @WithUserDetails(value = "admin@admin.com")
-    void tryUpdateWithIdNotExistst() throws Exception {
+    void tryUpdateWithIdNotExists() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .put("/activities/{id}", 123*5+10)
                         .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
