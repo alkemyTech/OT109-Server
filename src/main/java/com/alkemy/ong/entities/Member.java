@@ -12,20 +12,17 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "members")
@@ -69,4 +66,16 @@ public class Member {
     private Date updatedAt;
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
+
+    public Member(Long id, String name, @Nullable String facebookUrl, @Nullable String instagramUrl, @Nullable String linkedinUrl, String image, String description, OrganizationEntity organization, Date createdAt) {
+        Id = id;
+        this.name = name;
+        this.facebookUrl = facebookUrl;
+        this.instagramUrl = instagramUrl;
+        this.linkedinUrl = linkedinUrl;
+        this.image = image;
+        this.description = description;
+        this.organization = organization;
+        this.createdAt = createdAt;
+    }
 }
