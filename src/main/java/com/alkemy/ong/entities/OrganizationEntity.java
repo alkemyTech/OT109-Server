@@ -80,6 +80,8 @@ public class OrganizationEntity implements Serializable {
     private String linkedinUrl;
     private String instagramUrl;
 
-    public OrganizationEntity(long id, String name) {
+    public OrganizationEntity(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }
