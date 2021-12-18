@@ -39,7 +39,22 @@ class ActivityControllerTest {
 
     @Test @Transactional
     @WithUserDetails(value = "admin@admin.com")
-    void create() throws Exception {
+    void createWithADMIN_Role() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .post("/activities")
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com")))
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("aName"))
+                .andExpect(jsonPath("$.content").value("aContent"))
+                .andExpect(jsonPath("$.image").value("https://www.image.com"));
+    }
+
+    @Test @Transactional
+    @WithUserDetails(value = "juanperez@gmail.com")
+    void createWithUSER_Role() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .post("/activities")
                         .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com")))
@@ -77,7 +92,21 @@ class ActivityControllerTest {
 
     @Test @Transactional
     @WithUserDetails(value = "admin@admin.com")
-    void update() throws Exception {
+    void updateWithADMIN_ROle() throws Exception {
+        mockMvc.perform( MockMvcRequestBuilders
+                        .put("/activities/{id}", 1)
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("aNewName"))
+                .andExpect(jsonPath("$.content").value("aNewContent"))
+                .andExpect(jsonPath("$.image").value("https://www.newImage.com"));
+    }
+
+    @Test @Transactional
+    @WithUserDetails(value = "juanperez@gmail.com")
+    void updateWithUSER_Role() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .put("/activities/{id}", 1)
                         .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
