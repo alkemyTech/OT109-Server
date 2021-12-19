@@ -8,6 +8,7 @@ import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.services.MemberService;
+import com.alkemy.ong.services.OrganizationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
@@ -43,6 +44,8 @@ public class MemberControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private MemberService memberService;
+    @MockBean
+    private OrganizationService organizationService;
 
     private ObjectMapper objectMapper;
 
@@ -135,5 +138,32 @@ public class MemberControllerTest {
                 .andExpect(content().string("Member successfully deleted"));
 
         verify(memberService).delete(1L);
+    }
+
+    @Test
+    @WithUserDetails(value = "admin@admin.com")
+    void update() throws Exception {
+        //given
+        MemberRequest oldMember = new MemberRequest("Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", 1L);
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/members")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(oldMember)));
+
+        MemberRequest newMember = new MemberRequest("Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "NEW description", 1L);
+        ListOrganizationDTO ong1 = new ListOrganizationDTO(1L, "ONG1");
+        MemberResponseDTO newMemberResponse = new MemberResponseDTO(1L, "Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "NEW description", ong1);
+        when(memberService.update(newMember,1L)).thenReturn(newMemberResponse);
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/members/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newMemberResponse)))
+        //then
+                .andExpect(status().isOk());
+
+        verify(memberService).update(any(),any());
+
     }
 }
