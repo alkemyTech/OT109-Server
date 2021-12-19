@@ -99,10 +99,12 @@ public class UserService {
         if (opt.isPresent()) {
             ModelMapper modelMapper = new ModelMapper();
             modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(AccessLevel.PRIVATE);;
+            if(newUser.getPassword() != null){
+                newUser.setPassword(encoder.encode(newUser.getPassword()));
+            }
             User user = opt.get();
             modelMapper.map(newUser, user);
             user.setUpdatedAt(new Date());
-            user.setPassword(encoder.encode(newUser.getPassword()));
             userRepo.save(user);
         } else {
             throw new UserServiceException("User not found");
