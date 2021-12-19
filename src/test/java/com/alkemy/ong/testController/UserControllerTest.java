@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.hamcrest.Matchers.instanceOf;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -64,7 +65,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = "juanperez@gmail.com")
+    @WithMockUser(authorities = {"USER"})
     public void findAllWithRegularAuthorityShouldReturnUserList() throws Exception {
         this.mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
@@ -73,7 +74,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = "monicasala@gmail.com")
+    @WithMockUser(authorities = {"ADMIN"})
     public void findAllWithAdminAuthorityShouldReturnUserList() throws Exception {
         this.mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
@@ -90,7 +91,7 @@ public class UserControllerTest {
 
     @Test
     @Transactional
-    @WithUserDetails(value = "juanperez@gmail.com")
+    @WithMockUser(authorities = {"USER"})
     public void updateWithRegularAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(patch("/users/1"))
                 .andExpect(status().isForbidden());
@@ -98,7 +99,7 @@ public class UserControllerTest {
 
     @Test
     @Transactional
-    @WithUserDetails(value = "monicasala@gmail.com")
+    @WithMockUser(authorities = {"ADMIN"})
     public void updateWithAdminAuthorityShouldReturnOk() throws Exception {
         UpdateUserDTO userUpdate = UpdateUserDTO.builder()
                 .firstName("updatedFirstName")
@@ -119,7 +120,7 @@ public class UserControllerTest {
 
     @Test
     @Transactional
-    @WithUserDetails(value = "monicasala@gmail.com")
+    @WithMockUser(authorities = {"ADMIN"})
     public void updateWithoutValidBodyShouldReturnBadRequest() throws Exception {
         UpdateUserDTO userUpdate;
         this.mockMvc.perform(patch("/users/1"))
@@ -159,7 +160,7 @@ public class UserControllerTest {
 
     @Test
     @Transactional
-    @WithUserDetails(value = "juanperez@gmail.com")
+    @WithMockUser(authorities = {"USER"})
     public void deleteWithRegularAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isForbidden());
@@ -167,7 +168,7 @@ public class UserControllerTest {
 
     @Test
     @Transactional
-    @WithUserDetails(value = "monicasala@gmail.com")
+    @WithMockUser(authorities = {"ADMIN"})
     public void DeleteWithAdminAuthorityShouldReturnOk() throws Exception {
         this.mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
