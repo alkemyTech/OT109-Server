@@ -1,9 +1,14 @@
 package com.alkemy.ong.controllers;
 
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
+import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
+import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.services.MemberService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,7 +57,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void authRequestOnLoginWithAdmin_shouldSucceedWith200() throws Exception{
+    void authRequestOnLoginWithAdmin_shouldSucceedWith200() throws Exception{
         //Given
         RequestLoginDTO requestLoginDTO = new RequestLoginDTO();
         requestLoginDTO.setUsername("admin@admin.com");
@@ -66,7 +72,7 @@ public class MemberControllerTest {
 
    @Test
    @WithUserDetails(value = "admin@admin.com")
-   public void findAll() throws Exception{
+   void findAll() throws Exception{
         //given
        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
        Date datenow = sdf.parse("2021-12-17 17:38:02");
@@ -91,9 +97,43 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("Pepe"))
                 .andExpect(jsonPath("$[0].organization.id").value(1L))
+                .andExpect(jsonPath("$[0].organization.name").value("ONG1"))
                 .andExpect(jsonPath("$[0].deletedAt").value(IsNull.nullValue()))//chequear que todos tengan deletedAtNull;
                 .andExpect(content().json(objectMapper.writeValueAsString(memberDTOS)));
 
        verify(memberService).findAll();
    }
+
+   @Test
+   @WithUserDetails(value = "admin@admin.com")
+   void save() throws Exception {
+        //given
+       MemberRequest member = new MemberRequest("Teto", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", 1L);
+       ListOrganizationDTO ong1 = new ListOrganizationDTO(1L,"ONG1");
+       MemberResponseDTO memberResponse = new MemberResponseDTO(1L,"Teto", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1);
+       when(memberService.create(any())).thenReturn(memberResponse);
+        //when
+       mockMvc.perform(MockMvcRequestBuilders
+               .post("/members").contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(memberResponse)))
+        //then
+               .andExpect(status().isCreated())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id").value(1L))
+               .andExpect(jsonPath("$.name").value("Teto"))
+               .andExpect(jsonPath("$.organization.id").value(1L))
+               .andExpect(jsonPath("$.organization.name").value("ONG1"));
+
+       verify(memberService).create(any());
+   }
+
+    @Test
+    @WithUserDetails(value = "admin@admin.com")
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/members/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Member successfully deleted"));
+
+        verify(memberService).delete(1L);
+    }
 }
