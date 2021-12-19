@@ -60,7 +60,6 @@ public class UserControllerTest {
     @Test
     public void findAllWithoutAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(get("/users"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -68,7 +67,6 @@ public class UserControllerTest {
     @WithUserDetails(value = "juanperez@gmail.com")
     public void findAllWithRegularAuthorityShouldReturnUserList() throws Exception {
         this.mockMvc.perform(get("/users"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", instanceOf(List.class)));
@@ -78,7 +76,6 @@ public class UserControllerTest {
     @WithUserDetails(value = "monicasala@gmail.com")
     public void findAllWithAdminAuthorityShouldReturnUserList() throws Exception {
         this.mockMvc.perform(get("/users"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", instanceOf(List.class)));
@@ -88,7 +85,6 @@ public class UserControllerTest {
     @Transactional
     public void updateWithoutAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(patch("/users/1"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -97,7 +93,6 @@ public class UserControllerTest {
     @WithUserDetails(value = "juanperez@gmail.com")
     public void updateWithRegularAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(patch("/users/1"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -114,7 +109,6 @@ public class UserControllerTest {
         this.mockMvc.perform(patch("/users/1")
                 .content(writer.writeValueAsString(userUpdate))
                 .contentType("application/json"))
-                .andDo(print())
                 .andExpect(status().isOk());
 
         User user = this.userService.findById(1L);
@@ -129,35 +123,30 @@ public class UserControllerTest {
     public void updateWithoutValidBodyShouldReturnBadRequest() throws Exception {
         UpdateUserDTO userUpdate;
         this.mockMvc.perform(patch("/users/1"))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         userUpdate = UpdateUserDTO.builder().email("email").build();
         this.mockMvc.perform(patch("/users/1")
                 .content(writer.writeValueAsString(userUpdate))
                 .contentType("application/json"))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         userUpdate = UpdateUserDTO.builder().photo("www.google.com").build();
         this.mockMvc.perform(patch("/users/1")
                 .content(writer.writeValueAsString(userUpdate))
                 .contentType("application/json"))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         userUpdate = UpdateUserDTO.builder().photo(".jpg").build();
         this.mockMvc.perform(patch("/users/1")
                 .content(writer.writeValueAsString(userUpdate))
                 .contentType("application/json"))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         userUpdate = UpdateUserDTO.builder().role("ROLE").build();
         this.mockMvc.perform(patch("/users/1")
                 .content(writer.writeValueAsString(userUpdate))
                 .contentType("application/json"))
-                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -165,7 +154,6 @@ public class UserControllerTest {
     @Transactional
     public void deleteWithoutAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(delete("/users/1"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -174,7 +162,6 @@ public class UserControllerTest {
     @WithUserDetails(value = "juanperez@gmail.com")
     public void deleteWithRegularAuthorityShouldReturnForbidden() throws Exception {
         this.mockMvc.perform(delete("/users/1"))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -183,7 +170,6 @@ public class UserControllerTest {
     @WithUserDetails(value = "monicasala@gmail.com")
     public void DeleteWithAdminAuthorityShouldReturnOk() throws Exception {
         this.mockMvc.perform(delete("/users/1"))
-                .andDo(print())
                 .andExpect(status().isOk());
 
         assertThat(assertThrows(UserServiceException.class, () -> this.userService.findById(1L)).getMessage().equals("User not found"));
