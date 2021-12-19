@@ -1,8 +1,10 @@
 package com.alkemy.ong.ControllerTests;
 
+import com.alkemy.ong.controllers.OrganizationController;
 import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
+import com.alkemy.ong.exceptions.ApiExceptionHandler;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.input.CreateOrganizationDTO;
 import com.alkemy.ong.pojos.input.UpdateOrganizationDTO;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
@@ -53,7 +57,6 @@ public class OrganizationControllerTest {
     private JacksonTester<CreateOrganizationDTO> orgJson;
 
     private CreateOrganizationDTO organizationDTO;
-    private List<ListOrganizationDTO> organizationList;
     private OrganizationEntity organization;
     private Slide slide;
     private SlideRequest slideRequest;
@@ -83,7 +86,7 @@ public class OrganizationControllerTest {
         organization.setEmail("organization@org.com");
         organization.setAddress("address");
         organization.setAboutUsText("about us text");
-        organization.setPhone(223568792);
+        organization.setPhone("223568792");
         organization.setWelcomeText("welcome text");
         organization.setLinkedinUrl("http://www.linkedin.com");
         organization.setFacebookUrl("http://www.facebook.com");
@@ -111,8 +114,6 @@ public class OrganizationControllerTest {
         ListOrganizationDTO listOrgDTO = new ListOrganizationDTO();
         listOrgDTO.setId(organization.getId());
         listOrgDTO.setName(organization.getName());
-        organizationList = new ArrayList<>();
-        organizationList.add(listOrgDTO);
 
     }
 
@@ -174,10 +175,11 @@ public class OrganizationControllerTest {
     @Test
     @WithUserDetails(value = "monicasala@gmail.com")
     public void adminRetrievesOrganizationWithWrongIdErrorThrown() throws Exception{
-        mvc.perform(get("/organization/public/")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError())
-                .andExpect(error -> assertTrue(error.getResolvedException() instanceof ParamNotFound));
+        when(organizationService.findById(10L)).thenThrow(new ParamNotFound("Organization not found"));
+
+        mvc.perform(get("/organization/public/{id}",10L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
         verify(organizationService, times(1)).findById(10L);
     }
