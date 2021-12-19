@@ -4,6 +4,9 @@ import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
 import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
+import com.alkemy.ong.exceptions.BadRequestException;
+import com.alkemy.ong.exceptions.ParamNotFound;
+import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.services.CategoryService;
 import com.alkemy.ong.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,19 +29,21 @@ class CategoryControllerTest {
 
 
     private CategoryController categoryController;
-
     private CategoryService categoryService;
+    private CategoryRepository categoryRepository;
     @Autowired
     private ModelMapper modelMapper;
     private Category category;
     private CategoryDTO result;
     private CategoryPostPutRequestDTO categoryRequest;
+    private CategoryPostPutRequestDTO categoryRequestEmpty;
     private CategoryListRequestDTO categoryListRequestDTO;
     private List<CategoryListRequestDTO> listRequestDTOS;
 
     @BeforeEach
     void setUp() {
         this.modelMapper = new ModelMapper();
+        categoryRepository = Mockito.mock(CategoryRepository.class);
         categoryService = Mockito.mock(CategoryService.class);
         categoryController = new CategoryController(categoryService);
         category = new Category(1L,
@@ -50,12 +56,13 @@ class CategoryControllerTest {
         categoryRequest.setDescription("description");
         categoryRequest.setImage("image");
 
+        categoryRequestEmpty = new CategoryPostPutRequestDTO();
+
         result = modelMapper.map(category, CategoryDTO.class);
 
         categoryListRequestDTO = new CategoryListRequestDTO();
         categoryListRequestDTO.setName("name");
         categoryListRequestDTO.setId(1L);
-
 
     }
 
@@ -63,7 +70,6 @@ class CategoryControllerTest {
     void create() {
         Mockito.when(categoryService.create(categoryRequest)).thenReturn(result);
         ResponseEntity respuestaCreate = categoryController.create(categoryRequest);
-        System.out.println(respuestaCreate);
         assertEquals(respuestaCreate, new ResponseEntity(result, HttpStatus.CREATED));
         verify(categoryService, times(1)).create(categoryRequest);
     }
@@ -97,6 +103,21 @@ class CategoryControllerTest {
         ResponseEntity respuestaUpd = categoryController.update(1L, categoryRequest);
         assertEquals(respuestaUpd, new ResponseEntity(result, HttpStatus.OK));
         verify(categoryService, times(1)).update(1L, categoryRequest);
-
     }
+
+    @Test
+    void deleteException() throws ParamNotFound {
+
+        Mockito.when(categoryRepository.findById(2L)).thenThrow(new ParamNotFound("Error: Invalid category id"));
+        assertThrows(ParamNotFound.class, () -> categoryRepository.findById(2L));
+        verify(categoryRepository,times(1)).findById(2L);
+    }
+
+    @Test
+    void createException () {
+        Mockito.when(categoryService.create(categoryRequestEmpty)).thenThrow(new BadRequestException("Name may not be empty"));
+        assertThrows(BadRequestException.class,() ->categoryController.create(categoryRequestEmpty));
+        verify(categoryService,times(1)).create(categoryRequestEmpty);
+    }
+
 }
