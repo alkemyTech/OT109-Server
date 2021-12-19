@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -54,8 +55,8 @@ public class MemberController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
-        if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
+    public ResponseEntity<?> update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
+        //if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
 
         try{
             memberService.update(request,id);
