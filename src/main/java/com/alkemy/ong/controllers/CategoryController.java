@@ -27,6 +27,12 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+
+    }
+
     @PostMapping
     public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryPostPutRequestDTO category) {
         CategoryDTO postCreated = categoryService.create(category);
