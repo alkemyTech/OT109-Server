@@ -44,13 +44,12 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
-        if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
+    public ResponseEntity<?> delete(@PathVariable @Min(value = 1, message = "Id cannot be less than one.") Long id) throws NotFoundException{
         try{
             memberService.delete(id);
             return ResponseEntity.ok("Member successfully deleted");
         }catch (NotFoundException ex){
-            throw new NotFoundException(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
