@@ -1,4 +1,4 @@
-package com.alkemy.ong.testController;
+package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.exceptions.UserServiceException;

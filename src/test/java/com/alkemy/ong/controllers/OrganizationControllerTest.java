@@ -1,4 +1,4 @@
-package com.alkemy.ong.ControllerTests;
+package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.controllers.OrganizationController;
 import com.alkemy.ong.dtos.requests.SlideRequest;
