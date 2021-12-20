@@ -1,4 +1,4 @@
-package com.alkemy.ong.testController;
+package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.controllers.ActivityController;
 import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;

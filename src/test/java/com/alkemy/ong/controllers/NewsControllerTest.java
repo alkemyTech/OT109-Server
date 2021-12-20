@@ -1,4 +1,4 @@
-package com.alkemy.ong.testController;
+package com.alkemy.ong.controllers;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.BDDMockito.given;
