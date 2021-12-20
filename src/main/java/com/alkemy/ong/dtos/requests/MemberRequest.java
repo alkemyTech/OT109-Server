@@ -29,6 +29,7 @@ public class MemberRequest {
     private String image;
     @NotNull
     private String description;
+    @NotNull
     private Long organizationId;
 
 }
