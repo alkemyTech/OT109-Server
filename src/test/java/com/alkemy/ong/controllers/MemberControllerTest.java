@@ -188,7 +188,7 @@ public class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(member)))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict());//https://stackoverflow.com/questions/3825990/http-response-code-for-post-when-resource-already-exists
+                .andExpect(status().isBadRequest());//https://stackoverflow.com/questions/3825990/http-response-code-for-post-when-resource-already-exists
 
         verify(memberService).create(any());
     }
