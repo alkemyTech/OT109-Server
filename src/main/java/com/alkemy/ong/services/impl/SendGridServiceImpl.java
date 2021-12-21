@@ -17,7 +17,7 @@ import org.springframework.core.io.ClassPathResource;
 @Service
 public class SendGridServiceImpl implements SendGridService {
 
-    private final Email from = new Email("alkemy109@gmail.com");
+    private final Email from = new Email("alkemy109.test@gmail.com");
 
     @Value("${SENDGRID_API_KEY}")
     private SendGrid sendGridApiKey;
