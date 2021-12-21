@@ -19,7 +19,8 @@ import com.alkemy.ong.repositories.NewsRepository;
 import com.alkemy.ong.services.INewsService;
 
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +33,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-
 
 @AutoConfigureJsonTesters
 @SpringBootTest
@@ -189,28 +189,27 @@ public class NewsControllerTest {
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
         }
-        
 
-        // @Test
-        // @WithUserDetails(value = "admin@admin.com")
-        // void canRetreiveWhenCreateNewsThrowNotFound() throws Exception {
-        // // given
-        // NewPostPutRequestDTO newPostPutRequestDTO = new NewPostPutRequestDTO();
-        // newPostPutRequestDTO.setContent("null");
-        // newPostPutRequestDTO.setName("name");
-        // newPostPutRequestDTO.setImage("image");
-        // newPostPutRequestDTO.setCategoryId(1L);
-        // given(newsService.saveNews(null)).willThrow(new NotFoundException(""));
+        @Test
+        @WithUserDetails(value = "admin@admin.com")
+        void canRetreiveWhenCreateNewsThrowNotFound() throws Exception {
+                // given
 
-        // // when
-        // MockHttpServletResponse response = mockMvc.perform(post("/news")
-        // .contentType(MediaType.APPLICATION_JSON))
-        // .andReturn().getResponse();
+                // given(newsService.saveNews(null)).willThrow(new NotFoundException(""));
+                when(newsService.saveNews(any())).thenThrow(NotFoundException.class);
 
-        // // then
-        // assertThat(response.getStatus()).isEqualTo(status().isNotFound());
-        // assertThat(response.getContentAsString()).isEmpty();
-        // }
+                // when
+                MockHttpServletResponse response = mockMvc.perform(post("/news")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonNewsPostPutDTO
+                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .getJson()))
+                                .andReturn().getResponse();
+
+                // then
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+
+        }
 
         @Test
         @WithUserDetails(value = "admin@admin.com")
@@ -245,6 +244,7 @@ public class NewsControllerTest {
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
         }
+
         @Test
         void updateNewsWithoutRole() throws Exception {
 
@@ -278,23 +278,25 @@ public class NewsControllerTest {
 
         }
 
-        // @Test
-        // @WithUserDetails(value = "admin@admin.com")
-        // void canRetreiveWhenUpdateNewsThrowNotFound() throws Exception {
+        @Test
+        @WithUserDetails(value = "admin@admin.com")
+        void canRetreiveWhenUpdateNewsThrowNotFound() throws Exception {
 
-        // // when
-        // MockHttpServletResponse response = mockMvc.perform(put("/news/1")
-        // .contentType(MediaType.APPLICATION_JSON)
-        // .content(jsonNewsPostPutDTO
-        // .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
-        // .getJson())
-        // .accept(MediaType.APPLICATION_JSON))
-        // .andReturn().getResponse();
+                when(newsService.updateNews(any(), any())).thenThrow(NotFoundException.class);
 
-        // // then
-        // assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+                // when
+                MockHttpServletResponse response = mockMvc.perform(put("/news/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonNewsPostPutDTO
+                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .getJson())
+                                .accept(MediaType.APPLICATION_JSON))
+                                .andReturn().getResponse();
 
-        // }
+                // then
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+
+        }
 
         @Test
         @WithUserDetails(value = "admin@admin.com")
@@ -346,21 +348,23 @@ public class NewsControllerTest {
 
         }
 
-        // @Test
-        // @WithUserDetails(value = "admin@admin.com")
-        // void canRetreiveWhenDeleteNewsThrowNotFound() throws Exception {
+        @Test
+        @WithUserDetails(value = "admin@admin.com")
+        void canRetreiveWhenDeleteNewsThrowNotFound() throws Exception {
 
-        //         // given
-        //         given(newsRepository.findById(1L)).willThrow(new NotFoundException("message"));
+                // given
+                doThrow(NotFoundException.class).when(newsService).delete(any());
+                // when
+                MockHttpServletResponse response = mockMvc.perform(delete("/news/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonNewsPostPutDTO
+                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .getJson()))
+                                .andReturn().getResponse();
 
-        //         // when
-        //         MockHttpServletResponse response = mockMvc.perform(delete("/news/1")
-        //                         .contentType(MediaType.APPLICATION_JSON))
-        //                         .andReturn().getResponse();
+                // then
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
-        //         // then
-        //         assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-
-        // }
+        }
 
 }
