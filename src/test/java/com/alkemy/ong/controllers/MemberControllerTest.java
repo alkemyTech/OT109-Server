@@ -3,6 +3,7 @@ package com.alkemy.ong.controllers;
 import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
+import com.alkemy.ong.dtos.responses.MembersPageResponseDTO;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
@@ -14,6 +15,7 @@ import com.alkemy.ong.services.OrganizationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -92,6 +95,14 @@ public class MemberControllerTest {
         Member member3 = new Member(4L, "Maria", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow, null, null);
         List<Member> members = Arrays.asList(member0, member1, member2, member3);
         Slice<Member> sliceMember = new SliceImpl<>(members);
+        //MembersPageResponseDTO expected
+        ListMemberDTO memberPage0 = new ListMemberDTO(1L, "Pepe", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow2, null, null);
+        ListMemberDTO memberPage1 = new ListMemberDTO(2L, "Jose", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow1, null, null);
+        ListMemberDTO memberPage2 = new ListMemberDTO(3L, "Marcela", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow, null, null);
+        ListMemberDTO memberPage3 = new ListMemberDTO(4L, "Maria", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow, null, null);
+        List<ListMemberDTO> listMemberPage = new ArrayList<>(Arrays.asList(memberPage0, memberPage1, memberPage2, memberPage3));
+        MembersPageResponseDTO memberResponseDTOexpected = new MembersPageResponseDTO();
+        memberResponseDTOexpected.setMembersDto(listMemberPage);
         
         
         when(memberService.findAll(anyInt(),anyInt())).thenReturn(sliceMember);
@@ -103,14 +114,14 @@ public class MemberControllerTest {
                 //Then
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").exists());
-                // .andExpect(jsonPath("$", hasSize(4)))
-                // .andExpect(jsonPath("$[0].id").value(1L))
-                // .andExpect(jsonPath("$[0].name").value("Pepe"))
-                // .andExpect(jsonPath("$[0].organization.id").value(1L))
-                // .andExpect(jsonPath("$[0].organization.name").value("ONG1"))
-                // .andExpect(jsonPath("$[0].deletedAt").value(IsNull.nullValue()))//chequear que todos tengan deletedAtNull;
-                // .andExpect(content().json(objectMapper.writeValueAsString(sliceMember)));
+                //.andExpect(jsonPath("$").exists());
+                 .andExpect(jsonPath("$.membersDto", hasSize(4)))
+                 .andExpect(jsonPath("$.membersDto[0].id").value(1L))
+                 .andExpect(jsonPath("$.membersDto[0].name").value("Pepe"))
+                 .andExpect(jsonPath("$.membersDto[0].organization.id").value(1L))
+                 .andExpect(jsonPath("$.membersDto[0].organization.name").value("ONG1"))
+                 .andExpect(jsonPath("$.membersDto[0].deletedAt").value(IsNull.nullValue()))//chequear que todos tengan deletedAtNull;
+                 .andExpect(content().json(objectMapper.writeValueAsString(memberResponseDTOexpected)));
 
         verify(memberService).findAll(anyInt(), anyInt());
     }
@@ -176,8 +187,7 @@ public class MemberControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(member)))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(status().isNotFound());
 
         verify(memberService).create(any());
     }
