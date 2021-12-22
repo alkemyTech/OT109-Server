@@ -57,7 +57,6 @@ public class SlideController {
         return slideService.getById(id);
     }
 
-
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
     public List<SlideCompact> getSlides(){
