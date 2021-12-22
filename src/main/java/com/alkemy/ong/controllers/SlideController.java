@@ -5,6 +5,7 @@ import com.alkemy.ong.dtos.responses.SlidePostResponse;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.output.SlideCompact;
 import com.alkemy.ong.pojos.output.SlideRequestUpdate;
 import com.alkemy.ong.services.SlideService;
@@ -56,11 +57,6 @@ public class SlideController {
         return slideService.getById(id);
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public String handle(NotFoundException notFoundException) {
-        return notFoundException.getMessage();
-    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
