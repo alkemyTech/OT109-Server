@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-
 /** Amazon Web Services S3 Bucket integration for uploading and downloading images.*/
 @RestController
 @RequestMapping("/s3/images")

@@ -52,8 +52,6 @@ public class MemberController {
         if(membersSlice.hasNext()) {
             membersPageResponseDTO.setNextPage(url + membersSlice.nextPageable().getPageNumber());
         }
-        //membersSlice.previousOrFirstPageable().getPageNumber();
-        //membersSlice.nextOrLastPageable().getPageNumber();
         return membersPageResponseDTO;
     }
 
@@ -82,8 +80,6 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
-        //if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
-
         try{
             memberService.update(request,id);
         }catch (ConstraintViolationException ex){

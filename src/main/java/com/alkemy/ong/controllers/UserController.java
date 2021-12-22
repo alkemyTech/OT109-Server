@@ -12,7 +12,6 @@ import javax.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +39,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ListUserDTO> findAll(){
-        //FALTA LA VALIDACIÓN DE ADMINISTRADOR
         List<ListUserDTO> response = new ArrayList();
         List<User> users = userService.findAll();
         users.forEach(e -> {

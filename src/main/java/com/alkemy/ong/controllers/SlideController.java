@@ -6,7 +6,6 @@ import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.pojos.output.SlideCompact;
-import com.alkemy.ong.pojos.output.SlideRequestUpdate;
 import com.alkemy.ong.services.SlideService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
