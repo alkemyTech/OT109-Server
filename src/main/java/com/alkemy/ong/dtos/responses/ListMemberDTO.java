@@ -1,6 +1,7 @@
 package com.alkemy.ong.dtos.responses;
 
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +34,13 @@ public class ListMemberDTO {
 
     private OrganizationEntity organization;
 
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date deletedAt;
+
 }

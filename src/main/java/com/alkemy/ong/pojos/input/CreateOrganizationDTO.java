@@ -16,7 +16,7 @@ import org.springframework.lang.Nullable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateOrganizationDTO {
+public class  CreateOrganizationDTO {
     
     @NonNull
     @NotNull

@@ -70,8 +70,6 @@ public class MemberServiceImpl implements MemberService {
         Member newMember = memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member does not exist"));
         OrganizationEntity organization = organizationService.findById(member.getOrganizationId());
 
-        if(organization == null) throw new NotFoundException(String.format("Organization Id: %d not found",member.getOrganizationId()));
-
         newMember.setId(id);
         newMember.setName(member.getName());
         newMember.setFacebookUrl(member.getFacebookUrl());

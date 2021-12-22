@@ -53,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/contacts")
                .permitAll()
                 .antMatchers(HttpMethod.GET,
-                        "/members",
                         "/categories/{id}",
                         "/categories",
                         "/s3/images",
@@ -65,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,
                         "/news**").hasAuthority("USER")
                 .antMatchers(HttpMethod.GET,
+                        "/members",
                         "/comments").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,
                         "/testimonials",

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.validation.Valid;
 
 
 @RestController
@@ -35,7 +35,7 @@ public class ContactController {
     private JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
+    public ResponseEntity<?> create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
         Contact contactCreated;
         try {
             Contact contactToCreate = contactPostDto.toContact();
@@ -58,11 +58,6 @@ public class ContactController {
     @GetMapping
     public List<ContactListDTO> getAll() {
         //Falta validación como administrador
-        List<Contact> contactList = contactService.findAllContacts();
-        List<ContactListDTO> contactDTOList = new ArrayList<>();
-        for (Contact c : contactList) {
-            contactDTOList.add(new ContactListDTO(c));
-        }
-        return contactDTOList;
+        return contactService.findAllContacts();
     }
 }
