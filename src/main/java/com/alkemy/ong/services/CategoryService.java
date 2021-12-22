@@ -7,6 +7,8 @@ import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.CategoryServiceException;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
 
@@ -21,5 +23,7 @@ public interface CategoryService {
     public Category findByName(String name) throws CategoryServiceException;
 
     public List<CategoryListRequestDTO> findAll();
+    
+    public Page<Category> findAllPageable(Pageable pageable);
 }
 

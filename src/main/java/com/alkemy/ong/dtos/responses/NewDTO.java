@@ -20,5 +20,5 @@ public class NewDTO {
 
     private String image;
 
-    private Category category;
+    private CategoryDTO category;
 }

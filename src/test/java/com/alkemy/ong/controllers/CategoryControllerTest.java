@@ -6,6 +6,7 @@ import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.ParamNotFound;
+import com.alkemy.ong.pojos.output.PageDTO;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.services.CategoryService;
 import com.alkemy.ong.services.impl.CategoryServiceImpl;
@@ -15,11 +16,17 @@ import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,6 +70,7 @@ class CategoryControllerTest {
         categoryListRequestDTO = new CategoryListRequestDTO();
         categoryListRequestDTO.setName("name");
         categoryListRequestDTO.setId(1L);
+        
 
     }
 
@@ -75,11 +83,14 @@ class CategoryControllerTest {
     }
 
     @Test
-    void findAll() {
-        Mockito.when(categoryService.findAll()).thenReturn(listRequestDTOS);
-        ResponseEntity respuestaList = categoryController.findAll();
-        assertEquals(respuestaList, new ResponseEntity(listRequestDTOS, HttpStatus.OK));
-        verify(categoryService, times(1)).findAll();
+    void findAllPageable() {
+        List<Category> lCategories =new ArrayList<>();
+        lCategories.add(category);
+        Page<Category> pageCategory = new PageImpl<>(lCategories);
+        Mockito.when(categoryService.findAllPageable(any())).thenReturn(pageCategory);
+        PageDTO<CategoryListRequestDTO> respuestaList = categoryController.findAll(1, 1);
+        assertEquals(respuestaList.getPage().isEmpty(), false);
+        verify(categoryService, times(1)).findAllPageable(any());
     }
 
     @Test

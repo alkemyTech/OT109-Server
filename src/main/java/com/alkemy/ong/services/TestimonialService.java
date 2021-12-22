@@ -11,6 +11,7 @@ import com.alkemy.ong.repositories.TestimonialRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -66,4 +67,17 @@ public class TestimonialService {
     public TestimonialEntity findById(Long id) {
         return testimonialRepository.getById(id);
     }
+
+    public Slice<TestimonialEntity> findAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Slice<TestimonialEntity> testimonialsSlice = testimonialRepository.findBy(pageRequest);
+        if(testimonialsSlice.isEmpty()){
+            throw new NotFoundException("Page not found.");
+        }
+        else{
+            return testimonialsSlice;
+        }
+
+    }
+
 }

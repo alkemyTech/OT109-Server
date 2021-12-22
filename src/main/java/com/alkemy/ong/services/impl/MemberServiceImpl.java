@@ -22,6 +22,9 @@ import com.alkemy.ong.services.OrganizationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -96,10 +99,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<ListMemberDTO> findAll() {
-        return convertListToDTO(memberRepository.findAll());
+    public Slice<Member> findAll(int page,int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Slice<Member> memberSlice = memberRepository.findBy(pageRequest);
+        if(memberSlice.isEmpty()){
+            throw new NotFoundException("Page not found, try with other Page.");
+        }
+        return memberSlice;
     }
-
 
     private List<ListMemberDTO> convertListToDTO(List<Member> members){
 

@@ -1,13 +1,11 @@
 package com.alkemy.ong.services;
 
-import java.util.List;
-
-import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
+import org.springframework.data.domain.Slice;
 
 public interface MemberService {
 
@@ -15,7 +13,6 @@ public interface MemberService {
     MemberResponseDTO update(MemberRequest member, Long id) throws NotFoundException;
     void delete(Long id) throws NotFoundException;
     Member findById(Long id) throws NotFoundException;
-    List<ListMemberDTO> findAll();
+    Slice<Member> findAll(int page,int size);
 
-    
 }
