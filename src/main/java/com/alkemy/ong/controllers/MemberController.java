@@ -59,46 +59,52 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody MemberRequest request) throws DataAlreadyExistException, NotFoundException{
-        try{
-            MemberResponseDTO response = memberService.create(request);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+//        try{
+        MemberResponseDTO response = memberService.create(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            /*
         }catch (ConstraintViolationException ex){
             String errorMessage = ex.getConstraintViolations().iterator().next().getMessage();
             throw new InvalidParameterException(errorMessage);
+
         }catch (DataIntegrityViolationException ex){
             throw new InvalidParameterException(ex.getLocalizedMessage());
-        }
+        }*/
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Min(value = 1, message = "Id cannot be less than one.") Long id) throws NotFoundException{
-        try{
+        //try{
             memberService.delete(id);
             return ResponseEntity.ok("Member successfully deleted");
+            /*
         }catch (NotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        }*/
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
         //if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
 
-        try{
+        //try{
             memberService.update(request,id);
-        }catch (ConstraintViolationException ex){
+            /*
+        }catch (ConstraintViolationException ex) {
             String errorMessage = ex.getConstraintViolations().iterator().next().getMessage();
             throw new InvalidParameterException(errorMessage);
+
         }catch (DataIntegrityViolationException ex){
             throw new InvalidParameterException("Image can't be null");
         }
-
+        }*/
         return ResponseEntity.ok().build();
     }
+    /*
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public String handle(NotFoundException notFoundException) {
         return notFoundException.getMessage();
-    }
+    }*/
 
 }
