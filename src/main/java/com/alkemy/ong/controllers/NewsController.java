@@ -6,7 +6,7 @@ import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.pojos.output.PageDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.INewsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

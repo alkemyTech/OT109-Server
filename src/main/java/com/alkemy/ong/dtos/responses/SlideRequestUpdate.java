@@ -1,4 +1,4 @@
-package com.alkemy.ong.pojos.output;
+package com.alkemy.ong.dtos.responses;
 
 import lombok.Data;
 

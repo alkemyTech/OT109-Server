@@ -5,7 +5,7 @@ import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.ParamNotFound;
-import com.alkemy.ong.pojos.output.PageDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.CategoryService;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;

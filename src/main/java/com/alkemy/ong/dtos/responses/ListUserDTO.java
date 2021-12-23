@@ -1,4 +1,4 @@
-package com.alkemy.ong.pojos.output;
+package com.alkemy.ong.dtos.responses;
 
 import com.alkemy.ong.entities.Role;
 import com.alkemy.ong.entities.User;

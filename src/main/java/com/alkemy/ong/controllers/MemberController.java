@@ -7,7 +7,7 @@ import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.pojos.output.PageDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.MemberService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.Role;
-import com.alkemy.ong.pojos.input.RegisterUserDTO;
-import com.alkemy.ong.pojos.input.RequestLoginDTO;
+import com.alkemy.ong.dtos.requests.RegisterUserDTO;
+import com.alkemy.ong.dtos.requests.RequestLoginDTO;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;

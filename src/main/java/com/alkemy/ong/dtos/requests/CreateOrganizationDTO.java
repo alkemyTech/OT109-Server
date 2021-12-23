@@ -1,26 +1,37 @@
-package com.alkemy.ong.pojos.input;
+package com.alkemy.ong.dtos.requests;
 
+import com.alkemy.ong.entities.Member;
+import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.lang.Nullable;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UpdateOrganizationDTO {
+@NoArgsConstructor
+public class  CreateOrganizationDTO {
     
+    @NonNull
+    @NotNull
     private String name;
     
-    @Pattern(regexp = "((http|https)://)?(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)(.jpg|.png|.jpeg)", message="Invalid image url")
+    @Pattern(regexp = "((http|https)://)?(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)(.jpg|.png|.jpeg)", message="The image URL has invalid format")
     private String image;
+    private String address;
     private Integer phone;
     
-    private String address;
-
+    @Email(message = "Email has invalid format")
+    private String email;
+    private String welcomeText;
+    private String aboutUsText;
+    //private List<Member> members;
     @Pattern(regexp = "((http|https)://)?(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)", message="Attribute facebookUrl is not valid")
     private String facebookUrl;
     @Pattern(regexp = "((http|https)://)?(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)", message="Attribute linkedinUrl is not valid")

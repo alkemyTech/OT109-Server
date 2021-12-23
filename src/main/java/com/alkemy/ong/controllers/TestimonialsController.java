@@ -2,8 +2,8 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.responses.TestimonialListDTO;
 import com.alkemy.ong.entities.TestimonialEntity;
-import com.alkemy.ong.pojos.input.TestimonialDTO;
-import com.alkemy.ong.pojos.output.PageDTO;
+import com.alkemy.ong.dtos.requests.TestimonialDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.TestimonialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

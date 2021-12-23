@@ -6,7 +6,7 @@ import com.alkemy.ong.entities.TestimonialEntity;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
-import com.alkemy.ong.pojos.input.TestimonialDTO;
+import com.alkemy.ong.dtos.requests.TestimonialDTO;
 import com.alkemy.ong.repositories.TestimonialRepository;
 
 import org.modelmapper.ModelMapper;

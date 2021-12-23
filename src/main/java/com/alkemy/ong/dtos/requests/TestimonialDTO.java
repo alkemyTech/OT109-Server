@@ -1,4 +1,4 @@
-package com.alkemy.ong.pojos.input;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
