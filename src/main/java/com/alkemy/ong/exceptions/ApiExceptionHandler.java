@@ -18,9 +18,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-
+/*
     @ExceptionHandler(value = {ParamNotFound.class})
     protected ResponseEntity<Object> handleParamNotFound(RuntimeException ex, WebRequest request) {
         ApiError errorDTO = new ApiError(
@@ -40,10 +40,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return handleExceptionInternal(ex, errorDTO, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
-
+*/
     /**
      * Handler for @Valid annotation
      */
+
+
+    /*
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -60,7 +63,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Method argument not valid", errors);
         return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
 
-    }
+    }*/
 
 
 }

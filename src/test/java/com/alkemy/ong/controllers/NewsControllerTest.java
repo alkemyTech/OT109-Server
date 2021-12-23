@@ -109,6 +109,10 @@ public class NewsControllerTest {
 
         }
 
+        /**
+         * Ahora devolvemos un Objeto cuando ocurre un error, entonces ya no esta mas vacia la respuesta
+         * @throws Exception
+         */
         @Test
         @WithUserDetails(value = "admin@admin.com")
         void canRetrieveByIdWhenDoesNotExists() throws Exception {
@@ -122,7 +126,7 @@ public class NewsControllerTest {
 
                 // then
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-                assertThat(response.getContentAsString()).isEmpty();
+               // assertThat(response.getContentAsString()).isEmpty();
         }
 
         @Test

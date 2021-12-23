@@ -11,9 +11,11 @@ import com.alkemy.ong.pojos.output.SlideRequestUpdate;
 import com.alkemy.ong.services.SlideService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,7 @@ public class SlideController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public SlidePostResponse save(@RequestBody SlideRequest slideRequest) throws NotFoundException {
+    public SlidePostResponse save(@Valid @RequestBody SlideRequest slideRequest) throws NotFoundException {
         return slideService.save(slideRequestToSlide(slideRequest));
     }
 

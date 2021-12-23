@@ -5,6 +5,7 @@ import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.ApiExceptionHandler;
+import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.input.CreateOrganizationDTO;
 import com.alkemy.ong.pojos.input.UpdateOrganizationDTO;
@@ -175,7 +176,7 @@ public class OrganizationControllerTest {
     @Test
     @WithUserDetails(value = "monicasala@gmail.com")
     public void adminRetrievesOrganizationWithWrongIdErrorThrown() throws Exception{
-        when(organizationService.findById(10L)).thenThrow(new ParamNotFound("Organization not found"));
+        when(organizationService.findById(10L)).thenThrow(new NotFoundException("Organization not found"));
 
         mvc.perform(get("/organization/public/{id}",10L)
                         .contentType(MediaType.APPLICATION_JSON))

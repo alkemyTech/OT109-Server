@@ -1,20 +1,23 @@
 package com.alkemy.ong.controllers.advice;
 
-import com.alkemy.ong.exceptions.BadRequestException;
-import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.exceptions.ParamNotFound;
-import com.alkemy.ong.exceptions.UserServiceException;
+import com.alkemy.ong.exceptions.*;
 import com.alkemy.ong.pojos.output.ApiResponse;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.TransactionSystemException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
-public class MyControllerAdvice {
+public class MyControllerAdvice extends ResponseEntityExceptionHandler {
 
     //Para id que no existen
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -40,32 +43,48 @@ public class MyControllerAdvice {
     public ApiResponse handleBadRequestException(BadRequestException badRequestException, WebRequest request){
         return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, badRequestException.getMessage());
     }
-
-    //Deberia romper cuando ocurre un error en la base de datos, pero solo ocurre cuando una imagen es null en MemberController
+    //Ocurre cuando hay errores con la base de datos
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ApiResponse handleDataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException, WebRequest request){
-        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, "Image cant be null" );
+        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, "sdsdsdsd" );
     }
 
-
-
-    /*
-    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-        String response = "";
-        for (ObjectError error : ex.getAllErrors()) {
-            response += error.getDefaultMessage() + "\n";
-        }
-        return response;
+    @ExceptionHandler(DataAlreadyExistException.class)
+    public ApiResponse handleDataAlreadyExistException(DataAlreadyExistException dataAlreadyExistException, WebRequest request){
+        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, dataAlreadyExistException.getMessage());
     }
 
-    @ExceptionHandler(ParamNotFound.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String paramNotFoundExceptionHandler(ParamNotFound ex) {
-        return ex.getMessage();
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidParameterException.class)
+    public ApiResponse handleInvalidParameterException(InvalidParameterException invalidParameterException, WebRequest request) {
+        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, invalidParameterException.getMessage());
     }
-*/
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(NewsNotFoundException.class)
+    public ApiResponse handleNewsNotFoundException(NewsNotFoundException newsNotFoundException, WebRequest request){
+        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, newsNotFoundException.getMessage());
+    }
+    //Solo sirve para capturar la excepcion de una imagen en /organization/public y el patch
+    //Falta hacer cach de los casos post de members
+    //Esta excepcion es la que entra en los @Pattern
+    /*
+       Se debe usar en los controladores con methodo save(@Valid @BodyRequest YourType yourtype)
+     */
+    @Override
+    //@ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        List<String> errors = new ArrayList<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.add(error.getField() + ": " + error.getDefaultMessage());
+        }
+        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+            errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
+        }
+        return handleExceptionInternal(ex,new ApiResponseErrorsList(HttpStatus.BAD_REQUEST.value(), request, errors), headers, HttpStatus.BAD_REQUEST, request);
+    }
+
 }
 

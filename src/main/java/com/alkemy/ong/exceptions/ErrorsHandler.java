@@ -8,13 +8,13 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ErrorsHandler {
-
+/*
     @ExceptionHandler(value = DataAlreadyExistException.class)
     public ResponseEntity<?> alreadyExistException(DataAlreadyExistException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getContextPath());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
-
+*/
 }

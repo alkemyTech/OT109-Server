@@ -17,8 +17,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class MemberExceptionHandler extends ResponseEntityExceptionHandler {
+    /*
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<?> handleNotFoundException(NotFoundException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
@@ -38,7 +39,9 @@ public class MemberExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false).substring(4));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+*/
 
+    /*
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         BindingResult result = ex.getBindingResult();
@@ -49,5 +52,5 @@ public class MemberExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),"Method argument not valid, field errors: " + errors, request.getDescription(false).substring(4));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 
-    }
+    }*/
 }

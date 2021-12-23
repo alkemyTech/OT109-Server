@@ -43,7 +43,7 @@ public class TestimonialService {
             throw new BadRequestException("Content may not be empty");
         }
         if (!testimonialRepository.findById(id).isPresent()) {
-            throw new ParamNotFound("Error: invalid testimonial id");
+            throw new NotFoundException("Error: invalid testimonial id");
         }
         TestimonialEntity testimonialEntity = testimonialRepository.getById(id);
         modelMapper.map(testimonialDTO, testimonialEntity);
@@ -58,7 +58,7 @@ public class TestimonialService {
 
         Optional<TestimonialEntity> entity = testimonialRepository.findById(id);
         if (!entity.isPresent()) {
-            throw new ParamNotFound("Error: Invalid category id");
+            throw new NotFoundException("Error: Invalid testimonials id");
         }
         testimonialRepository.deleteById(id);
 

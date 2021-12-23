@@ -8,13 +8,13 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class NewsExceptionHandler {
-
+    /*
     @ExceptionHandler(value = NewsNotFoundException.class)
     public ResponseEntity<?> handleNewsNotFoundException(NewsNotFoundException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), request.getContextPath());
         return new ResponseEntity<>(errorDetails, HttpStatus.NO_CONTENT);
     }
-
+*/
 }
