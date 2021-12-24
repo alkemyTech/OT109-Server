@@ -1,7 +1,7 @@
 package com.alkemy.ong.dataSeeders;
 
 import com.alkemy.ong.entities.Activity;
-import com.alkemy.ong.services.ActivityService;
+import com.alkemy.ong.services.impl.ActivityService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

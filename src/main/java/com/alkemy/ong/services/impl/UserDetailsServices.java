@@ -1,4 +1,4 @@
-package com.alkemy.ong.services;
+package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.entities.UsersDetails;

@@ -5,6 +5,8 @@ import com.alkemy.ong.pojos.input.RegisterUserDTO;
 import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
+import com.alkemy.ong.services.impl.RoleServiceImpl;
+import com.alkemy.ong.services.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+import org.mockito.Mock;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +38,7 @@ public class AuthControllerTest {
     @MockBean
     private UserService userService;
 
-    @MockBean
+    @Mock
     private RoleService roleService;
 
     @InjectMocks

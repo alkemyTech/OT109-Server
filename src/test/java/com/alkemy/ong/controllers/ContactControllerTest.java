@@ -40,9 +40,6 @@ public class ContactControllerTest {
     @MockBean
     private ContactService contactService;
 
-    @InjectMocks
-    private ContactController contactController;
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -65,7 +62,7 @@ public class ContactControllerTest {
         contactsDto.add(contactDto2);
         contactsDto.add(contactDto3);
 
-        when(contactService.findAllContacts()).thenReturn(contactsDto);
+        when(contactService.findAll()).thenReturn(contactsDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/contacts")
@@ -80,7 +77,7 @@ public class ContactControllerTest {
                 .andExpect(jsonPath("$[2].name").value("José"))
                 .andExpect(content().json(objectMapper.writeValueAsString(contactsDto)));
 
-        verify(contactService).findAllContacts();
+        verify(contactService).findAll();
     }
 
     @Test

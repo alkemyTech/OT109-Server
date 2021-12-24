@@ -1,94 +1,21 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.entities.Role;
-import com.alkemy.ong.exceptions.RoleServiceException;
-import com.alkemy.ong.repositories.RoleRepository;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import javax.transaction.Transactional;
-import lombok.NonNull;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.config.Configuration.AccessLevel;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class RoleService {
+public interface RoleService {
     
-    @Autowired
-    private RoleRepository roleRepo;
+    public Role create(Role role);
     
-    @Transactional
-    public Role create(@NonNull Role role){
-        role.setCreatedAt(new Date());
-        return roleRepo.save(role);
-    }
+    public List<Role> findAll();
     
-    @Transactional
-    public Role create(String name, String description){
-        return create(Role.builder()
-                .name(name)
-                .description(description)
-                .build());
-    }
+    public Role findById(Long id);
     
-    public List<Role> findAll(){
-        return roleRepo.findAll();
-    }
+    public Role findByName(String name);
     
-    public Role findById(@NonNull Long id) throws RoleServiceException{
-        Optional<Role> opt = roleRepo.findById(id);
-        if (opt.isPresent()){
-            return opt.get();
-        }
-        throw new RoleServiceException("Role not found");
-    }
+    public void update(Long id, Role Role);
     
-    public Role findByName(@NonNull String name) {
-        return roleRepo.findByName(name);
-    }
+    public void delete(Long id);
     
-    @Transactional
-    public void update(@NonNull Long id, @NonNull Role newRole) throws RoleServiceException {
-        Optional<Role> opt = roleRepo.findById(id);
-        if (opt.isPresent()) {
-            ModelMapper modelMapper = new ModelMapper();
-            modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT).setFieldAccessLevel(AccessLevel.PRIVATE);;
-            Role role = opt.get();
-            modelMapper.map(newRole, role);
-            role.setUpdatedAt(new Date());
-            roleRepo.save(role);
-        } else {
-            throw new RoleServiceException("User not found");
-        }
-    }
-    
-    @Transactional
-    public void put(@NonNull Long id, @NonNull Role newRole) {
-        Optional<Role> opt = roleRepo.findById(id);
-        if (opt.isPresent()) {
-            Role role = opt.get();
-            newRole.setCreatedAt(role.getCreatedAt());
-            BeanUtils.copyProperties(newRole, role);
-            role.setUpdatedAt(new Date());
-            roleRepo.save(role);
-        } else {
-            roleRepo.putId(id);
-            newRole.setCreatedAt(new Date());
-            roleRepo.save(newRole);
-        }
-    }
-    
-    @Transactional
-    public void delete(@NonNull Long id) throws RoleServiceException {
-        if(roleRepo.findById(id).isPresent()){
-            roleRepo.deleteById(id);
-        } else {
-            throw new RoleServiceException("User not found");
-        }
-    }
-    
+    public void put(Long id, Role role);
 }

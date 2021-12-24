@@ -1,4 +1,4 @@
-package com.alkemy.ong.services;
+package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
@@ -10,6 +10,8 @@ import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.repositories.NewsRepository;
+import com.alkemy.ong.services.CategoryService;
+import com.alkemy.ong.services.INewsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
