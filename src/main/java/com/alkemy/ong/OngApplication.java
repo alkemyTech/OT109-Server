@@ -16,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 
-import java.util.Random;
-
 @SpringBootApplication
 public class OngApplication implements ApplicationRunner {
 
