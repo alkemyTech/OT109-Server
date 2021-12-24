@@ -13,6 +13,10 @@ import org.springframework.lang.Nullable;
 /*
 @AllArgsConstructor
 @NoArgsConstructor*/
+
+/**
+ * Solo se usa en create
+ */
 @Getter
 @Setter
 public class  CreateOrganizationDTO extends Socials {

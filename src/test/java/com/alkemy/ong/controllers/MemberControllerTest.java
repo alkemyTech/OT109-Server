@@ -8,7 +8,7 @@ import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.pojos.input.RequestLoginDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.services.MemberService;
 import com.alkemy.ong.services.OrganizationService;
@@ -165,7 +165,7 @@ public class MemberControllerTest {
     @Test
     @WithUserDetails(value = "admin@admin.com")
     void saveMemberWithNullOrganizationShouldReturnErrorMessage() throws Exception {
-        MemberRequest member = new MemberRequest("Teto", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", null);
+        MemberRequest member = new MemberRequest("Teto", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "description", null);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/members")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -178,7 +178,7 @@ public class MemberControllerTest {
     @WithUserDetails(value = "admin@admin.com")
     void saveMemberWithNonExistentOrganizationIdShouldReturnNotFound404Status() throws Exception {
         //given
-        MemberRequest member = new MemberRequest("Teto", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", 99L);
+        MemberRequest member = new MemberRequest("Teto", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "description", 99L);
         //when
         when(memberService.create(any())).thenThrow(NotFoundException.class);
         //then
@@ -194,7 +194,7 @@ public class MemberControllerTest {
     @WithUserDetails(value = "admin@admin.com")
     void saveMemberThatAlreadyExistShouldReturn409ConflictStatus() throws Exception{
         //given
-        MemberRequest member = new MemberRequest("Erik", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", 1L);
+        MemberRequest member = new MemberRequest("Erik", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "description", 1L);
         //when
         when(memberService.create(any())).thenThrow(DataAlreadyExistException.class);
         //then
@@ -244,9 +244,9 @@ public class MemberControllerTest {
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(objectMapper.writeValueAsString(oldMember)));
 
-        MemberRequest newMember = new MemberRequest("Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "NEW description", 1L);
+        MemberRequest newMember = new MemberRequest("Tito", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "NEW description", 1L);
         ListOrganizationDTO ong1 = new ListOrganizationDTO(1L, "ONG1");
-        MemberResponseDTO newMemberResponse = new MemberResponseDTO(1L, "Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "NEW description", ong1);
+        MemberResponseDTO newMemberResponse = new MemberResponseDTO(1L, "Tito", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "NEW description", ong1);
         when(memberService.update(newMember, 1L)).thenReturn(newMemberResponse);
 
         //when
@@ -271,7 +271,7 @@ public class MemberControllerTest {
     @WithUserDetails(value = "admin@admin.com")
     void updateNonExistentMemberShouldReturn404NotFound() throws Exception{
         //given
-        MemberRequest newMember = new MemberRequest("Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "NEW description", 1L);
+        MemberRequest newMember = new MemberRequest("Tito", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "NEW description", 1L);
         //when
         doThrow(NotFoundException.class).when(memberService).update(any(),any());
         //then
@@ -286,7 +286,7 @@ public class MemberControllerTest {
     @WithUserDetails(value = "admin@admin.com")
     void updateMemberWithNullOrganizationShouldReturnErrorMessage() throws Exception {
         //given
-        MemberRequest newMember = new MemberRequest("Tito", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "NEW description", null);
+        MemberRequest newMember = new MemberRequest("Tito", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.myimage.com/image.png", "NEW description", null);
         //when
 
         //then

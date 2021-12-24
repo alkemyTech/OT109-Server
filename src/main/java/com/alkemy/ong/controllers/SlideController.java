@@ -32,7 +32,7 @@ public class SlideController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(path = "/{id}")
-    public SlidePostResponse update(@PathVariable("id") Long id, @RequestBody SlideRequest slideRequestUpdate) throws NotFoundException {
+    public SlidePostResponse update(@PathVariable("id") Long id,@Valid @RequestBody SlideRequest slideRequestUpdate) throws NotFoundException {
         return slideService.update(id,slideRequestToSlide(slideRequestUpdate));
     }
 

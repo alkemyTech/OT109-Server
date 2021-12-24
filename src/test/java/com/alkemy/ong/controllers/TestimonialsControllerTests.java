@@ -33,7 +33,7 @@ public class TestimonialsControllerTests {
     void createSucess() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/testimonials")
-                .content(asJsonString(new TestimonialDTO("newName","https://www.newImage.com","newContent")))
+                .content(asJsonString(new TestimonialDTO("newName","https://www.newImage.com/image.png","newContent")))
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -61,7 +61,7 @@ public class TestimonialsControllerTests {
     void updateSucess() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .put("/testimonials/{id}", 1)
-                .content(asJsonString(new TestimonialDTO("editName","https://www.editImage.com","editContent")))
+                .content(asJsonString(new TestimonialDTO("editName","https://www.editImage.com/image.png","editContent")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -75,7 +75,7 @@ public class TestimonialsControllerTests {
     void tryUpdateWithIdNotExists() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .put("/testimonials/{id}", 123*5+10)
-                .content(asJsonString(new TestimonialDTO("editName","https://www.editImage.com","editContent")))
+                .content(asJsonString(new TestimonialDTO("editName","https://www.editImage.com/image.png","editContent")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -98,7 +98,7 @@ public class TestimonialsControllerTests {
     void deleteSucess() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .delete("/testimonials/{id}", 3)
-                .content(asJsonString(new TestimonialDTO("nameDeleted","https://www.Image.com","Content")))
+                .content(asJsonString(new TestimonialDTO("nameDeleted","https://www.Image.com/image.png","Content")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -110,7 +110,7 @@ public class TestimonialsControllerTests {
     void tryDeleteWithIdNotExists() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .delete("/testimonials/{id}", 123*5+10)
-                .content(asJsonString(new TestimonialDTO("Name","https://www.Image.com","Content")))
+                .content(asJsonString(new TestimonialDTO("Name","https://www.Image.com/image.png","Content")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -122,7 +122,7 @@ public class TestimonialsControllerTests {
     void createWithoutUser() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .post("/testimonials")
-                .content(asJsonString(new TestimonialDTO("newName","https://www.newImage.com","newContent")))
+                .content(asJsonString(new TestimonialDTO("newName","https://www.newImage.com/image.png","newContent")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
@@ -131,7 +131,7 @@ public class TestimonialsControllerTests {
     void updateWithoutUser() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .put("/testimonials/{id}", 1)
-                .content(asJsonString(new TestimonialDTO("editName","https://www.editImage.com","editContent")))
+                .content(asJsonString(new TestimonialDTO("editName","https://www.editImage.com/image.png","editContent")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
@@ -140,7 +140,7 @@ public class TestimonialsControllerTests {
     void DeleteWithoutUser() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                 .delete("/testimonials/{id}", 1)
-                .content(asJsonString(new TestimonialDTO("Name","https://www.Image.com","Content")))
+                .content(asJsonString(new TestimonialDTO("Name","https://www.Image.com/image.png","Content")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());

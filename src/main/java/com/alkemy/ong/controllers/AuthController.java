@@ -2,8 +2,8 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
-import com.alkemy.ong.pojos.input.RegisterUserDTO;
-import com.alkemy.ong.pojos.input.RequestLoginDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.RegisterUserDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseLoginDTO;
 import com.alkemy.ong.pojos.output.ResponseRegisterDTO;
 import com.alkemy.ong.services.SendGridService;

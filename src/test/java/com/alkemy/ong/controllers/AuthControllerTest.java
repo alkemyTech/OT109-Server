@@ -1,12 +1,10 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.Role;
-import com.alkemy.ong.pojos.input.RegisterUserDTO;
-import com.alkemy.ong.pojos.input.RequestLoginDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.RegisterUserDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.RequestLoginDTO;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
-import com.alkemy.ong.services.impl.RoleServiceImpl;
-import com.alkemy.ong.services.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +55,7 @@ public class AuthControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/auth/register")
-                        .content(objectMapper.writeValueAsString(new RegisterUserDTO("Gabriela", "Sosa", "gabriela@gmail.com", "gabrielasosa", "https://imagen.png")))
+                        .content(objectMapper.writeValueAsString(new RegisterUserDTO("Gabriela", "Sosa", "gabriela@gmail.com", "gabrielasosa", "https://www.imagen.png")))
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

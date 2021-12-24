@@ -48,7 +48,7 @@ public class CommentController {
     }
 
     @PutMapping("/comments/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommentPutRequestDTO request, HttpServletRequest header){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CommentPutRequestDTO request, HttpServletRequest header){
         String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));
         List<String> roles = jwtUtil.extractRoles(token.substring(7));

@@ -49,7 +49,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ApiResponse handleDataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException, WebRequest request){
-        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, "sdsdsdsd" );
+        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, "no deberia pasar nunca! ya que deberia estar validado en el controller antes de entrar a la BD" );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
