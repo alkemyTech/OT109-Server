@@ -1,17 +1,14 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.SlideRequest;
+import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
 import com.alkemy.ong.dtos.responses.SlidePostResponse;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.pojos.output.SlideCompact;
-import com.alkemy.ong.pojos.output.SlideRequestUpdate;
 import com.alkemy.ong.services.SlideService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

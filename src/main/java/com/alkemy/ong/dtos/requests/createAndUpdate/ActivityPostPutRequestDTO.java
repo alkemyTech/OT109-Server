@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests;
+package com.alkemy.ong.dtos.requests.createAndUpdate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Se  usa en create y put
+ */
 public class ActivityPostPutRequestDTO {
     @NotBlank
     @NotNull(message = "Name may not be empty")

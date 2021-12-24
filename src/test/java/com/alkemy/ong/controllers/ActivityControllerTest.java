@@ -1,7 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.controllers.ActivityController;
-import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.ActivityPostPutRequestDTO;
 import com.alkemy.ong.services.IActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

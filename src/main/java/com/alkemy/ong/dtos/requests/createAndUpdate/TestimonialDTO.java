@@ -1,4 +1,4 @@
-package com.alkemy.ong.pojos.input;
+package com.alkemy.ong.dtos.requests.createAndUpdate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +10,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * create y put
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestimonialDTO {
 
-    @NotNull
+    @NotBlank
     @Size(min = 3, message = "Name should be at least three characters")
     private String name;
     @Nullable

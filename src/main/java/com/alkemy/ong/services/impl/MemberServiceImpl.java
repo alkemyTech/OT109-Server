@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
-import com.alkemy.ong.dtos.requests.MemberRequest;
+import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
@@ -21,9 +21,7 @@ import com.alkemy.ong.services.MemberService;
 import com.alkemy.ong.services.OrganizationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests;
+package com.alkemy.ong.dtos.requests.createAndUpdate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 @Data
 @AllArgsConstructor
 public abstract class Socials {
-    @NotBlank @NotNull
+    @NotBlank
     private String name;
     /**
      * Puede ser null o si hay un texto entonces debe ser un URI valido

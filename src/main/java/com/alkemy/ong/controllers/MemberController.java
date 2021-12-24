@@ -1,21 +1,19 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.MemberRequest;
+import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.responses.MembersPageResponseDTO;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
-import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.services.MemberService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.ConstraintViolationException;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import org.springframework.data.domain.Slice;

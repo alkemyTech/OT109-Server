@@ -1,14 +1,10 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.dtos.responses.CommentListDTO;
-import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
-import com.alkemy.ong.entities.News;
-import com.alkemy.ong.entities.User;
-import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.mapper.CommentMapper;
 import com.alkemy.ong.repositories.CommentRepository;
 import com.alkemy.ong.repositories.NewsRepository;

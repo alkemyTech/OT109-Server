@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.ActivityPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.ActivityDTO;
 import com.alkemy.ong.services.IActivityService;
 import org.springframework.beans.factory.annotation.Autowired;

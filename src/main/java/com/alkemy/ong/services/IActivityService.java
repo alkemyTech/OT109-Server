@@ -1,6 +1,6 @@
 package com.alkemy.ong.services;
 
-import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.ActivityPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.ActivityDTO;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;

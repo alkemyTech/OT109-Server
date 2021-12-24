@@ -1,7 +1,7 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
-import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.ParamNotFound;
@@ -22,14 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

@@ -7,7 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.ActivityPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.ActivityDTO;
 import com.alkemy.ong.entities.Activity;
 import com.alkemy.ong.exceptions.ActivityServiceException;

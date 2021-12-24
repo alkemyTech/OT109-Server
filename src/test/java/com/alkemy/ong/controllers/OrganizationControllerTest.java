@@ -1,14 +1,11 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.controllers.OrganizationController;
-import com.alkemy.ong.dtos.requests.SlideRequest;
+import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
-import com.alkemy.ong.exceptions.ApiExceptionHandler;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.exceptions.ParamNotFound;
-import com.alkemy.ong.pojos.input.CreateOrganizationDTO;
-import com.alkemy.ong.pojos.input.UpdateOrganizationDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.CreateOrganizationDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.UpdateOrganizationDTO;
 import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.repositories.OrganizationRepository;
 import com.alkemy.ong.services.OrganizationService;
@@ -16,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
@@ -191,15 +186,17 @@ public class OrganizationControllerTest {
         mvc.perform(patch("/organization/public/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(new UpdateOrganizationDTO(
-                        "updateOrganization",
-                        "http://www.myimage.com/updatedImage.jpg",
-                        8658264,
-                        "updatedAddress",
-                        "http://www.linkedin.com",
-                        "http://www.facebook.com",
-                        "http://www.instagram.com"
-                ))))
+                        .content(toJson(new UpdateOrganizationDTO(
+                                "updateOrganization",
+                                "http://www.facebook.com",
+                                "http://www.instagram.com",
+                                "http://www.linkedin.com",
+                                "http://www.myimage.com/updatedImage.jpg",
+                                8658264,
+                                "updatedAddress"
+                        ))))
+
+
                 .andExpect(status().isOk());
                 verify(organizationService, times(1)).update(eq(1L),any(OrganizationEntity.class));
     }
@@ -212,6 +209,17 @@ public class OrganizationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(new UpdateOrganizationDTO(
                         "failOrganization",
+                        "http://www.facebook.com",
+                        "http://www.instagram.com",
+                        "http://www.linkedin.com",
+                        "http://www.myimage.com/updatedImage.jpg",
+                        8658264,
+                        "failAddress"
+                )))).andExpect(status().is4xxClientError());
+    }
+    /*
+    .content(toJson(new UpdateOrganizationDTO(
+                        "failOrganization",
                         "http://www.myimage.com/failImage.jpg",
                         8658264,
                         "failAddress",
@@ -219,7 +227,16 @@ public class OrganizationControllerTest {
                         "http://www.facebook.com",
                         "http://www.instagram.com"
                 )))).andExpect(status().is4xxClientError());
-    }
+    .content(toJson(new UpdateOrganizationDTO(
+                                "updateOrganization",
+                                "http://www.facebook.com",
+                                "http://www.instagram.com",
+                                "http://www.linkedin.com",
+                                "http://www.myimage.com/updatedImage.jpg",
+                                8658264,
+                                "updatedAddress"
+                        ))))
+     */
 
     private String toJson(Object obj){
         try{

@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.MemberRequest;
+import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.responses.MembersPageResponseDTO;
@@ -12,10 +12,8 @@ import com.alkemy.ong.pojos.input.RequestLoginDTO;
 import com.alkemy.ong.pojos.output.ListOrganizationDTO;
 import com.alkemy.ong.services.MemberService;
 import com.alkemy.ong.services.OrganizationService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

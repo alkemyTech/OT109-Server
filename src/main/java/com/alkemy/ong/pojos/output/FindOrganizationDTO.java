@@ -1,6 +1,6 @@
 package com.alkemy.ong.pojos.output;
 
-import com.alkemy.ong.dtos.requests.SlideRequest;
+import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

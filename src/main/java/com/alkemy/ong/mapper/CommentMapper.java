@@ -1,6 +1,6 @@
 package com.alkemy.ong.mapper;
 
-import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
 import com.alkemy.ong.exceptions.NotFoundException;

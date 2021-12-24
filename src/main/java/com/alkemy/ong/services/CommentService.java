@@ -1,10 +1,9 @@
 package com.alkemy.ong.services;
 
-import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.dtos.responses.CommentListDTO;
 import com.alkemy.ong.entities.Comment;
-import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
 
 import java.util.List;

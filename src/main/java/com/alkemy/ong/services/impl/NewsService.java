@@ -1,6 +1,6 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
