@@ -14,7 +14,7 @@ import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.pojos.output.ListOrganizationDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
 import com.alkemy.ong.repositories.MemberRepository;
 import com.alkemy.ong.services.MemberService;
 

@@ -2,7 +2,7 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.exceptions.UserServiceException;
-import com.alkemy.ong.pojos.input.UpdateUserDTO;
+import com.alkemy.ong.dtos.requests.UpdateUserDTO;
 import com.alkemy.ong.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

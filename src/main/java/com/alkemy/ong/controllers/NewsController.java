@@ -2,11 +2,11 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
-import com.alkemy.ong.dtos.responses.NewsPageResponseDTO;
 import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.INewsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.PageImpl;
 
 @RestController
 @RequestMapping("/news")
@@ -74,34 +75,25 @@ public class NewsController {
         }catch (NotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getPage(@RequestParam("page") Integer page, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size){
+    @ResponseStatus(HttpStatus.OK)
+    public PageDTO<NewDTO> getPage(@RequestParam("page") Integer page, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size){
         if(page < 0) throw new InvalidParameterException("Page number must be equal or higher than 0");
         if(size <= 0) throw new InvalidParameterException("Size number must be higher than 0");
 
         Pageable pageRequest = PageRequest.of(page,size);
         Page<News> news = newService.getAll(pageRequest);
-        NewsPageResponseDTO response = preparePageResponse(news);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return preparePageResponse(news);
     }
 
-    public NewsPageResponseDTO preparePageResponse(Page<News> page){
+    public PageDTO<NewDTO> preparePageResponse(Page<News> page){
         String url = "localhost:9800/news?page=";
 
-        String previousOrFirstPage = Integer.toString(page.previousOrFirstPageable().getPageNumber());
-        String nextOrLastPage = Integer.toString(page.nextOrLastPageable().getPageNumber());
-
-        NewsPageResponseDTO response = new NewsPageResponseDTO();
-        response.setNewDTOS(convertToDto(page.getContent()));
-        response.setPreviousPage(url + previousOrFirstPage);
-        response.setNextPage(url + nextOrLastPage);
-
-        return response;
+        Page<NewDTO> outputPage = new PageImpl(convertToDto(page.getContent()), PageRequest.of(page.getNumber(), page.getSize()), page.getTotalElements());
+        return new PageDTO<>(outputPage, url);
     }
 
     private List<NewDTO> convertToDto(List<News> newsList){

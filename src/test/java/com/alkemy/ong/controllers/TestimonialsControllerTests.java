@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.pojos.input.TestimonialDTO;
+import com.alkemy.ong.dtos.requests.TestimonialDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
