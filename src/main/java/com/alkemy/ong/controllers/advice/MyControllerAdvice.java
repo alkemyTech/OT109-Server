@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -67,14 +69,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     public ApiResponse handleNewsNotFoundException(NewsNotFoundException newsNotFoundException, WebRequest request){
         return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, newsNotFoundException.getMessage());
     }
-    //Solo sirve para capturar la excepcion de una imagen en /organization/public y el patch
-    //Falta hacer cach de los casos post de members
-    //Esta excepcion es la que entra en los @Pattern
-    /*
-       Se debe usar en los controladores con methodo save(@Valid @BodyRequest YourType yourtype)
-     */
     @Override
-    //@ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errors = new ArrayList<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {

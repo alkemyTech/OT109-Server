@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -12,10 +13,14 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActivityPostPutRequestDTO {
+    @NotBlank
     @NotNull(message = "Name may not be empty")
     private String name;
+    @NotBlank
     @NotNull(message = "Content may not be empty")
     private String content;
+    @NotBlank
     @NotNull(message = "Image may not be empty")
+    //Falta agregar validacion de link image
     private String image;
 }
