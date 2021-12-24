@@ -40,7 +40,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     public ApiResponse UserServiceExceptionHandler(UserServiceException userServiceException, WebRequest request){
         return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, userServiceException.getMessage());
     }
-    //Cuando los valores son null o vacios isBlank()
+    //Cuando los valores son null o vacios isBlank() //No deberia ocurrir nunca ya que con handleMethodArgumentNotValid lo cubrimos
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ApiResponse handleBadRequestException(BadRequestException badRequestException, WebRequest request){
@@ -52,7 +52,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     public ApiResponse handleDataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException, WebRequest request){
         return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, "no deberia pasar nunca! ya que deberia estar validado en el controller antes de entrar a la BD" );
     }
-
+    //Cuando un email o un nombre(atributo unico de un objeto) ya esxistes en la base de datos
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataAlreadyExistException.class)
     public ApiResponse handleDataAlreadyExistException(DataAlreadyExistException dataAlreadyExistException, WebRequest request){

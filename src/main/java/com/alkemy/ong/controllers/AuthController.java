@@ -13,6 +13,7 @@ import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
 import com.alkemy.ong.services.impl.UserDetailsServices;
 import com.alkemy.ong.util.JwtUtil;
+import com.alkemy.ong.exceptions.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
@@ -60,8 +61,9 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, BindingResult result, HttpServletResponse httpResponse)
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, HttpServletResponse httpResponse)
         throws DataAlreadyExistException {
+        /*
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -72,7 +74,7 @@ public class AuthController {
                     .collect(Collectors.toList());
             response.put("Verify inputs data", errors);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
@@ -105,10 +107,10 @@ public class AuthController {
 
     }
 
-
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO, BindingResult result){
+    public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO){
+        /*
         Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors()
@@ -121,7 +123,7 @@ public class AuthController {
 
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
-        }
+        }*/
         Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
 
         ResponseLoginDTO loginResponse = new ResponseLoginDTO();
@@ -154,8 +156,10 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserProfileDTO> getUserProfile(HttpServletRequest httpServletRequest) {
-
+    public ResponseEntity<?> getUserProfile(HttpServletRequest httpServletRequest) throws NotFoundException {
+        if(httpServletRequest.getHeader("Authorization") == null){
+            throw new NotFoundException("User not logged");
+        }
         String jwt = httpServletRequest.getHeader("Authorization").substring(7);
         User user = userService.findByEmail(jwtTokenUtil.extractUserEmail(jwt));
         ModelMapper modelMapper = new ModelMapper();
