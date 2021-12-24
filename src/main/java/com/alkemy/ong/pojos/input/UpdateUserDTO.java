@@ -11,6 +11,9 @@ import javax.validation.constraints.Pattern;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * User patch
+ */
 public class UpdateUserDTO {
     
     private String firstName;

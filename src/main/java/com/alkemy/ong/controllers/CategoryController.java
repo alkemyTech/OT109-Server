@@ -94,7 +94,7 @@ public class CategoryController {
         Page<CategoryListRequestDTO> outputPage = new PageImpl<>(categories, pageable, page.getTotalElements());
         return new PageDTO<>(outputPage, url);
     }
-    
+    /*
     @ExceptionHandler(ParamNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String paramNotFoundExceptionHandler(ParamNotFound ex) {
@@ -105,5 +105,5 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String globalExceptionHandler(Exception ex) {
         return ex.getMessage();
-    }
+    }*/
 }
