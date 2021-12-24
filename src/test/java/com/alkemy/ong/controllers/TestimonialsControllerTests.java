@@ -39,7 +39,7 @@ public class TestimonialsControllerTests {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("newName"))
-                .andExpect(jsonPath("$.image").value("https://www.newImage.com"))
+                .andExpect(jsonPath("$.image").value("https://www.newImage.com/image.png"))
                 .andExpect(jsonPath("$.content").value("newContent"));
     }
     @Test

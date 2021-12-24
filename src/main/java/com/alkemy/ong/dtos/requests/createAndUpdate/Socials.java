@@ -17,7 +17,7 @@ public abstract class Socials {
     @NotBlank
     private String name;
     /**
-     * Puede ser null o si hay un texto entonces debe ser un URI valido
+     * Puede ser null/blank o si hay un texto entonces debe ser un URI valido
      */
     @Nullable
     @Pattern(regexp = "((http|https)://)?(www.facebook.com)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)", message="Attribute facebookUrl is not url valid")

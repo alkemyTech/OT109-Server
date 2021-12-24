@@ -1,4 +1,4 @@
-package com.alkemy.ong.controllers.advice;
+package com.alkemy.ong.dtos.responses.exceptionResponses;
 
 import lombok.Data;
 import org.springframework.web.context.request.WebRequest;

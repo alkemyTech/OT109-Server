@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -134,15 +135,16 @@ public class MemberControllerTest {
     @Test
     @WithUserDetails(value = "admin@admin.com")
     void save() throws Exception {
-        //given
-        MemberRequest member = new MemberRequest("Teto", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", 1L);
+        //given "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile",
+        MemberRequest member = new MemberRequest("Teto", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile","http://www.anyimage.com/image.jpg", "description", 1L);
         ListOrganizationDTO ong1 = new ListOrganizationDTO(1L, "ONG1");
-        MemberResponseDTO memberResponse = new MemberResponseDTO(1L, "Teto", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1);
+        MemberResponseDTO memberResponse = new MemberResponseDTO(1L, "Teto", "http://www.facebook.com/profile", "http://www.instagram.com/profile", "http://www.linkedin.com/profile", "http://www.anyimage.com/image.jpg", "description", ong1);
         when(memberService.create(any())).thenReturn(memberResponse);
         //when
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/members").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(member)))
+                .andDo(print())
                 //then
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

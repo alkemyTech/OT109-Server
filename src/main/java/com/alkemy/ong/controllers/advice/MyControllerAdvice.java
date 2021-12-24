@@ -1,7 +1,8 @@
 package com.alkemy.ong.controllers.advice;
 
+import com.alkemy.ong.dtos.responses.exceptionResponses.ApiResponseErrorsList;
 import com.alkemy.ong.exceptions.*;
-import com.alkemy.ong.pojos.output.ApiResponse;
+import com.alkemy.ong.dtos.responses.exceptionResponses.ApiResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
