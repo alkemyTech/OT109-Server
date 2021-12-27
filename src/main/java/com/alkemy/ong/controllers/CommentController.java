@@ -4,6 +4,7 @@ import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPostRequestDTO;
 import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
+import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.services.CommentService;
 import com.alkemy.ong.util.JwtUtil;
 import org.modelmapper.ModelMapper;
@@ -68,7 +69,8 @@ public class CommentController {
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<String> delete(@PathVariable @Min(value = 1, message = "Comment id cannot be less than one") Long id, HttpServletRequest header){
         if(!commentService.existsById(id)){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found.");
+            throw new ParamNotFound("Comment with id "+ id+" not found");
+            //return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found.");
         }
         String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));

@@ -64,12 +64,13 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     public ApiResponse handleInvalidParameterException(InvalidParameterException invalidParameterException, WebRequest request) {
         return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, invalidParameterException.getMessage());
     }
-
+    /*
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ExceptionHandler(NewsNotFoundException.class)
     public ApiResponse handleNewsNotFoundException(NewsNotFoundException newsNotFoundException, WebRequest request){
         return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, newsNotFoundException.getMessage());
-    }
+    }*/
+    //Cubre la validacion de un objeto request
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errors = new ArrayList<>();
