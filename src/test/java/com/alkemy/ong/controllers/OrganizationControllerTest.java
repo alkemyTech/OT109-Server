@@ -1,12 +1,12 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.dtos.requests.createAndUpdate.CreateOrganizationDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.UpdateOrganizationDTO;
-import com.alkemy.ong.pojos.output.ListOrganizationDTO;
+import com.alkemy.ong.dtos.requests.CreateOrganizationDTO;
+import com.alkemy.ong.dtos.requests.UpdateOrganizationDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
 import com.alkemy.ong.repositories.OrganizationRepository;
 import com.alkemy.ong.services.OrganizationService;
 import com.fasterxml.jackson.databind.ObjectMapper;

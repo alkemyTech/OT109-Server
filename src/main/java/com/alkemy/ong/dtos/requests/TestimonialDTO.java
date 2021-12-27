@@ -1,22 +1,29 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
-@Getter
-@Setter
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
- * SE usa en put y create
+ * create y put
  */
-public class CategoryPostPutRequestDTO {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class TestimonialDTO {
+
     @NotBlank
+    @Size(min = 3, message = "Name should be at least three characters")
     private String name;
-    @NotBlank
-    private String description;
     @Nullable
     @Pattern(regexp = "((http|https)://)?(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)(.jpg|.png|.jpeg)", message="The image URL has invalid format")
     private String image;
+    private String content;
+
 }

@@ -1,7 +1,7 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.entities.TestimonialEntity;
-import com.alkemy.ong.dtos.requests.createAndUpdate.TestimonialDTO;
+import com.alkemy.ong.dtos.requests.TestimonialDTO;
 import org.springframework.data.domain.Slice;
 
 public interface TestimonialService {

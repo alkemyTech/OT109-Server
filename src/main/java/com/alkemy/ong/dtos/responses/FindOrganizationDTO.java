@@ -1,6 +1,6 @@
-package com.alkemy.ong.pojos.output;
+package com.alkemy.ong.dtos.responses;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

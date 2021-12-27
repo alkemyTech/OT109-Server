@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.dtos.responses.NewsPageResponseDTO;
 import com.alkemy.ong.entities.News;

@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.responses.MembersPageResponseDTO;

@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.pojos.output.ListOrganizationDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
 import com.alkemy.ong.repositories.MemberRepository;
 import com.alkemy.ong.services.MemberService;
 

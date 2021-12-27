@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.alkemy.ong.entities.TestimonialEntity;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.dtos.requests.createAndUpdate.TestimonialDTO;
+import com.alkemy.ong.dtos.requests.TestimonialDTO;
 import com.alkemy.ong.repositories.TestimonialRepository;
 import com.alkemy.ong.services.TestimonialService;
 

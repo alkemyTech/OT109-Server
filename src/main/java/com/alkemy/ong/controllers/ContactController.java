@@ -1,7 +1,7 @@
 package com.alkemy.ong.controllers;
 
 //import com.alkemy.ong.dtos.requests.ContactPostDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.ContactPostDTO;
+import com.alkemy.ong.dtos.requests.ContactPostDTO;
 import com.alkemy.ong.dtos.responses.ContactListDTO;
 import com.alkemy.ong.entities.Contact;
 import com.alkemy.ong.services.ContactService;

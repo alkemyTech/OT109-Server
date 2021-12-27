@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import com.alkemy.ong.entities.Contact;
 import lombok.AllArgsConstructor;

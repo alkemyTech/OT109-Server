@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.dtos.responses.ListMemberDTO;
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.responses.MembersPageResponseDTO;
@@ -8,8 +8,8 @@ import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.dtos.requests.createAndUpdate.RequestLoginDTO;
-import com.alkemy.ong.pojos.output.ListOrganizationDTO;
+import com.alkemy.ong.dtos.requests.RequestLoginDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
 import com.alkemy.ong.services.MemberService;
 import com.alkemy.ong.services.OrganizationService;
 import com.fasterxml.jackson.databind.ObjectMapper;

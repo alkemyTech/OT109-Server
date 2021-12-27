@@ -1,12 +1,12 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.mapper.SlideMapper;
-import com.alkemy.ong.dtos.requests.createAndUpdate.CreateOrganizationDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.UpdateOrganizationDTO;
-import com.alkemy.ong.pojos.output.FindOrganizationDTO;
-import com.alkemy.ong.pojos.output.ListOrganizationDTO;
+import com.alkemy.ong.dtos.requests.CreateOrganizationDTO;
+import com.alkemy.ong.dtos.requests.UpdateOrganizationDTO;
+import com.alkemy.ong.dtos.responses.FindOrganizationDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
 import com.alkemy.ong.services.OrganizationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

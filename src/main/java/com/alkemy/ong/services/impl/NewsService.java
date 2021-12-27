@@ -1,6 +1,6 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;

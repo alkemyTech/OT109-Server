@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.exceptions.NotFoundException;

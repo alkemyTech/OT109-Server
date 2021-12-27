@@ -1,6 +1,6 @@
 package com.alkemy.ong.mapper;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.SlideRequest;
+import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.dtos.responses.SlidePostResponse;
 import com.alkemy.ong.entities.Slide;
 import org.springframework.stereotype.Component;

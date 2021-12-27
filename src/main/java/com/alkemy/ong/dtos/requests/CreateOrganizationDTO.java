@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

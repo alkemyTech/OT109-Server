@@ -1,7 +1,6 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.entities.OrganizationEntity;
-import com.alkemy.ong.pojos.output.FindOrganizationDTO;
 import com.alkemy.ong.exceptions.NotFoundException;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPostRequestDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.CommentPutRequestDTO;
+import com.alkemy.ong.dtos.requests.CommentPostRequestDTO;
+import com.alkemy.ong.dtos.requests.CommentPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CommentDTO;
 import com.alkemy.ong.entities.Comment;
 import com.alkemy.ong.exceptions.ParamNotFound;
