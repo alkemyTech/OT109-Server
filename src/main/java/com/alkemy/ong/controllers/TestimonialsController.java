@@ -4,9 +4,11 @@ import com.alkemy.ong.dtos.responses.TestimonialListDTO;
 import com.alkemy.ong.dtos.responses.TestimonialsPageDTO;
 import com.alkemy.ong.entities.TestimonialEntity;
 import com.alkemy.ong.dtos.requests.TestimonialDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.TestimonialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @RestController
 @RequestMapping("/testimonials")
@@ -52,12 +60,12 @@ public class TestimonialsController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam(defaultValue = "0")  @Min(value = 0, message = "Page must be 0 or greater.") int page,
+    public PageDTO<TestimonialListDTO> findAll(@RequestParam(defaultValue = "0")  @Min(value = 0, message = "Page must be 0 or greater.") int page,
                                     @RequestParam(defaultValue = "10") @Min(value = 1, message = "Page size cannot be less than one.") int size
     ) {
         Slice<TestimonialEntity> testimonialsSlice = testimonialService.findAll(page, size);
-        TestimonialsPageDTO testimonialsPage = toTestimonialPageDTO(testimonialsSlice);
-        return new ResponseEntity<>(testimonialsPage,HttpStatus.OK);
+
+        return toPageDTO(testimonialsSlice);
     }
 
     public TestimonialListDTO convertToListDTO(TestimonialEntity te){
@@ -65,21 +73,14 @@ public class TestimonialsController {
         return teDTO;
     }
 
-    public TestimonialsPageDTO toTestimonialPageDTO(Slice<TestimonialEntity> testimonialsSlice){
-        List<TestimonialListDTO> testimonialsDTOS = testimonialsSlice.stream()
+    public PageDTO<TestimonialListDTO> toPageDTO(Slice<TestimonialEntity> slice){
+        List<TestimonialListDTO> testimonialsDTOS = slice.stream()
                 .map(this::convertToListDTO)
                 .collect(Collectors.toList());
 
         String url = "http://localhost:9800/testimonials?page=";
-        TestimonialsPageDTO testimonialsPage = new TestimonialsPageDTO();
-        testimonialsPage.setTestimonialsDTOS(testimonialsDTOS);
-        if(testimonialsSlice.hasPrevious()) {
-            testimonialsPage.setPreviousPage(url + testimonialsSlice.previousPageable().getPageNumber());
-        }
-        if(testimonialsSlice.hasNext()) {
-            testimonialsPage.setNextPage(url + testimonialsSlice.nextPageable().getPageNumber());
-        }
-        return testimonialsPage;
+        Page<TestimonialListDTO> outputPage = new PageImpl<>(testimonialsDTOS, PageRequest.of(slice.getNumber(), slice.getSize()), slice.getNumberOfElements());
+        return new PageDTO<>(outputPage, url);
     }
 
 

@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -81,7 +83,7 @@ public class CategoryController {
         return ResponseEntity.ok().body(result);
     }
     
-    private PageDTO preparePageDTO(Page<Category> page, Pageable pageable){
+    private PageDTO<CategoryListRequestDTO> preparePageDTO(Page<Category> page, Pageable pageable){
         final String url = "localhost:9800/categories?page=";
         List<CategoryListRequestDTO> categories = new ArrayList();
         for(Category c : page){

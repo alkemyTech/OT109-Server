@@ -10,18 +10,22 @@ import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.dtos.requests.RequestLoginDTO;
 import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
+import com.alkemy.ong.dtos.requests.RequestLoginDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.MemberService;
 import com.alkemy.ong.services.OrganizationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.IsNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
@@ -100,10 +104,9 @@ public class MemberControllerTest {
         ListMemberDTO memberPage2 = new ListMemberDTO(3L, "Marcela", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow, null, null);
         ListMemberDTO memberPage3 = new ListMemberDTO(4L, "Maria", "facebook.com", "instagram.com", "linkedin.com", "image.jpg", "description", ong1, datenow, null, null);
         List<ListMemberDTO> listMemberPage = new ArrayList<>(Arrays.asList(memberPage0, memberPage1, memberPage2, memberPage3));
-        MembersPageResponseDTO memberResponseDTOexpected = new MembersPageResponseDTO();
-        memberResponseDTOexpected.setMembersDto(listMemberPage);
-        
-        
+        Page<ListMemberDTO> memberPages = new PageImpl<ListMemberDTO>(listMemberPage,PageRequest.of(0,4),4);
+        PageDTO<ListMemberDTO> pageDTO = new PageDTO<ListMemberDTO>(memberPages,null,null);
+
         when(memberService.findAll(anyInt(),anyInt())).thenReturn(sliceMember);
 
         //when
@@ -114,13 +117,13 @@ public class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 //.andExpect(jsonPath("$").exists());
-                 .andExpect(jsonPath("$.membersDto", hasSize(4)))
-                 .andExpect(jsonPath("$.membersDto[0].id").value(1L))
-                 .andExpect(jsonPath("$.membersDto[0].name").value("Pepe"))
-                 .andExpect(jsonPath("$.membersDto[0].organization.id").value(1L))
-                 .andExpect(jsonPath("$.membersDto[0].organization.name").value("ONG1"))
-                 .andExpect(jsonPath("$.membersDto[0].deletedAt").value(IsNull.nullValue()))//chequear que todos tengan deletedAtNull;
-                 .andExpect(content().json(objectMapper.writeValueAsString(memberResponseDTOexpected)));
+                 .andExpect(jsonPath("$.page.content", hasSize(4)))
+                 .andExpect(jsonPath("$.page.content[0].id").value(1L))
+                 .andExpect(jsonPath("$.page.content[0].name").value("Pepe"))
+                 .andExpect(jsonPath("$.page.content[0].organization.id").value(1L))
+                 .andExpect(jsonPath("$.page.content[0].organization.name").value("ONG1"))
+                 .andExpect(jsonPath("$.page.content[0].deletedAt").value(IsNull.nullValue()))//chequear que todos tengan deletedAtNull;
+                 .andExpect(content().json(objectMapper.writeValueAsString(pageDTO)));
 
         verify(memberService).findAll(anyInt(), anyInt());
     }
@@ -144,7 +147,6 @@ public class MemberControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/members").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(member)))
-                .andDo(print())
                 //then
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

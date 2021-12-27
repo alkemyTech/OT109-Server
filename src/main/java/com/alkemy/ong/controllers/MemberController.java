@@ -6,20 +6,26 @@ import com.alkemy.ong.dtos.responses.MemberResponseDTO;
 import com.alkemy.ong.dtos.responses.MembersPageResponseDTO;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
+import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.MemberService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @RestController
 @RequestMapping("/members")
@@ -32,27 +38,18 @@ public class MemberController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public MembersPageResponseDTO findAll(@RequestParam(defaultValue = "0")  @Min(value = 0, message = "Page must be 0 or greater.") int page,
+    public PageDTO<ListMemberDTO> findAll(@RequestParam(defaultValue = "0")  @Min(value = 0, message = "Page must be 0 or greater.") int page,
                                      @RequestParam(defaultValue = "10") @Min(value = 1, message = "Page size cannot be less than one.") int size
                                     ) {
         Slice<Member> membersSlice = memberService.findAll(page,size);
 
-        List<ListMemberDTO> membersPageResponseDTOS = membersSlice.stream()
+        List<ListMemberDTO> membersResponseDTOS = membersSlice.stream()
                 .map(member -> modelMapper.map(member,ListMemberDTO.class))
                 .collect(Collectors.toList());
 
         String url = "http://localhost:9800/members?page=";
-        MembersPageResponseDTO membersPageResponseDTO = new MembersPageResponseDTO();
-        membersPageResponseDTO.setMembersDto(membersPageResponseDTOS);
-        if(membersSlice.hasPrevious()) {
-            membersPageResponseDTO.setPreviousPage(url + membersSlice.previousPageable().getPageNumber());
-        }
-        if(membersSlice.hasNext()) {
-            membersPageResponseDTO.setNextPage(url + membersSlice.nextPageable().getPageNumber());
-        }
-        //membersSlice.previousOrFirstPageable().getPageNumber();
-        //membersSlice.nextOrLastPageable().getPageNumber();
-        return membersPageResponseDTO;
+        Page<ListMemberDTO> outputPage = new PageImpl(membersResponseDTOS, PageRequest.of(membersSlice.getNumber(), membersSlice.getSize()), membersSlice.getNumberOfElements());
+        return new PageDTO<>(outputPage, url);
     }
 
     @PostMapping
@@ -83,6 +80,7 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
+        try{
         //if(id == null || id.equals(0L)) throw new InvalidParameterException("Invalid id");
 
         //try{
