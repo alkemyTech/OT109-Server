@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
+import org.mockito.Mock;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +36,7 @@ public class AuthControllerTest {
     @MockBean
     private UserService userService;
 
-    @MockBean
+    @Mock
     private RoleService roleService;
 
     @InjectMocks
@@ -54,7 +55,7 @@ public class AuthControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/auth/register")
-                        .content(objectMapper.writeValueAsString(new RegisterUserDTO("Gabriela", "Sosa", "gabriela@gmail.com", "gabrielasosa", "https://imagen.png")))
+                        .content(objectMapper.writeValueAsString(new RegisterUserDTO("Gabriela", "Sosa", "gabriela@gmail.com", "gabrielasosa", "https://www.imagen.png")))
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

@@ -1,6 +1,6 @@
 package com.alkemy.ong.config;
 
-import com.alkemy.ong.services.UserDetailsServices;
+import com.alkemy.ong.services.impl.UserDetailsServices;
 import com.alkemy.ong.util.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

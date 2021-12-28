@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 public class CommentPostRequestDTO {
-
     @NotNull
     @Min(value = 1, message = "News id cannot be less than one.")
     private Long news_id;

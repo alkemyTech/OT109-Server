@@ -1,6 +1,7 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.entities.OrganizationEntity;
+import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.repositories.OrganizationRepository;
 import com.alkemy.ong.repositories.SlideRepository;
@@ -47,13 +48,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public OrganizationEntity findById(Long id) throws ParamNotFound {
+    public OrganizationEntity findById(Long id) throws NotFoundException {
         Optional<OrganizationEntity> opt = organizationRepository.findById(id);
         if (opt.isPresent()) {
             opt.get().setSlide(slideRepository.getSlidesSortedAsc(id));
             return opt.get();
         }
-        throw new ParamNotFound("Organization not found");
+        throw new NotFoundException("Organization not found");
     }
 
     @Override

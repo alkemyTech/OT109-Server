@@ -1,83 +1,15 @@
 package com.alkemy.ong.services;
 
-import java.util.Optional;
-
 import com.alkemy.ong.entities.TestimonialEntity;
-import com.alkemy.ong.exceptions.BadRequestException;
-import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.dtos.requests.TestimonialDTO;
-import com.alkemy.ong.repositories.TestimonialRepository;
+import org.springframework.data.domain.Slice;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
+public interface TestimonialService {
 
-@Service
-public class TestimonialService {
-
-    @Autowired
-    TestimonialRepository testimonialRepository;
-
-    @Autowired
-    ModelMapper modelMapper;
-
-    public TestimonialEntity create(TestimonialDTO testimonialDTO) {
-        if (testimonialDTO.getName() == null || testimonialDTO.getName() == "") {
-            throw new BadRequestException("Name may not be empty");
-        }
-        if (testimonialDTO.getContent() == null || testimonialDTO.getContent() == "") {
-            throw new BadRequestException("Content may not be empty");
-        }
-        TestimonialEntity testimonialEntity = modelMapper.map(testimonialDTO, TestimonialEntity.class);
-        return testimonialRepository.save(testimonialEntity);
-    }
-
-    public TestimonialEntity update(Long id, TestimonialDTO testimonialDTO) {
-
-        if (testimonialDTO.getName() == null || testimonialDTO.getName() == "") {
-            throw new BadRequestException("Name may not be empty");
-        }
-        if (testimonialDTO.getContent() == null || testimonialDTO.getContent() == "") {
-            throw new BadRequestException("Content may not be empty");
-        }
-        if (!testimonialRepository.findById(id).isPresent()) {
-            throw new ParamNotFound("Error: invalid testimonial id");
-        }
-        TestimonialEntity testimonialEntity = testimonialRepository.getById(id);
-        modelMapper.map(testimonialDTO, testimonialEntity);
-        if (testimonialDTO.getImage() == null || testimonialDTO.getImage() == "") {
-            testimonialEntity.setImage(testimonialDTO.getImage());
-        }
-        return testimonialRepository.save(testimonialEntity);
-
-    }
-
-    public void delete(Long id) {
-
-        Optional<TestimonialEntity> entity = testimonialRepository.findById(id);
-        if (!entity.isPresent()) {
-            throw new ParamNotFound("Error: Invalid category id");
-        }
-        testimonialRepository.deleteById(id);
-
-    }
-
-    public TestimonialEntity findById(Long id) {
-        return testimonialRepository.getById(id);
-    }
-
-    public Slice<TestimonialEntity> findAll(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Slice<TestimonialEntity> testimonialsSlice = testimonialRepository.findBy(pageRequest);
-        if(testimonialsSlice.isEmpty()){
-            throw new NotFoundException("Page not found.");
-        }
-        else{
-            return testimonialsSlice;
-        }
-
-    }
+    TestimonialEntity create(TestimonialDTO testimonialDto);
+    TestimonialEntity update(Long id, TestimonialDTO testimonialDto);
+    void delete(Long id);
+    TestimonialEntity findById(Long id);
+    Slice<TestimonialEntity> findAll(int page, int size);
 
 }

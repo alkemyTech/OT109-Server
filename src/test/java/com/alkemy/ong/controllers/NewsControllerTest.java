@@ -7,21 +7,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
-import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.NewsRepository;
 import com.alkemy.ong.services.INewsService;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -109,6 +105,10 @@ public class NewsControllerTest {
 
         }
 
+        /**
+         * Ahora devolvemos un Objeto cuando ocurre un error, entonces ya no esta mas vacia la respuesta
+         * @throws Exception
+         */
         @Test
         @WithUserDetails(value = "admin@admin.com")
         void canRetrieveByIdWhenDoesNotExists() throws Exception {
@@ -122,7 +122,7 @@ public class NewsControllerTest {
 
                 // then
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-                assertThat(response.getContentAsString()).isEmpty();
+               // assertThat(response.getContentAsString()).isEmpty();
         }
 
         @Test
@@ -133,7 +133,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(post("/news")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -150,7 +150,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(post("/news")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -182,7 +182,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(post("/news")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO(null, "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO(null, "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -203,7 +203,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(post("/news")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -220,7 +220,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(put("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -237,7 +237,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(put("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -253,7 +253,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(put("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -270,7 +270,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(put("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO(null, "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO(null, "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -289,7 +289,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(put("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson())
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andReturn().getResponse();
@@ -307,7 +307,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(delete("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -324,7 +324,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(delete("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -340,7 +340,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(delete("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 
@@ -359,7 +359,7 @@ public class NewsControllerTest {
                 MockHttpServletResponse response = mockMvc.perform(delete("/news/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonNewsPostPutDTO
-                                                .write(new NewPostPutRequestDTO("name", "content", "image", 1L))
+                                                .write(new NewPostPutRequestDTO("name", "content", "http://www.anylink.com/image.png", 1L))
                                                 .getJson()))
                                 .andReturn().getResponse();
 

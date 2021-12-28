@@ -1,7 +1,6 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.User;
-import com.alkemy.ong.exceptions.UserServiceException;
 import com.alkemy.ong.dtos.requests.UpdateUserDTO;
 import com.alkemy.ong.dtos.responses.ListUserDTO;
 import com.alkemy.ong.services.RoleService;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +37,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<ListUserDTO> findAll(){
+        //FALTA LA VALIDACIÓN DE ADMINISTRADOR
         List<ListUserDTO> response = new ArrayList();
         List<User> users = userService.findAll();
         users.forEach(e -> {
@@ -60,22 +59,11 @@ public class UserController {
         modelMapper.map(userDto, user);
         userService.update(id, user);
     }
-    
+
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
         userService.delete(id);
     }
-    
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserServiceException.class)
-    public String UserServiceExceptionHandler(UserServiceException ex){
-        return ex.getMessage();
-    }
-    
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NullPointerException.class)
-    public String NullPointerExceptionHandler(NullPointerException ex){
-        return ex.getMessage();
-    }
+
 }

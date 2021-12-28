@@ -4,6 +4,10 @@ import com.alkemy.ong.controllers.OrganizationController;
 import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
 import com.alkemy.ong.entities.Slide;
+import com.alkemy.ong.exceptions.NotFoundException;
+import com.alkemy.ong.dtos.requests.CreateOrganizationDTO;
+import com.alkemy.ong.dtos.requests.UpdateOrganizationDTO;
+import com.alkemy.ong.dtos.responses.ListOrganizationDTO;
 import com.alkemy.ong.exceptions.ApiExceptionHandler;
 import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.dtos.requests.CreateOrganizationDTO;
@@ -175,7 +179,7 @@ public class OrganizationControllerTest {
     @Test
     @WithUserDetails(value = "monicasala@gmail.com")
     public void adminRetrievesOrganizationWithWrongIdErrorThrown() throws Exception{
-        when(organizationService.findById(10L)).thenThrow(new ParamNotFound("Organization not found"));
+        when(organizationService.findById(10L)).thenThrow(new NotFoundException("Organization not found"));
 
         mvc.perform(get("/organization/public/{id}",10L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -190,15 +194,17 @@ public class OrganizationControllerTest {
         mvc.perform(patch("/organization/public/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(new UpdateOrganizationDTO(
-                        "updateOrganization",
-                        "http://www.myimage.com/updatedImage.jpg",
-                        8658264,
-                        "updatedAddress",
-                        "http://www.linkedin.com",
-                        "http://www.facebook.com",
-                        "http://www.instagram.com"
-                ))))
+                        .content(toJson(new UpdateOrganizationDTO(
+                                "updateOrganization",
+                                "http://www.facebook.com",
+                                "http://www.instagram.com",
+                                "http://www.linkedin.com",
+                                "http://www.myimage.com/updatedImage.jpg",
+                                8658264,
+                                "updatedAddress"
+                        ))))
+
+
                 .andExpect(status().isOk());
                 verify(organizationService, times(1)).update(eq(1L),any(OrganizationEntity.class));
     }
@@ -211,6 +217,17 @@ public class OrganizationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(new UpdateOrganizationDTO(
                         "failOrganization",
+                        "http://www.facebook.com",
+                        "http://www.instagram.com",
+                        "http://www.linkedin.com",
+                        "http://www.myimage.com/updatedImage.jpg",
+                        8658264,
+                        "failAddress"
+                )))).andExpect(status().is4xxClientError());
+    }
+    /*
+    .content(toJson(new UpdateOrganizationDTO(
+                        "failOrganization",
                         "http://www.myimage.com/failImage.jpg",
                         8658264,
                         "failAddress",
@@ -218,7 +235,16 @@ public class OrganizationControllerTest {
                         "http://www.facebook.com",
                         "http://www.instagram.com"
                 )))).andExpect(status().is4xxClientError());
-    }
+    .content(toJson(new UpdateOrganizationDTO(
+                                "updateOrganization",
+                                "http://www.facebook.com",
+                                "http://www.instagram.com",
+                                "http://www.linkedin.com",
+                                "http://www.myimage.com/updatedImage.jpg",
+                                8658264,
+                                "updatedAddress"
+                        ))))
+     */
 
     private String toJson(Object obj){
         try{

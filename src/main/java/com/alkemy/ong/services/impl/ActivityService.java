@@ -1,4 +1,4 @@
-package com.alkemy.ong.services;
+package com.alkemy.ong.services.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +14,7 @@ import com.alkemy.ong.exceptions.ActivityServiceException;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.ActivityRepository;
+import com.alkemy.ong.services.IActivityService;
 
 @Service
 public class ActivityService implements IActivityService {

@@ -7,8 +7,8 @@ import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.TestimonialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Slice;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,23 +33,19 @@ public class TestimonialsController {
 
     @PostMapping
     public ResponseEntity<TestimonialEntity> addTestimonial(@Valid @RequestBody TestimonialDTO testimonialDTO) {
-
         return ResponseEntity.status(HttpStatus.CREATED).body(testimonialService.create(testimonialDTO));
-
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @PutMapping("/{id}")
-    public TestimonialEntity updateTestimonial(@PathVariable Long id, @RequestBody TestimonialDTO testimonialDTO) {
+    public TestimonialEntity updateTestimonial(@PathVariable Long id,@Valid @RequestBody TestimonialDTO testimonialDTO) {
         return testimonialService.update(id, testimonialDTO);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
-
         testimonialService.delete(id);
-
     }
 
     @ResponseStatus(value = HttpStatus.OK)
@@ -58,7 +54,6 @@ public class TestimonialsController {
                                     @RequestParam(defaultValue = "10") @Min(value = 1, message = "Page size cannot be less than one.") int size
     ) {
         Slice<TestimonialEntity> testimonialsSlice = testimonialService.findAll(page, size);
-        
         return toPageDTO(testimonialsSlice);
     }
 
@@ -71,11 +66,10 @@ public class TestimonialsController {
         List<TestimonialListDTO> testimonialsDTOS = slice.stream()
                 .map(this::convertToListDTO)
                 .collect(Collectors.toList());
-        
+
         String url = "http://localhost:9800/testimonials?page=";
         Page<TestimonialListDTO> outputPage = new PageImpl<>(testimonialsDTOS, PageRequest.of(slice.getNumber(), slice.getSize()), slice.getNumberOfElements());
         return new PageDTO<>(outputPage, url);
     }
-
 
 }

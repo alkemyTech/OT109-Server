@@ -9,18 +9,13 @@ import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.services.CategoryService;
-import com.alkemy.ong.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

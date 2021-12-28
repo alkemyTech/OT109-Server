@@ -1,7 +1,5 @@
 package com.alkemy.ong.entities;
 
-import com.alkemy.ong.dtos.requests.ContactPostDTO;
-import com.alkemy.ong.dtos.responses.ContactListDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

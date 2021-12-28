@@ -1,4 +1,4 @@
-package com.alkemy.ong.services;
+package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
@@ -10,6 +10,8 @@ import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.repositories.NewsRepository;
+import com.alkemy.ong.services.CategoryService;
+import com.alkemy.ong.services.INewsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -147,7 +148,7 @@ public class NewsService implements INewsService {
     public void update(Long id, News updated){
         Optional<News> news = newsRepository.findById(id);
 
-        if(!news.isPresent()) throw new NewsNotFoundException("News with id " + id + " not found");
+        if(!news.isPresent()) throw new NotFoundException("News with id " + id + " not found");
 
         news.get().setId(id);
         news.get().setName(updated.getName());

@@ -24,7 +24,7 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE testimonials SET deleted_at = current_timestamp() WHERE id = ?")
+@SQLDelete(sql = "UPDATE testimonials SET deleted_at = now() WHERE id = ?")
 @Where(clause = "deleted_at is null")
 
 public class TestimonialEntity {

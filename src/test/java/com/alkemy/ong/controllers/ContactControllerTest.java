@@ -7,7 +7,6 @@ import com.alkemy.ong.services.ContactService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,9 +39,6 @@ public class ContactControllerTest {
     @MockBean
     private ContactService contactService;
 
-    @InjectMocks
-    private ContactController contactController;
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -65,7 +61,7 @@ public class ContactControllerTest {
         contactsDto.add(contactDto2);
         contactsDto.add(contactDto3);
 
-        when(contactService.findAllContacts()).thenReturn(contactsDto);
+        when(contactService.findAll()).thenReturn(contactsDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/contacts")
@@ -80,7 +76,7 @@ public class ContactControllerTest {
                 .andExpect(jsonPath("$[2].name").value("José"))
                 .andExpect(content().json(objectMapper.writeValueAsString(contactsDto)));
 
-        verify(contactService).findAllContacts();
+        verify(contactService).findAll();
     }
 
     @Test

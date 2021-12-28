@@ -2,7 +2,6 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.requests.SlideRequest;
 import com.alkemy.ong.entities.OrganizationEntity;
-import com.alkemy.ong.exceptions.ParamNotFound;
 import com.alkemy.ong.mapper.SlideMapper;
 import com.alkemy.ong.dtos.requests.CreateOrganizationDTO;
 import com.alkemy.ong.dtos.requests.UpdateOrganizationDTO;
@@ -12,9 +11,6 @@ import com.alkemy.ong.services.OrganizationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,28 +76,6 @@ public class OrganizationController {
         OrganizationEntity organization = new OrganizationEntity();
         BeanUtils.copyProperties(organizationDto, organization);
         orgService.update(id, organization);
-    }
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String globalExceptionHandler(Exception ex) {
-        return ex.getMessage();
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-        String response = "";
-        for (ObjectError error : ex.getAllErrors()) {
-            response += error.getDefaultMessage() + "\n";
-        }
-        return response;
-    }
-
-    @ExceptionHandler(ParamNotFound.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String paramNotFoundExceptionHandler(ParamNotFound ex) {
-        return ex.getMessage();
     }
 
 }
