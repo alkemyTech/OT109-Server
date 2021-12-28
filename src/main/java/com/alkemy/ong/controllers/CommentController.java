@@ -31,23 +31,26 @@ public class CommentController {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @PostMapping("/comments")
-    public ResponseEntity<CommentDTO> create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO) {
-        CommentDTO commentCreated = commentService.create(commentPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentCreated);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDTO create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO) {
+        return commentService.create(commentPostRequestDTO);
     }
 
     @GetMapping("/comments")
-    private ResponseEntity<?> getAll(){
+    @ResponseStatus(HttpStatus.OK)
+    private List<CommentDTO> getAll(){
         List<CommentDTO> comments = commentService.findAll()
                 .stream()
                 .map(comment -> modelMapper.map(comment,CommentDTO.class))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.OK).body(comments);
+        return comments;
     }
 
     @PutMapping("/comments/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CommentPutRequestDTO request, HttpServletRequest header){
         String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));
@@ -56,7 +59,7 @@ public class CommentController {
         if(commentService.validUser(email,id) || isAdmin(roles)){
             Comment comment = modelMapper.map(request,Comment.class);
             comment = commentService.update(comment,id);
-            return ResponseEntity.ok(modelMapper.map(comment,CommentDTO.class));
+            return ResponseEntity.status(200).body("");
         }else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
     }
@@ -65,6 +68,7 @@ public class CommentController {
         return roles.contains("ADMIN");
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/comments/{id}")
     public ResponseEntity<String> delete(@PathVariable @Min(value = 1, message = "Comment id cannot be less than one") Long id, HttpServletRequest header){
         if(!commentService.existsById(id)){

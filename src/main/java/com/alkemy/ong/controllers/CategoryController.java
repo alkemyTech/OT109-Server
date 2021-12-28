@@ -46,14 +46,15 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryPostPutRequestDTO category) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryDTO create(@Valid @RequestBody CategoryPostPutRequestDTO category) {
         CategoryDTO postCreated = categoryService.create(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(postCreated);
+        return postCreated;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PageDTO<CategoryListRequestDTO> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer pageNumber, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size) {
+    public PageDTO findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer pageNumber, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size) {
         PageRequest pageable = PageRequest.of(pageNumber, size);
         Page<Category> page = categoryService.findAllPageable(pageable);
         if(page.getNumberOfElements() == 0){
@@ -64,21 +65,21 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
-        CategoryDTO category = categoryService.findById(id);
-        return ResponseEntity.ok().body(category);
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDTO findById(@PathVariable Long id) {
+        return categoryService.findById(id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
         categoryService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @Valid @RequestBody CategoryPostPutRequestDTO categoryDTO) {
-        CategoryDTO result = categoryService.update(id, categoryDTO);
-        return ResponseEntity.ok().body(result);
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable Long id, @Valid @RequestBody CategoryPostPutRequestDTO categoryDTO) {
+        categoryService.update(id, categoryDTO);
     }
     
     private PageDTO preparePageDTO(Page<Category> page, Pageable pageable){

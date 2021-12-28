@@ -16,23 +16,26 @@ public class ActivityController {
     @Autowired
     private IActivityService activityService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ActivityPostPutRequestDTO activityPostRequestDTO){
+    public ActivityDTO create(@Valid @RequestBody ActivityPostPutRequestDTO activityPostRequestDTO){
         //try{
         ActivityDTO activityDTO = activityService.create(activityPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(activityDTO);
+        return activityDTO;
         /*
         }catch (BadRequestException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
 */
     }
+
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id,
+    public void update(@PathVariable Long id,
                                     @Valid @RequestBody ActivityPostPutRequestDTO activityPutRequestDTO ){
         //try{
             ActivityDTO activityDTO = activityService.update(id,activityPutRequestDTO);
-            return ResponseEntity.ok().body(activityDTO);
+            //return ResponseEntity.ok().body(activityDTO);
             /*
         }catch (BadRequestException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());

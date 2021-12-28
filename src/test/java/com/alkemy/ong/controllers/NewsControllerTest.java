@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
-import com.alkemy.ong.dtos.responses.NewDTO;
+import com.alkemy.ong.dtos.responses.NewsDTO;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.NewsRepository;
 import com.alkemy.ong.services.INewsService;
@@ -48,7 +48,7 @@ public class NewsControllerTest {
         @Autowired
         private JacksonTester<NewPostPutRequestDTO> jsonNewsPostPutDTO;
         @Autowired
-        private JacksonTester<NewDTO> jsonNewsDTO;
+        private JacksonTester<NewsDTO> jsonNewsDTO;
 
         @Test
         @WithUserDetails(value = "admin@admin.com")
@@ -56,7 +56,7 @@ public class NewsControllerTest {
 
                 // given
 
-                given(newsService.getById(1L)).willReturn(new NewDTO(1L, "name", "content", "image", new CategoryDTO()));
+                given(newsService.getById(1L)).willReturn(new NewsDTO(1L, "name", "content", "image", new CategoryDTO()));
 
                 // when
                 MockHttpServletResponse response = mockMvc.perform(get("/news/1")
@@ -66,7 +66,7 @@ public class NewsControllerTest {
                 // then
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
                 assertThat(response.getContentAsString()).isEqualTo(jsonNewsDTO
-                                .write(new NewDTO(1L, "name", "content", "image", new CategoryDTO())).getJson());
+                                .write(new NewsDTO(1L, "name", "content", "image", new CategoryDTO())).getJson());
         }
 
         @Test
@@ -75,7 +75,7 @@ public class NewsControllerTest {
 
                 // given
 
-                given(newsService.getById(1L)).willReturn(new NewDTO(1L, "name", "content", "image", new CategoryDTO()));
+                given(newsService.getById(1L)).willReturn(new NewsDTO(1L, "name", "content", "image", new CategoryDTO()));
 
                 // when
                 MockHttpServletResponse response = mockMvc.perform(get("/news/1")
@@ -85,7 +85,7 @@ public class NewsControllerTest {
                 // then
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
                 assertThat(response.getContentAsString()).isEqualTo(jsonNewsDTO
-                                .write(new NewDTO(1L, "name", "content", "image", new CategoryDTO())).getJson());
+                                .write(new NewsDTO(1L, "name", "content", "image", new CategoryDTO())).getJson());
         }
 
         @Test
@@ -93,7 +93,7 @@ public class NewsControllerTest {
 
                 // given
 
-                given(newsService.getById(1L)).willReturn(new NewDTO(1L, "name", "content", "image", new CategoryDTO()));
+                given(newsService.getById(1L)).willReturn(new NewsDTO(1L, "name", "content", "image", new CategoryDTO()));
 
                 // when
                 MockHttpServletResponse response = mockMvc.perform(get("/news/1")

@@ -1,7 +1,7 @@
 package com.alkemy.ong.services.impl;
 
 import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
-import com.alkemy.ong.dtos.responses.NewDTO;
+import com.alkemy.ong.dtos.responses.NewsDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.CategoryServiceException;
@@ -84,14 +84,14 @@ public class NewsService implements INewsService {
         return newsRepository.findAll(page);
     }
     @Override
-    public NewDTO getById(Long id) throws NotFoundException {
+    public NewsDTO getById(Long id) throws NotFoundException {
         News news = newsRepository.findById(id).orElseThrow(() -> new NotFoundException("News Not found."));
-        NewDTO newsDTO=modelMapper.map(news,NewDTO.class);
+        NewsDTO newsDTO=modelMapper.map(news, NewsDTO.class);
         return newsDTO;
     }
 
     @Override
-    public NewDTO saveNews(NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
+    public NewsDTO saveNews(NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
 
         Category category =categoryRepository.findById(newPostRequestDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("News category not found."));
         if(newPostRequestDTO.getName().isBlank()){
@@ -110,12 +110,12 @@ public class NewsService implements INewsService {
         news.setCategory(category);
         news.setCreatedAt(new Date());
         News newNews =  newsRepository.save(news);
-        NewDTO newDTO = modelMapper.map(newNews, NewDTO.class );
-        return newDTO;
+        NewsDTO newsDTO = modelMapper.map(newNews, NewsDTO.class );
+        return newsDTO;
     }
 
     @Override
-    public NewDTO updateNews(Long id, NewPostPutRequestDTO newPutRequestDTO) throws NotFoundException {
+    public NewsDTO updateNews(Long id, NewPostPutRequestDTO newPutRequestDTO) throws NotFoundException {
         if(newPutRequestDTO.getName().isBlank()){
             throw new BadRequestException("Name may not be empty");
         }
@@ -135,7 +135,7 @@ public class NewsService implements INewsService {
         news.setCategory(category);
         news.setUpdatedAt(new Date());
         News UptNews =  newsRepository.save(news);
-        NewDTO UptDTO = modelMapper.map(UptNews, NewDTO.class );
+        NewsDTO UptDTO = modelMapper.map(UptNews, NewsDTO.class );
         return UptDTO;
 
     }

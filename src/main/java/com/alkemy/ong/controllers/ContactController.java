@@ -34,7 +34,8 @@ public class ContactController {
     private JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
+    @ResponseStatus(HttpStatus.OK)
+    public Contact create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
         Contact contactCreated;
        // try {
             Contact contactToCreate = contactPostDto.toContact();
@@ -48,13 +49,14 @@ public class ContactController {
             System.out.println("Name, email, phone number and message cannot be empty.");
             return new ResponseEntity<>("Name, email, phone number and message cannot be empty.", HttpStatus.BAD_REQUEST);
         }*/
-        return new ResponseEntity<>(contactCreated, HttpStatus.CREATED);
+        return contactCreated;
     }
 
     /**
      * Falta validación como administrador
      */
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<ContactListDTO> getAll() {
         //Falta validación como administrador
         return contactService.findAll();
