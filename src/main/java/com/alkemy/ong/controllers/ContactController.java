@@ -33,7 +33,7 @@ public class ContactController {
     private JwtUtil jwtUtil;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public Contact create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
         Contact contactCreated;
         Contact contactToCreate = contactPostDto.toContact();

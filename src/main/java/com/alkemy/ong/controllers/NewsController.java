@@ -1,26 +1,24 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
-import com.alkemy.ong.dtos.responses.NewDTO;
+import com.alkemy.ong.dtos.requests.NewsPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewsDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
-import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.INewsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.PageImpl;
 
 @RestController
 @RequestMapping("/news")
@@ -33,14 +31,14 @@ public class NewsController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
-        return newsService.saveNews(newPostRequestDTO);
+    public NewsDTO create(@Valid @RequestBody NewsPostPutRequestDTO newsPostRequestDTO) throws NotFoundException {
+        return newsService.saveNews(newsPostRequestDTO);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
-        return newsService.updateNews(id,newPostRequestDTO);
+    public void update(@PathVariable Long id, @Valid @RequestBody NewsPostPutRequestDTO newsPostPutRequestDTO) throws NotFoundException {
+        newsService.updateNews(id, newsPostPutRequestDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +53,7 @@ public class NewsController {
         return newsService.getById(id);
     }
 
-    @GetMapping("")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PageDTO<NewsDTO> getPage(@RequestParam("page") Integer page, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size){
         if(page < 0) throw new InvalidParameterException("Page number must be equal or higher than 0");

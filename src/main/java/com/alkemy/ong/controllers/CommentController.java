@@ -32,7 +32,6 @@ public class CommentController {
     @Autowired
     private ModelMapper modelMapper;
 
-
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO create(@Valid @RequestBody CommentPostRequestDTO commentPostRequestDTO) {
@@ -42,12 +41,10 @@ public class CommentController {
     @GetMapping("/comments")
     @ResponseStatus(HttpStatus.OK)
     private List<CommentDTO> getAll(){
-        List<CommentDTO> comments = commentService.findAll()
+        return commentService.findAll()
                 .stream()
                 .map(comment -> modelMapper.map(comment,CommentDTO.class))
                 .collect(Collectors.toList());
-
-        return comments;
     }
 
     @PutMapping("/comments/{id}")
@@ -59,7 +56,7 @@ public class CommentController {
 
         if(commentService.validUser(email,id) || isAdmin(roles)){
             Comment comment = modelMapper.map(request,Comment.class);
-            comment = commentService.update(comment,id);
+            commentService.update(comment,id);
             return ResponseEntity.status(200).body("");
         }else
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(String.format("%s unauthorized to edit this comment",email));
@@ -74,7 +71,6 @@ public class CommentController {
     public ResponseEntity<String> delete(@PathVariable @Min(value = 1, message = "Comment id cannot be less than one") Long id, HttpServletRequest header){
         if(!commentService.existsById(id)){
             throw new ParamNotFound("Comment with id "+ id+" not found");
-            //return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found.");
         }
         String token = header.getHeader("Authorization");
         String email = jwtUtil.extractUserEmail(token.substring(7));

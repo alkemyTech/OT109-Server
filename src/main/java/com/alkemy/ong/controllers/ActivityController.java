@@ -20,9 +20,7 @@ public class ActivityController {
     @PostMapping
     public ActivityDTO create(@Valid @RequestBody ActivityPostPutRequestDTO activityPostRequestDTO){
 
-        ActivityDTO activityDTO = activityService.create(activityPostRequestDTO);
-        return activityDTO;
-
+        return activityService.create(activityPostRequestDTO);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -30,8 +28,7 @@ public class ActivityController {
     public void update(@PathVariable Long id,
                                     @Valid @RequestBody ActivityPostPutRequestDTO activityPutRequestDTO ){
 
-            ActivityDTO activityDTO = activityService.update(id,activityPutRequestDTO);
-            return ResponseEntity.ok().body(activityDTO);
+            activityService.update(id,activityPutRequestDTO);
 
     }
 
