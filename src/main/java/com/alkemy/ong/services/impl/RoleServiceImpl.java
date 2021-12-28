@@ -54,9 +54,10 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public Role findByName(@NonNull String name) throws RoleServiceException{
         Role role = roleRepo.findByName(name);
+        /*
         if(role == null){
             throw new RoleServiceException("Role not found");
-        }
+        }*/
         return role;
     }
     
