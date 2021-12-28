@@ -77,27 +77,5 @@ public class OrganizationController {
         BeanUtils.copyProperties(organizationDto, organization);
         orgService.update(id, organization);
     }
-/*
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String globalExceptionHandler(Exception ex) {
-        return ex.getMessage();
-    }
-    //PARA QUE SIRVE
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-        String response = "";
-        for (ObjectError error : ex.getAllErrors()) {
-            response += error.getDefaultMessage() + "\n";
-        }
-        return response;
-    }
 
-    @ExceptionHandler(ParamNotFound.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String paramNotFoundExceptionHandler(ParamNotFound ex) {
-        return ex.getMessage();
-    }
-*/
 }

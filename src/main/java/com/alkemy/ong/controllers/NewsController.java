@@ -2,9 +2,7 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.NewDTO;
-import com.alkemy.ong.dtos.responses.NewsPageResponseDTO;
 import com.alkemy.ong.entities.News;
-import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.InvalidParameterException;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.dtos.responses.PageDTO;
@@ -34,50 +32,25 @@ public class NewsController {
 
     @PostMapping()
     public ResponseEntity<?> create(@Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
-       // try{
         NewDTO newDTO = newService.saveNews(newPostRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newDTO);
-            /*
-        }catch (NotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (BadRequestException exception){
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-        }*/
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
-       // try{
         NewDTO newDTO = newService.updateNews(id,newPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(newDTO);/*
-        }catch (NotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }catch (BadRequestException exception){
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-        }*/
+        return ResponseEntity.status(HttpStatus.OK).body(newDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
-        //try{
         newService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).build();
-            /*
-        }catch (NotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-        */
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) throws NotFoundException {
-        //try{
-            NewDTO newDTO=newService.getById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(newDTO);
-            /*
-        }catch (NotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-*/
+        NewDTO newDTO=newService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(newDTO);
     }
 
     @GetMapping("")

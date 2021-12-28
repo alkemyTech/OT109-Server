@@ -58,19 +58,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, HttpServletResponse httpResponse)
         throws DataAlreadyExistException {
-        /*
-        Map<String, Object> response = new HashMap<>();
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> {
-                        return "Error in field: " + err.getField() + ": " + err.getDefaultMessage();
-                    })
-                    .collect(Collectors.toList());
-            response.put("Verify inputs data", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-        }*/
-
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
@@ -105,20 +92,6 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO){
-        /*
-        Map<String, Object> response = new HashMap<>();
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> {
-                        return "Error in field: " + err.getField() + ": " + err.getDefaultMessage();
-                    })
-                    .collect(Collectors.toList());
-            response.put("Verify inputs data", errors);
-
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-        }*/
         Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
 
         ResponseLoginDTO loginResponse = new ResponseLoginDTO();

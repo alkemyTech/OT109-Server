@@ -18,28 +18,14 @@ public class ActivityController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody ActivityPostPutRequestDTO activityPostRequestDTO){
-        //try{
         ActivityDTO activityDTO = activityService.create(activityPostRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(activityDTO);
-        /*
-        }catch (BadRequestException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-        }
-*/
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id,
                                     @Valid @RequestBody ActivityPostPutRequestDTO activityPutRequestDTO ){
-        //try{
-            ActivityDTO activityDTO = activityService.update(id,activityPutRequestDTO);
-            return ResponseEntity.ok().body(activityDTO);
-            /*
-        }catch (BadRequestException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-        }catch (NotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-*/
+        ActivityDTO activityDTO = activityService.update(id,activityPutRequestDTO);
+        return ResponseEntity.ok().body(activityDTO);
     }
 
 }

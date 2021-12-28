@@ -1,14 +1,12 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.responses.TestimonialListDTO;
-import com.alkemy.ong.dtos.responses.TestimonialsPageDTO;
 import com.alkemy.ong.entities.TestimonialEntity;
 import com.alkemy.ong.dtos.requests.TestimonialDTO;
 import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.services.TestimonialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
