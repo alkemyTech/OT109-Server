@@ -1,7 +1,7 @@
 package com.alkemy.ong.services;
 
 import com.alkemy.ong.dtos.responses.MemberResponseDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.MemberRequest;
+import com.alkemy.ong.dtos.requests.MemberRequest;
 import com.alkemy.ong.entities.Member;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
 import com.alkemy.ong.exceptions.NotFoundException;

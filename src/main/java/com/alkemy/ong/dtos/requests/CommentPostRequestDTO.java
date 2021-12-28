@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +9,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-/**
- * Se usa en create
- */
 public class CommentPostRequestDTO {
     @NotNull
     @Min(value = 1, message = "News id cannot be less than one.")

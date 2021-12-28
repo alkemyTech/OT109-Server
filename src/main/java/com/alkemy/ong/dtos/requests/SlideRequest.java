@@ -1,13 +1,10 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-/**
- * put y create
- */
 @Data
 public class SlideRequest {
     @NotBlank

@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,5 @@ public class RequestLoginDTO {
     private String username;
     @NotBlank
     private String password;
-
 
 }

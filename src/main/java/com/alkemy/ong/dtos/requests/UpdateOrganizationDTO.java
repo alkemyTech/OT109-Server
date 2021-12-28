@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -6,9 +6,6 @@ import javax.validation.constraints.Pattern;
 
 import lombok.*;
 
-/**
- * Se usa en patch
- */
 @Getter
 @Setter
 public class UpdateOrganizationDTO extends Socials{

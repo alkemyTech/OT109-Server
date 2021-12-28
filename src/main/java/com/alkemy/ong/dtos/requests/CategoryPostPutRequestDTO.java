@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +8,6 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
-/**
- * SE usa en put y create
- */
 public class CategoryPostPutRequestDTO {
     @NotBlank
     private String name;

@@ -1,6 +1,6 @@
 package com.alkemy.ong.controllers;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.ActivityPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.ActivityPostPutRequestDTO;
 import com.alkemy.ong.services.IActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -41,14 +41,14 @@ class ActivityControllerTest {
     void createWithADMIN_Role() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .post("/activities")
-                        .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com")))
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com/image.png")))
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("aName"))
                 .andExpect(jsonPath("$.content").value("aContent"))
-                .andExpect(jsonPath("$.image").value("https://www.image.com"));
+                .andExpect(jsonPath("$.image").value("https://www.image.com/image.png"));
     }
 
     @Test @Transactional
@@ -56,14 +56,14 @@ class ActivityControllerTest {
     void createWithUSER_Role() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .post("/activities")
-                        .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com")))
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aName","aContent","https://www.image.com/image.png")))
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("aName"))
                 .andExpect(jsonPath("$.content").value("aContent"))
-                .andExpect(jsonPath("$.image").value("https://www.image.com"));
+                .andExpect(jsonPath("$.image").value("https://www.image.com/image.png"));
     }
 
     @Test
@@ -94,13 +94,13 @@ class ActivityControllerTest {
     void updateWithADMIN_ROle() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .put("/activities/{id}", 1)
-                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com/image.png")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("aNewName"))
                 .andExpect(jsonPath("$.content").value("aNewContent"))
-                .andExpect(jsonPath("$.image").value("https://www.newImage.com"));
+                .andExpect(jsonPath("$.image").value("https://www.newImage.com/image.png"));
     }
 
     @Test @Transactional
@@ -108,20 +108,20 @@ class ActivityControllerTest {
     void updateWithUSER_Role() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .put("/activities/{id}", 1)
-                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com/image.png")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("aNewName"))
                 .andExpect(jsonPath("$.content").value("aNewContent"))
-                .andExpect(jsonPath("$.image").value("https://www.newImage.com"));
+                .andExpect(jsonPath("$.image").value("https://www.newImage.com/image.png"));
     }
 
     @Test
     void updateWithoutUser() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .put("/activities/{id}", 1)
-                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com/image.png")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
@@ -132,7 +132,7 @@ class ActivityControllerTest {
     void tryUpdateWithIdNotExists() throws Exception {
         mockMvc.perform( MockMvcRequestBuilders
                         .put("/activities/{id}", 123*5+10)
-                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com")))
+                        .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com/image.png")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());

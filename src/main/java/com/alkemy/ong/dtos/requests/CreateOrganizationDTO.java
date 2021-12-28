@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -7,16 +7,6 @@ import javax.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
- /*
-@Data
-@Builder*/
-/*
-@AllArgsConstructor
-@NoArgsConstructor*/
-
-/**
- * Solo se usa en create
- */
 @Getter
 @Setter
 public class  CreateOrganizationDTO extends Socials {

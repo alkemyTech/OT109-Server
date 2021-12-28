@@ -1,7 +1,7 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
-import com.alkemy.ong.dtos.responses.NewsDTO;
+import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.CategoryServiceException;
@@ -148,7 +148,7 @@ public class NewsService implements INewsService {
     public void update(Long id, News updated){
         Optional<News> news = newsRepository.findById(id);
 
-        if(!news.isPresent()) throw new NewsNotFoundException("News with id " + id + " not found");
+        if(!news.isPresent()) throw new NotFoundException("News with id " + id + " not found");
 
         news.get().setId(id);
         news.get().setName(updated.getName());

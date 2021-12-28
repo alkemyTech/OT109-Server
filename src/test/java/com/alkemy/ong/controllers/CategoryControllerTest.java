@@ -1,12 +1,12 @@
 package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.dtos.requests.CategoryListRequestDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.CategoryPostPutRequestDTO;
+import com.alkemy.ong.dtos.requests.CategoryPostPutRequestDTO;
 import com.alkemy.ong.dtos.responses.CategoryDTO;
 import com.alkemy.ong.entities.Category;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.ParamNotFound;
-import com.alkemy.ong.pojos.output.PageDTO;
+import com.alkemy.ong.dtos.responses.PageDTO;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.services.CategoryService;
 import org.junit.jupiter.api.BeforeEach;

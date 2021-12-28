@@ -2,12 +2,12 @@ package com.alkemy.ong.controllers;
 
 import com.alkemy.ong.entities.User;
 import com.alkemy.ong.exceptions.DataAlreadyExistException;
-import com.alkemy.ong.dtos.requests.createAndUpdate.RegisterUserDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.RequestLoginDTO;
-import com.alkemy.ong.pojos.output.ResponseLoginDTO;
-import com.alkemy.ong.pojos.output.ResponseRegisterDTO;
+import com.alkemy.ong.dtos.requests.RegisterUserDTO;
+import com.alkemy.ong.dtos.requests.RequestLoginDTO;
+import com.alkemy.ong.dtos.responses.ResponseLoginDTO;
+import com.alkemy.ong.dtos.responses.ResponseRegisterDTO;
 import com.alkemy.ong.services.SendGridService;
-import com.alkemy.ong.pojos.output.UserProfileDTO;
+import com.alkemy.ong.dtos.responses.UserProfileDTO;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
@@ -25,17 +25,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -63,19 +58,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO, HttpServletResponse httpResponse)
         throws DataAlreadyExistException {
-        /*
-        Map<String, Object> response = new HashMap<>();
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> {
-                        return "Error in field: " + err.getField() + ": " + err.getDefaultMessage();
-                    })
-                    .collect(Collectors.toList());
-            response.put("Verify inputs data", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-        }*/
-
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setSkipNullEnabled(true).setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
@@ -110,20 +92,6 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> login(@Valid @RequestBody RequestLoginDTO loginRequestDTO){
-        /*
-        Map<String, Object> response = new HashMap<>();
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> {
-                        return "Error in field: " + err.getField() + ": " + err.getDefaultMessage();
-                    })
-                    .collect(Collectors.toList());
-            response.put("Verify inputs data", errors);
-
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
-        }*/
         Optional<User> userOptional = userRepository.findByEmail(loginRequestDTO.getUsername());
 
         ResponseLoginDTO loginResponse = new ResponseLoginDTO();

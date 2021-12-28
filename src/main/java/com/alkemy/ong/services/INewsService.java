@@ -1,7 +1,7 @@
 package com.alkemy.ong.services;
 
-import com.alkemy.ong.dtos.requests.createAndUpdate.NewPostPutRequestDTO;
-import com.alkemy.ong.dtos.responses.NewsDTO;
+import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
+import com.alkemy.ong.dtos.responses.NewDTO;
 import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.NotFoundException;
 import org.springframework.data.domain.Page;

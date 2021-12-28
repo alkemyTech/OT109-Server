@@ -1,4 +1,4 @@
-package com.alkemy.ong.dtos.requests.createAndUpdate;
+package com.alkemy.ong.dtos.requests;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,9 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-/**
- * Se usa en create y put
- */
 @Getter
 @Setter
 public class MemberRequest extends Socials{

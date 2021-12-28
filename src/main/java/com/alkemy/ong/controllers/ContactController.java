@@ -1,7 +1,6 @@
 package com.alkemy.ong.controllers;
 
-//import com.alkemy.ong.dtos.requests.ContactPostDTO;
-import com.alkemy.ong.dtos.requests.createAndUpdate.ContactPostDTO;
+import com.alkemy.ong.dtos.requests.ContactPostDTO;
 import com.alkemy.ong.dtos.responses.ContactListDTO;
 import com.alkemy.ong.entities.Contact;
 import com.alkemy.ong.services.ContactService;
@@ -37,18 +36,12 @@ public class ContactController {
     @ResponseStatus(HttpStatus.OK)
     public Contact create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
         Contact contactCreated;
-       // try {
-            Contact contactToCreate = contactPostDto.toContact();
-            contactCreated = contactService.create(contactToCreate);
+        Contact contactToCreate = contactPostDto.toContact();
+        contactCreated = contactService.create(contactToCreate);
 
-            //Contact Mail Sending
-            httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(contactPostDto.getName(), contactPostDto.getEmail())));
-    /*
-        } catch (NullPointerException npe) {
+        //Contact Mail Sending
+        httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(contactPostDto.getName(), contactPostDto.getEmail())));
 
-            System.out.println("Name, email, phone number and message cannot be empty.");
-            return new ResponseEntity<>("Name, email, phone number and message cannot be empty.", HttpStatus.BAD_REQUEST);
-        }*/
         return contactCreated;
     }
 
