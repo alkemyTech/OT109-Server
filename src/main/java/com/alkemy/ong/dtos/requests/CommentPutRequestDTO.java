@@ -7,9 +7,6 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-/**
- * SE usa en put
- */
 public class CommentPutRequestDTO {
     @NotBlank
     private String body;

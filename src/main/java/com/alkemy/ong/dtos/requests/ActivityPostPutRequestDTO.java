@@ -13,9 +13,6 @@ import javax.validation.constraints.Pattern;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-/**
- * Se  usa en create y put
- */
 public class ActivityPostPutRequestDTO {
     @NotBlank
     private String name;

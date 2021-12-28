@@ -7,16 +7,6 @@ import javax.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
- /*
-@Data
-@Builder*/
-/*
-@AllArgsConstructor
-@NoArgsConstructor*/
-
-/**
- * Solo se usa en create
- */
 @Getter
 @Setter
 public class  CreateOrganizationDTO extends Socials {

@@ -62,7 +62,6 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
-
         memberService.update(request,id);
         return ResponseEntity.ok().build();
     }

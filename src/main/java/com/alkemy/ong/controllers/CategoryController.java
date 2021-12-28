@@ -44,25 +44,12 @@ public class CategoryController {
     @Autowired
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-
     }
 
     @PostMapping
     public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryPostPutRequestDTO category) {
         CategoryDTO postCreated = categoryService.create(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(postCreated);
-    }
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public PageDTO<CategoryListRequestDTO> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer pageNumber, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size) {
-        PageRequest pageable = PageRequest.of(pageNumber, size);
-        Page<Category> page = categoryService.findAllPageable(pageable);
-        if(page.getNumberOfElements() == 0){
-            throw new ParamNotFound("Page not found");
-        }
-        return preparePageDTO(page, pageable);
-        
     }
 
     @GetMapping("/{id}")
@@ -82,7 +69,17 @@ public class CategoryController {
         CategoryDTO result = categoryService.update(id, categoryDTO);
         return ResponseEntity.ok().body(result);
     }
-    
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public PageDTO<CategoryListRequestDTO> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer pageNumber, @RequestParam(value = "size",required = false, defaultValue = "10") Integer size) {
+        PageRequest pageable = PageRequest.of(pageNumber, size);
+        Page<Category> page = categoryService.findAllPageable(pageable);
+        if(page.getNumberOfElements() == 0){
+            throw new ParamNotFound("Page not found");
+        }
+        return preparePageDTO(page, pageable);
+    }
     private PageDTO<CategoryListRequestDTO> preparePageDTO(Page<Category> page, Pageable pageable){
         final String url = "localhost:9800/categories?page=";
         List<CategoryListRequestDTO> categories = new ArrayList();

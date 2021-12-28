@@ -10,9 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-/**
- * create y put
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

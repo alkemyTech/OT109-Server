@@ -18,5 +18,4 @@ public class RequestLoginDTO {
     @NotBlank
     private String password;
 
-
 }

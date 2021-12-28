@@ -11,9 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-/**
- * se usa en create, no tiene update
- */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,16 +20,13 @@ public class ContactPostDTO {
     @NotBlank
     @Size(min = 3, message = "Name should be at least three characters")
     private String name;
-
     @NotBlank
     @Size(min = 10, message = "Phone number should be at least nine characters")
     private String phone;
-
     @NotBlank
     @Email(message = "Email is not valid", regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
     private String email;
-
     @NotBlank
     private String message;
 

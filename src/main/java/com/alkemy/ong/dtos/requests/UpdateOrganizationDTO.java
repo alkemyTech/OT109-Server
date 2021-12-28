@@ -6,9 +6,6 @@ import javax.validation.constraints.Pattern;
 
 import lombok.*;
 
-/**
- * Se usa en patch
- */
 @Getter
 @Setter
 public class UpdateOrganizationDTO extends Socials{
