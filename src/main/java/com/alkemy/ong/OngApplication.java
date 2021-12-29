@@ -2,6 +2,7 @@ package com.alkemy.ong;
 
 import com.alkemy.ong.entities.Role;
 import com.alkemy.ong.entities.User;
+import com.alkemy.ong.exceptions.RoleServiceException;
 import com.alkemy.ong.repositories.UserRepository;
 import com.alkemy.ong.services.RoleService;
 import com.alkemy.ong.services.UserService;
@@ -35,34 +36,31 @@ public class OngApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        Role admin, userRole;
+        try{
+            roleService.findByName("ADMIN");
+            roleService.findByName("USER");
+        }catch(RoleServiceException ex){
+            admin = new Role();
+            admin.setName("ADMIN");
+            admin.setDescription("Usuario con rol Administrador");
+            roleService.create(admin);
 
-
-        if (roleService.findByName("ADMIN") == null) {
-            Role role = new Role();
-            role.setName("ADMIN");
-            role.setDescription("Usuario con rol Administrador");
-            roleService.create(role);
-
-        }
-
-        if (roleService.findByName("USER") == null) {
-            Role role = new Role();
-            role.setName("USER");
-            role.setDescription("Usuario con rol User");
-            roleService.create(role);
-
-        }
-        Optional<User> opt = userRepository.findByEmailIgnoreCase("admin@admin.com");
-        if (!opt.isPresent()) {
-            User user = new User();
-            user.setEmail("admin@admin.com");
-            user.setFirstName("Administrador");
-            user.setLastName("Root");
-            user.setPassword("admin");
-            user.setRole(roleService.findByName("ADMIN"));
-
-            userService.create(user);
-
+            userRole = new Role();
+            userRole.setName("USER");
+            userRole.setDescription("Usuario con rol User");
+            roleService.create(userRole);
+        }finally {
+            Optional<User> opt = userRepository.findByEmailIgnoreCase("admin@admin.com");
+            if (!opt.isPresent()) {
+                User user = new User();
+                user.setEmail("admin@admin.com");
+                user.setFirstName("Administrador");
+                user.setLastName("Root");
+                user.setPassword("admin");
+                user.setRole(roleService.findByName("ADMIN"));
+                userService.create(user);
+            }
         }
     }
 }
