@@ -38,8 +38,8 @@ public class TestimonialsController {
 
     @ResponseStatus(value = HttpStatus.OK)
     @PutMapping("/{id}")
-    public TestimonialEntity updateTestimonial(@PathVariable Long id,@Valid @RequestBody TestimonialDTO testimonialDTO) {
-        return testimonialService.update(id, testimonialDTO);
+    public void updateTestimonial(@PathVariable Long id,@Valid @RequestBody TestimonialDTO testimonialDTO) {
+        testimonialService.update(id, testimonialDTO);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -58,8 +58,7 @@ public class TestimonialsController {
     }
 
     public TestimonialListDTO convertToListDTO(TestimonialEntity te){
-        TestimonialListDTO teDTO = modelMapper.map(te, TestimonialListDTO.class);
-        return teDTO;
+        return modelMapper.map(te, TestimonialListDTO.class);
     }
 
     public PageDTO<TestimonialListDTO> toPageDTO(Slice<TestimonialEntity> slice){

@@ -72,8 +72,8 @@ class CategoryControllerTest {
     @Test
     void create() {
         Mockito.when(categoryService.create(categoryRequest)).thenReturn(result);
-        ResponseEntity respuestaCreate = categoryController.create(categoryRequest);
-        assertEquals(respuestaCreate, new ResponseEntity(result, HttpStatus.CREATED));
+        CategoryDTO category = categoryController.create(categoryRequest);
+        assertEquals(category, result);
         verify(categoryService, times(1)).create(categoryRequest);
     }
 
@@ -84,30 +84,28 @@ class CategoryControllerTest {
         Page<Category> pageCategory = new PageImpl<>(lCategories);
         Mockito.when(categoryService.findAllPageable(any())).thenReturn(pageCategory);
         PageDTO<CategoryListRequestDTO> respuestaList = categoryController.findAll(1, 1);
-        assertEquals(respuestaList.getPage().isEmpty(), false);
+        assertFalse(respuestaList.getPage().isEmpty());
         verify(categoryService, times(1)).findAllPageable(any());
     }
 
     @Test
     void findById() {
         Mockito.when(categoryService.findById(1L)).thenReturn(result);
-        ResponseEntity respuestaId = categoryController.findById(1L);
-        assertEquals(respuestaId, new ResponseEntity(result, HttpStatus.OK));
+        CategoryDTO category = categoryController.findById(1L);
+        assertEquals(category, result);
         verify(categoryService, times(1)).findById(1L);
     }
 
     @Test
     void delete() {
-        ResponseEntity respuestaDelete = categoryController.delete(1L);
-        assertEquals(respuestaDelete, new ResponseEntity(HttpStatus.NO_CONTENT));
+        categoryController.delete(1L);
         verify(categoryService, times(1)).delete(1L);
     }
 
     @Test
     void update() {
         Mockito.when(categoryService.update(1L, categoryRequest)).thenReturn(result);
-        ResponseEntity respuestaUpd = categoryController.update(1L, categoryRequest);
-        assertEquals(respuestaUpd, new ResponseEntity(result, HttpStatus.OK));
+        categoryController.update(1L, categoryRequest);
         verify(categoryService, times(1)).update(1L, categoryRequest);
     }
 

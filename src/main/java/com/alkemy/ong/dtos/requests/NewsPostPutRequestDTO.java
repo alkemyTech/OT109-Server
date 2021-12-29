@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewPostPutRequestDTO {
+public class NewsPostPutRequestDTO {
 
     @NotBlank(message = "Name may not be empty")
     private String name;

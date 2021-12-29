@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -49,21 +51,22 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody MemberRequest request) throws DataAlreadyExistException, NotFoundException{
-        MemberResponseDTO response = memberService.create(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public MemberResponseDTO save(@Valid @RequestBody MemberRequest request) throws DataAlreadyExistException, NotFoundException{
+        return memberService.create(request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable @Min(value = 1, message = "Id cannot be less than one.") Long id) throws NotFoundException{
+    @ResponseStatus(HttpStatus.OK)
+    public String delete(@PathVariable @Min(value = 1, message = "Id cannot be less than one.") Long id) throws NotFoundException{
         memberService.delete(id);
-        return ResponseEntity.ok("Member successfully deleted");
+        return "Member successfully deleted";
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable @Min(value = 1, message = "Id value cannot be less than 1") Long id, @Valid @RequestBody MemberRequest request) throws NotFoundException{
         memberService.update(request,id);
-        return ResponseEntity.ok().build();
     }
 
 }

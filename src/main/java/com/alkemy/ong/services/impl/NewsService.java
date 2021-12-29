@@ -1,12 +1,11 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.dtos.requests.NewPostPutRequestDTO;
-import com.alkemy.ong.dtos.responses.NewDTO;
+import com.alkemy.ong.dtos.requests.NewsPostPutRequestDTO;
+import com.alkemy.ong.dtos.responses.NewsDTO;
 import com.alkemy.ong.entities.Category;
+import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.BadRequestException;
 import com.alkemy.ong.exceptions.CategoryServiceException;
-import com.alkemy.ong.exceptions.NewsNotFoundException;
-import com.alkemy.ong.entities.News;
 import com.alkemy.ong.exceptions.NotFoundException;
 import com.alkemy.ong.repositories.CategoryRepository;
 import com.alkemy.ong.repositories.NewsRepository;
@@ -84,14 +83,14 @@ public class NewsService implements INewsService {
         return newsRepository.findAll(page);
     }
     @Override
-    public NewDTO getById(Long id) throws NotFoundException {
+    public NewsDTO getById(Long id) throws NotFoundException {
         News news = newsRepository.findById(id).orElseThrow(() -> new NotFoundException("News Not found."));
-        NewDTO newsDTO=modelMapper.map(news,NewDTO.class);
+        NewsDTO newsDTO=modelMapper.map(news, NewsDTO.class);
         return newsDTO;
     }
 
     @Override
-    public NewDTO saveNews(NewPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
+    public NewsDTO saveNews(NewsPostPutRequestDTO newPostRequestDTO) throws NotFoundException {
 
         Category category =categoryRepository.findById(newPostRequestDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("News category not found."));
         if(newPostRequestDTO.getName().isBlank()){
@@ -110,12 +109,11 @@ public class NewsService implements INewsService {
         news.setCategory(category);
         news.setCreatedAt(new Date());
         News newNews =  newsRepository.save(news);
-        NewDTO newDTO = modelMapper.map(newNews, NewDTO.class );
-        return newDTO;
+        return modelMapper.map(newNews, NewsDTO.class );
     }
 
     @Override
-    public NewDTO updateNews(Long id, NewPostPutRequestDTO newPutRequestDTO) throws NotFoundException {
+    public NewsDTO updateNews(Long id, NewsPostPutRequestDTO newPutRequestDTO) throws NotFoundException {
         if(newPutRequestDTO.getName().isBlank()){
             throw new BadRequestException("Name may not be empty");
         }
@@ -135,20 +133,18 @@ public class NewsService implements INewsService {
         news.setCategory(category);
         news.setUpdatedAt(new Date());
         News UptNews =  newsRepository.save(news);
-        NewDTO UptDTO = modelMapper.map(UptNews, NewDTO.class );
-        return UptDTO;
-
+        return modelMapper.map(UptNews, NewsDTO.class );
     }
 
     public void delete(Long id) throws NotFoundException {
-        newsRepository.findById(id).orElseThrow(() -> new NotFoundException("News Not Found."));;
+        newsRepository.findById(id).orElseThrow(() -> new NotFoundException("News Not Found."));
         newsRepository.deleteById(id);
     }
 
     public void update(Long id, News updated){
         Optional<News> news = newsRepository.findById(id);
 
-        if(!news.isPresent()) throw new NotFoundException("News with id " + id + " not found");
+        if(news.isEmpty()) throw new NotFoundException("News with id " + id + " not found");
 
         news.get().setId(id);
         news.get().setName(updated.getName());

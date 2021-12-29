@@ -16,16 +16,20 @@ public class ActivityController {
     @Autowired
     private IActivityService activityService;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ActivityPostPutRequestDTO activityPostRequestDTO){
-        ActivityDTO activityDTO = activityService.create(activityPostRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(activityDTO);
+    public ActivityDTO create(@Valid @RequestBody ActivityPostPutRequestDTO activityPostRequestDTO){
+
+        return activityService.create(activityPostRequestDTO);
     }
+
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id,
+    public void update(@PathVariable Long id,
                                     @Valid @RequestBody ActivityPostPutRequestDTO activityPutRequestDTO ){
-        ActivityDTO activityDTO = activityService.update(id,activityPutRequestDTO);
-        return ResponseEntity.ok().body(activityDTO);
+
+            activityService.update(id,activityPutRequestDTO);
+
     }
 
 }

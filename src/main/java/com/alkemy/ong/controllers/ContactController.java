@@ -7,6 +7,7 @@ import com.alkemy.ong.services.ContactService;
 import com.alkemy.ong.services.SendGridService;
 import com.alkemy.ong.services.UserService;
 import com.alkemy.ong.util.JwtUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +33,23 @@ public class ContactController {
     private JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Contact create(@Valid @RequestBody ContactPostDTO contactPostDto, HttpServletResponse httpResponse) {
         Contact contactCreated;
         Contact contactToCreate = contactPostDto.toContact();
         contactCreated = contactService.create(contactToCreate);
 
-            //Contact Mail Sending
+        //Contact Mail Sending
         httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.contactMessage(contactPostDto.getName(), contactPostDto.getEmail())));
-        return new ResponseEntity<>(contactCreated, HttpStatus.CREATED);
+
+        return contactCreated;
     }
 
+    /**
+     * Falta validación como administrador
+     */
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<ContactListDTO> getAll() {
         //Falta validación como administrador
         return contactService.findAll();

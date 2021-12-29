@@ -97,10 +97,7 @@ class ActivityControllerTest {
                         .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com/image.png")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("aNewName"))
-                .andExpect(jsonPath("$.content").value("aNewContent"))
-                .andExpect(jsonPath("$.image").value("https://www.newImage.com/image.png"));
+                .andExpect(status().isOk());
     }
 
     @Test @Transactional
@@ -111,10 +108,7 @@ class ActivityControllerTest {
                         .content(asJsonString(new ActivityPostPutRequestDTO("aNewName","aNewContent","https://www.newImage.com/image.png")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("aNewName"))
-                .andExpect(jsonPath("$.content").value("aNewContent"))
-                .andExpect(jsonPath("$.image").value("https://www.newImage.com/image.png"));
+                .andExpect(status().isOk());
     }
 
     @Test
