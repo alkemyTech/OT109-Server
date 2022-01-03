@@ -1,6 +1,5 @@
 package com.alkemy.ong.services.impl;
 
-import com.alkemy.ong.exceptions.S3Exception;
 import com.alkemy.ong.services.S3Service;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -18,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
-
 
 
 /** Amazon Web Services S3 Bucket integration for uploading and downloading images.*/
