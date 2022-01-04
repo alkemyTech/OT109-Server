@@ -81,6 +81,8 @@ public class AuthController {
 
         ResponseRegisterDTO responseRegisterDTO = new ResponseRegisterDTO();
         modelMapper.map(user, responseRegisterDTO);
+        UserDetails userDetails = userDetailsServices.loadUserByUsername(user.getEmail());
+        responseRegisterDTO.setToken(jwtTokenUtil.generateToken(userDetails));
 
         // Welcome mail sending
         httpResponse.addHeader("User-Mail-Sent", String.valueOf(sendGridService.welcomeMessage(registerUserDTO.getFirstName(), registerUserDTO.getLastName(), registerUserDTO.getEmail())));
