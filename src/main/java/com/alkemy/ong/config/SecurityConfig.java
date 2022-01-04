@@ -60,9 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/organization/public/{id}",
                         "/contacts",
                         "/users",
-                        "/testimonials").hasAnyAuthority("ADMIN","USER")
-                .antMatchers(HttpMethod.GET,
-                        "/news**").hasAuthority("USER")
+                        "/testimonials",
+                        "/news**").hasAnyAuthority("ADMIN","USER")
                 .antMatchers(HttpMethod.GET,
                         "/members",
                         "/comments").hasAuthority("ADMIN")

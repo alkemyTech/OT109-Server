@@ -81,10 +81,7 @@ public class TestimonialsControllerTests {
                 .content(asJsonString(testBean))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("editName"))
-                .andExpect(jsonPath("$.image").value("https://www.editImage.com/image.png"))
-                .andExpect(jsonPath("$.content").value("editContent"));
+                .andExpect(status().isOk());
     }
     
     @Test
