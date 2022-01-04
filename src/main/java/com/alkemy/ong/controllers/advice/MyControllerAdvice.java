@@ -44,25 +44,25 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ApiResponse handleBadRequestException(BadRequestException badRequestException, WebRequest request){
-        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, badRequestException.getMessage());
+        return new ApiResponse(HttpStatus.BAD_REQUEST.value(), request, badRequestException.getMessage());
     }
     //Ocurre cuando hay errores con la base de datos
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ApiResponse handleDataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException, WebRequest request){
-        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, "no deberia pasar nunca! ya que deberia estar validado en el controller antes de entrar a la BD" );
+        return new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), request, dataIntegrityViolationException.getMessage());
     }
     //Cuando un email o un nombre(atributo unico de un objeto) ya esxistes en la base de datos
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataAlreadyExistException.class)
     public ApiResponse handleDataAlreadyExistException(DataAlreadyExistException dataAlreadyExistException, WebRequest request){
-        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, dataAlreadyExistException.getMessage());
+        return new ApiResponse(HttpStatus.BAD_REQUEST.value(), request, dataAlreadyExistException.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidParameterException.class)
     public ApiResponse handleInvalidParameterException(InvalidParameterException invalidParameterException, WebRequest request) {
-        return new ApiResponse(HttpStatus.NOT_FOUND.value(), request, invalidParameterException.getMessage());
+        return new ApiResponse(HttpStatus.BAD_REQUEST.value(), request, invalidParameterException.getMessage());
     }
     //Cubre la validacion de un objeto request
     @Override
